@@ -3,12 +3,13 @@ const path = require('path');
 const traverse = require('@babel/traverse').default;
 const {addExtensions, runPassedChecks, parseAst} = require('./utils')
 const getAllComponents = require('./getAllComponents')
+const getReactComponentTree = require('./getReactComponentTree')
+
 const entryPoint = process.argv[2];
 const resolvedEntryPoint = path.resolve(entryPoint);
 // const componentTree = {}
 const importVarNameToSourceMap = {}
 const componentsWithFile = getAllComponents(resolvedEntryPoint)
-
 function processModule(filename, processedFiles = new Set()) {
   // const extname = path.extname(filename);
   if(!runPassedChecks(filename, processedFiles)){
@@ -40,7 +41,7 @@ function processModule(filename, processedFiles = new Set()) {
       if (defaultSpecifier) {
         let originalName = null;
         const varName = defaultSpecifier.local.name;
-        componentsWithFile[incomingPath.node.source.value] && componentsWithFile[incomingPath.node.source.value].children.forEach(node => {
+        componentsWithFile[incomingPath.node.source.value] && componentsWithFile[incomingPath.node.source.value].components.forEach(node => {
           if (node.isDefaultExport) {
             originalName = node.name
           }
@@ -65,7 +66,7 @@ function processModule(filename, processedFiles = new Set()) {
     },
     ExportDefaultDeclaration(path) {
       const defaultDeclaration = path.node.declaration;
-      componentsWithFile[filename].children.forEach(node => {
+      componentsWithFile[filename].components.forEach(node => {
         if (node.name === defaultDeclaration.name) {
           node.isDefaultExport = true
         }
@@ -163,13 +164,18 @@ function processModule(filename, processedFiles = new Set()) {
 
 // Process the entire component tree starting from the entry point file
 processModule(resolvedEntryPoint);
-console.log("Imported var name to filename")
 console.log(importVarNameToSourceMap)
+const tree = getReactComponentTree(resolvedEntryPoint,new Set(), importVarNameToSourceMap )
+console.log("Component tree")
+console.log(tree)
 
-console.log("Original components to filename")
-console.log(componentsWithFile)
+// console.log("Imported var name to filename")
+// console.log(importVarNameToSourceMap)
 
-// fs.writeFileSync("file.json", JSON.stringify(componentsWithFile))
+// console.log("Original components to filename")
+// console.log(componentsWithFile)
+
+fs.writeFileSync("file.json", JSON.stringify(tree))
 
 
 
