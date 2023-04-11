@@ -40,6 +40,7 @@ module.exports.parseAst = (filename) => {
                 "allowTopLevelThis": true
             }]
         ],
+        ranges: false,
         presets: [
             '@babel/preset-env',
             '@babel/preset-typescript',
@@ -95,19 +96,6 @@ module.exports.getDefaultExportImportBindings = (ast, componentsWithFile, import
                     node.isDefaultExport = true
                 }
             })
-            // if (defaultDeclaration.type === 'Identifier') {
-            //   // Default export is referencing a previously declared variable
-            //   // Here, we can assume that the variable name is the same as the file name
-            //   var defaultExportSource = './' + path.hub.file.opts.filename;
-            // } else if (defaultDeclaration.type === 'FunctionDeclaration' ||
-            //            defaultDeclaration.type === 'ClassDeclaration') {
-            //   // Default export is a function or a class
-            //   var defaultExportSource = path.hub.file.opts.filename;
-            // } else {
-            //   // Default export is an expression or an object
-            //   // Here, we can assume that the default export is defined in the same file as the export statement
-            //   var defaultExportSource = './' + path.hub.file.opts.filename;
-            // }
         },
 
     });

@@ -4,9 +4,7 @@ const { parse } = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const resolve = require("resolve");
 
-// Gets list of all react components mapped to their source file names
-const tree = {}
-// TODO: assept ast as paramenter instead of parsing file with babel.
+// TODO: accept ast as paramenter instead of parsing file with babel.
 function processModule(filename, processedFiles = new Set(), componentsWithFile = {}) {
     const extname = path.extname(filename);
     // console.log("fileName", filename)
@@ -34,6 +32,7 @@ function processModule(filename, processedFiles = new Set(), componentsWithFile 
                 "allowTopLevelThis": true
             }]
         ],
+        ranges: false,
         presets: [
             '@babel/preset-env',
             '@babel/preset-typescript',
@@ -111,12 +110,11 @@ function processModule(filename, processedFiles = new Set(), componentsWithFile 
         },
         ExportDefaultDeclaration(path) {
             const defaultDeclaration = path.node.declaration;
-            componentsWithFile[filename].components.forEach(node => {
-                if (node.name === defaultDeclaration.name) {
-                    node.isDefaultExport = true
-                }
-            })
-
+                componentsWithFile[filename].components.forEach(node => {
+                    if (node.name === defaultDeclaration.name) {
+                        node.isDefaultExport = true
+                    }
+                })
         },
     });
     return componentsWithFile
@@ -129,11 +127,11 @@ function getJSXElements(node, jsxElements = {}) {
         return
     }
     const nodeName = node.openingElement.name.name
-   
+
     jsxElements[nodeName] = { name: nodeName, children: [] };
     node.children.forEach(node => {
 
-        if(node.type === "JSXElement"){
+        if (node.type === "JSXElement") {
             jsxElements[nodeName].children.push(getJSXElements(node))
         }
     })

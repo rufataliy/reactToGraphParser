@@ -34,6 +34,7 @@ function processModule(filename, processedFiles = new Set(), importVarNameToSour
                 "allowTopLevelThis": true
             }]
         ],
+        ranges: false,
         presets: [
             '@babel/preset-env',
             '@babel/preset-typescript',
@@ -67,28 +68,20 @@ function processModule(filename, processedFiles = new Set(), importVarNameToSour
             path.node.declarations.forEach(declaration => {
                 if (declaration.init && declaration.init.type === 'ArrowFunctionExpression' && declaration.id.name[0] === declaration.id.name[0].toUpperCase()) {
                     const componentName = declaration.id.name
-                    tree[componentName] = { children: [] } 
-                        declaration.init.body.body[0].argument.children.forEach(node => {
-                            if (node.type === "JSXElement") {
-                                console.log(importVarNameToSourceMap)
-                                const child = { name: importVarNameToSourceMap[node.openingElement.name.name].pointsTo, children:[] }
-                                if (node.children) {
-                                    child.children = node.children.map(child => {
-                                        if(child.type === "JSXElement"){
-                                            return getJSXElements(child,{},importVarNameToSourceMap)
-                                        }
-                                    })
-                                }
+                    const rootJsx = getReturnedJSX(declaration)
+                    tree[componentName] = { children: [] }
 
-                                tree[componentName].children.push(child)
+                    
+                    if (rootJsx.type === "JSXFragment") {
+                        rootJsx.children.forEach(child => {
+                            if(child.type === "JSXElement" && child.openingElement){
+                                tree[componentName].children.push(getJSXElements(child, importVarNameToSourceMap))
                             }
                         })
-                        // fs.writeFileSync('children.json', JSON.stringify(tree))
-                        // fs.writeFileSync('ReactComponentDeclaration.json', JSON.stringify())
-                    // if (!componentsWithFile[filename]) {
-                    //     componentsWithFile[filename] = { components: [] }
-                    // }
-                    // componentsWithFile[filename].components.push({ name: declaration.id.name })
+                    }
+                    if (rootJsx.type === 'JSXElement') {
+                        tree[componentName].children.push(getJSXElements(rootJsx, importVarNameToSourceMap))
+                    }
                 }
             });
         },
@@ -114,18 +107,30 @@ function processModule(filename, processedFiles = new Set(), importVarNameToSour
 
 module.exports = processModule
 
-function getJSXElements(node, jsxElements = {}, importVarNameToSourceMap) {
-    if (node.type !== 'JSXElement') {
-        return
-    }
+function getJSXElements(node, importVarNameToSourceMap) {
+    let jsxElement = {}
     const nodeName = importVarNameToSourceMap[node.openingElement.name.name].pointsTo
-   
-    jsxElements[nodeName] = { name: nodeName, children: [] };
+    jsxElement = { name: nodeName, children: [] };
     node.children.forEach(node => {
-        if(node.type === "JSXElement"){
-            jsxElements[nodeName].children.push(getJSXElements(node), {}, importVarNameToSourceMap)
+        if (node.type === "JSXElement" && node.openingElement) {
+            jsxElement.children.push(getJSXElements(node, importVarNameToSourceMap))
         }
     })
 
-    return jsxElements[nodeName];
+    return jsxElement;
+}
+
+function getReturnedJSX(declaration) {
+    const isSingleExpresssion = declaration.init.body.type !== "BlockStatement"
+    if (isSingleExpresssion) {
+        return declaration.init.body
+    } else {
+        let node = null
+        declaration.init.body.body.forEach(statement => {
+            if (statement.type === "ReturnStatement") {
+                statement.argument.type.includes('JSX') && (node = statement.argument)
+            }
+        })
+        return node
+    }
 }

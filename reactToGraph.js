@@ -66,11 +66,13 @@ function processModule(filename, processedFiles = new Set()) {
     },
     ExportDefaultDeclaration(path) {
       const defaultDeclaration = path.node.declaration;
-      componentsWithFile[filename].components.forEach(node => {
-        if (node.name === defaultDeclaration.name) {
-          node.isDefaultExport = true
-        }
-      })
+      if(componentsWithFile[filename]){
+        componentsWithFile[filename].components.forEach(node => {
+          if (node.name === defaultDeclaration.name) {
+            node.isDefaultExport = true
+          }
+        })
+      }
       // if (defaultDeclaration.type === 'Identifier') {
       //   // Default export is referencing a previously declared variable
       //   // Here, we can assume that the variable name is the same as the file name
@@ -164,10 +166,9 @@ function processModule(filename, processedFiles = new Set()) {
 
 // Process the entire component tree starting from the entry point file
 processModule(resolvedEntryPoint);
-console.log(importVarNameToSourceMap)
 const tree = getReactComponentTree(resolvedEntryPoint,new Set(), importVarNameToSourceMap )
-console.log("Component tree")
-console.log(tree)
+// console.log("Component tree")
+// console.log(tree)
 
 // console.log("Imported var name to filename")
 // console.log(importVarNameToSourceMap)
@@ -175,7 +176,9 @@ console.log(tree)
 // console.log("Original components to filename")
 // console.log(componentsWithFile)
 
-fs.writeFileSync("file.json", JSON.stringify(tree))
+// fs.writeFileSync("importVarNameToSourceMap.json", JSON.stringify(importVarNameToSourceMap))
+// fs.writeFileSync("componentsWithFile.json", JSON.stringify(componentsWithFile))
+fs.writeFileSync("tree.json", JSON.stringify(tree))
 
 
 
