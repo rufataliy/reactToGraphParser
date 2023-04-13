@@ -1,14 +1,12 @@
-import { getAllComponentsFromFile } from "../../../lib/getAllComponents"
-import { getReactComponentTree } from "../../../lib/getReactComponentTree"
-import { getVarBindingToOriginalVarNames } from "../../../lib/reactToGraph"
+import { getReactComponentTree } from "../../../lib copy/getReactComponentTree"
 import componentTree from "../componentTree.json"
 import { filename } from "..//constants"
+import { parseAst } from "../../../lib copy/utils"
 
-describe("getReactComponentTree", ()=>{
-    it('VariableDeclaration', ()=>{
-        const sourceComponentsMap = getAllComponentsFromFile(filename, new Set(), {})
-        const varBindings = getVarBindingToOriginalVarNames(filename, new Set(), sourceComponentsMap)
-        const tree = getReactComponentTree(filename, new Set(), varBindings)
+describe("VariableDeclaration", ()=>{
+    it('Component tree', ()=>{
+       const ast = parseAst(filename)
+        const tree = getReactComponentTree(ast)
         expect(componentTree).toEqual(tree)
     })
 })

@@ -15,6 +15,7 @@
     "@types/react-dom": "^18.0.11",
     "babel-plugin-add-import-extension": "^1.6.0",
     "css-loader": "^6.7.3",
+    "esbuild": "0.17.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -26,8 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build-react-to-graph": "webpack --config reactToGraph.webpack.js ",
-    "vite-build":"vite build --config vite.config.js"
+    "bundle":"node esbuild.config.js"
   },
   "eslintConfig": {
     "extends": [

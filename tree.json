@@ -1,1 +1,23 @@
-{"Name":{"children":[{"name":"Child","children":[]},{"name":"AnotherChild","children":[]},{"name":"AnotherChild","children":[{"name":"AnotherChild","children":[{"name":"Child","children":[]}]}]}]}}
+{
+    "Component": {
+        "children": [
+            {
+                "name": "Child",
+                "children": []
+            },
+            {
+                "name": "AnotherChild",
+                "children": []
+            },
+            {
+                "name": "AnotherChild",
+                "children": [
+                    {
+                        "name": "AnotherChild",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+}
