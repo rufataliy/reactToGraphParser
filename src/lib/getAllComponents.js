@@ -5,7 +5,7 @@ const traverse = require('@babel/traverse').default;
 const resolve = require("resolve");
 
 // TODO: accept ast as paramenter instead of parsing file with babel.
-function processModule(filename, processedFiles = new Set(), componentsWithFile = {}) {
+export function getAllComponentsFromFile(filename, processedFiles = new Set(), componentsWithFile = {}) {
     const extname = path.extname(filename);
     // console.log("fileName", filename)
     if (filename.includes("node_modules")) return
@@ -65,26 +65,6 @@ function processModule(filename, processedFiles = new Set(), componentsWithFile 
         VariableDeclaration(path) {
             path.node.declarations.forEach(declaration => {
                 if (declaration.init && declaration.init.type === 'ArrowFunctionExpression' && declaration.id.name[0] === declaration.id.name[0].toUpperCase()) {
-                    // const componentName = declaration.id.name
-                    // tree[componentName] = { children: [] } 
-                    // if (declaration.id.name === 'Name') {
-                    //     declaration.init.body.body[0].argument.children.forEach(node => {
-                    //         if (node.type === "JSXElement") {
-                    //             const child = { name: node.openingElement.name.name, children:[] }
-                    //             if (node.children) {
-                    //                 child.children = node.children.map(child => {
-                    //                     if(child.type === "JSXElement"){
-                    //                         return getJSXElements(child)
-                    //                     }
-                    //                 })
-                    //             }
-
-                    //             tree[componentName].children.push(child)
-                    //         }
-                    //     })
-                    //     // fs.writeFileSync('children.json', JSON.stringify(tree))
-                    //     // fs.writeFileSync('ReactComponentDeclaration.json', JSON.stringify())
-                    // }
                     if (!componentsWithFile[filename]) {
                         componentsWithFile[filename] = { components: [] }
                     }
@@ -101,11 +81,11 @@ function processModule(filename, processedFiles = new Set(), componentsWithFile 
             if (dependencyPath.startsWith('.')) {
                 // Resolve the relative path of the dependency
                 const dependencyFilename = path.resolve(path.dirname(filename), `${dependencyPath}`);
-                processModule(dependencyFilename, processedFiles, componentsWithFile);
+                getAllComponentsFromFile(dependencyFilename, processedFiles, componentsWithFile);
             } else {
                 // Resolve the absolute path of the Node module
                 const dependencyFilename = require.resolve(dependencyPath);
-                processModule(dependencyFilename, processedFiles, componentsWithFile);
+                getAllComponentsFromFile(dependencyFilename, processedFiles, componentsWithFile);
             }
         },
         ExportDefaultDeclaration(path) {
@@ -120,32 +100,4 @@ function processModule(filename, processedFiles = new Set(), componentsWithFile 
     return componentsWithFile
 }
 
-module.exports = processModule
-
-function getJSXElements(node, jsxElements = {}) {
-    if (node.type !== 'JSXElement') {
-        return
-    }
-    const nodeName = node.openingElement.name.name
-
-    jsxElements[nodeName] = { name: nodeName, children: [] };
-    node.children.forEach(node => {
-
-        if (node.type === "JSXElement") {
-            jsxElements[nodeName].children.push(getJSXElements(node))
-        }
-    })
-
-    return jsxElements[nodeName];
-}
-
-function isReactComponent(node) {
-    const { openingElement } = node;
-    if (!openingElement) return
-    const { name } = openingElement.name;
-    if (typeof name === 'string' && /^[a-z]/.test(name) || name === undefined) {
-        // This is a built-in HTML element, skip it
-        return false
-    }
-    return true
-}
+module.exports.getAllComponentsFromFile = getAllComponentsFromFile

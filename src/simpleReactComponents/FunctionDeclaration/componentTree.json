@@ -1,0 +1,23 @@
+{
+    "Component": {
+        "children": [
+            {
+                "name": "Child",
+                "children": []
+            },
+            {
+                "name": "AnotherChild",
+                "children": []
+            },
+            {
+                "name": "AnotherChild",
+                "children": [
+                    {
+                        "name": "AnotherChild",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+}

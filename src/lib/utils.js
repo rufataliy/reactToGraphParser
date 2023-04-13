@@ -100,3 +100,84 @@ module.exports.getDefaultExportImportBindings = (ast, componentsWithFile, import
 
     });
 }
+
+module.exports.getJsxTreeForFromDeclaration = (declaration, importVarNameToSourceMap) => {
+    const tree = {}
+    if (declaration.init && declaration.init.type === 'ArrowFunctionExpression' && declaration.id.name[0] === declaration.id.name[0].toUpperCase()) {
+        const componentName = declaration.id.name
+        const rootJsx = getReturnedJSX(declaration)
+        tree[componentName] = { children: [] }
+
+        if (rootJsx.type === "JSXFragment") {
+            rootJsx.children.forEach(child => {
+                if (child.type === "JSXElement" && child.openingElement) {
+                    tree[componentName].children.push(getJSXElements(child, importVarNameToSourceMap))
+                }
+            })
+        }
+        if (rootJsx.type === 'JSXElement') {
+            tree[componentName].children.push(getJSXElements(rootJsx, importVarNameToSourceMap))
+        }
+    }
+    return tree
+}
+
+
+module.exports.getJsxTreeForFromFunctionDeclaration = (node, importVarNameToSourceMap) => {
+    const tree = {}
+    const componentName = node.id.name
+    const rootJsx = getReturnedJSXFromBlockBody(node)
+
+    tree[componentName] = { children: [] }
+
+    if (rootJsx.type === "JSXFragment") {
+        rootJsx.children.forEach(child => {
+            if (child.type === "JSXElement" && child.openingElement) {
+                tree[componentName].children.push(getJSXElements(child, importVarNameToSourceMap))
+            }
+        })
+    }
+    if (rootJsx.type === 'JSXElement') {
+        tree[componentName].children.push(getJSXElements(rootJsx, importVarNameToSourceMap))
+    }
+
+    return tree
+}
+function getJSXElements(node, importVarNameToSourceMap) {
+    let jsxElement = {}
+    const nodeName = importVarNameToSourceMap[node.openingElement.name.name].pointsTo
+    jsxElement = { name: nodeName, children: [] };
+    node.children.forEach(node => {
+        if (node.type === "JSXElement" && node.openingElement) {
+            jsxElement.children.push(getJSXElements(node, importVarNameToSourceMap))
+        }
+    })
+
+    return jsxElement;
+}
+
+function getReturnedJSX(declaration) {
+    const isSingleExpresssion = declaration.init.body.type !== "BlockStatement"
+    if (isSingleExpresssion) {
+        return declaration.init.body
+    } else {
+        // let node = null
+        // declaration.init.body.body.forEach(statement => {
+        //     if (statement.type === "ReturnStatement") {
+        //         statement.argument.type.includes('JSX') && (node = statement.argument)
+        //     }
+        // })
+        // return node
+       return getReturnedJSXFromBlockBody(declaration.init)
+    }
+}
+
+function getReturnedJSXFromBlockBody(node) {
+    let jsxRoot = null
+    node.body.body.forEach(statement => {
+        if (statement.type === "ReturnStatement") {
+            statement.argument.type.includes('JSX') && (jsxRoot = statement.argument)
+        }
+    })
+    return jsxRoot
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import '../nonJsxFiles/App.css';
 
 interface Props{
   children?: React.ReactNode

@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import '../nonJsxFiles/index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Child from './Child';
+import reportWebVitals from '../nonJsxFiles/reportWebVitals';
+import Child from '../components/Child';
 import {Component} from "./App"
 
 const root = ReactDOM.createRoot(
@@ -13,7 +13,9 @@ root.render(
   <React.StrictMode>
     <App>
       <Child/>
-      <Component />
+      <Component>
+        <Child />
+      </Component>
     </App>
   </React.StrictMode>
 );
