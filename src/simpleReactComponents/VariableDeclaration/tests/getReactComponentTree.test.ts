@@ -1,7 +1,7 @@
-import { getReactComponentTree } from "../../../lib copy/getReactComponentTree"
+import { getReactComponentTree } from "../../../lib_copy/getReactComponentTree"
 import componentTree from "../componentTree.json"
 import { filename } from "..//constants"
-import { parseAst } from "../../../lib copy/utils"
+import { parseAst } from "../../../lib_copy/utils"
 
 describe("VariableDeclaration", ()=>{
     it('Component tree', ()=>{

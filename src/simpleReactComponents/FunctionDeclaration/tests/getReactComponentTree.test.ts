@@ -1,4 +1,4 @@
-import { getReactComponentTree } from "../../../lib copy/getReactComponentTree"
+import { getReactComponentTree } from "../../../lib_copy/getReactComponentTree"
 import componentTree from "../componentTree.json"
 import { filename } from "..//constants"
 import { parseAst } from "../../../lib/utils"

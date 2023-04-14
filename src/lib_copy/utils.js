@@ -108,6 +108,32 @@ module.exports.getJsxTreeForFromDeclaration = (declaration, importVarNameToSourc
         const rootJsx = getReturnedJSX(declaration)
         tree[componentName] = { children: [] }
 
+        if (rootJsx) {
+            if (rootJsx.type === "JSXFragment") {
+                rootJsx.children.forEach(child => {
+                    if (child.type === "JSXElement" && child.openingElement) {
+                        tree[componentName].children.push(getJSXElements(child, importVarNameToSourceMap))
+                    }
+                })
+            }
+
+            if (rootJsx.type === 'JSXElement') {
+                tree[componentName].children.push(getJSXElements(rootJsx, importVarNameToSourceMap))
+            }
+        }
+    }
+    return tree
+}
+
+
+module.exports.getJsxTreeForFromFunctionDeclaration = (node, importVarNameToSourceMap) => {
+    const tree = {}
+    const componentName = importVarNameToSourceMap[node.id.name] || node.id.name
+    const rootJsx = getReturnedJSXFromBlockBody(node)
+
+    tree[componentName] = { children: [] }
+    if (rootJsx) {
+
         if (rootJsx.type === "JSXFragment") {
             rootJsx.children.forEach(child => {
                 if (child.type === "JSXElement" && child.openingElement) {
@@ -119,37 +145,17 @@ module.exports.getJsxTreeForFromDeclaration = (declaration, importVarNameToSourc
             tree[componentName].children.push(getJSXElements(rootJsx, importVarNameToSourceMap))
         }
     }
-    return tree
-}
-
-
-module.exports.getJsxTreeForFromFunctionDeclaration = (node, importVarNameToSourceMap) => {
-    const tree = {}
-    const componentName = node.id.name
-    const rootJsx = getReturnedJSXFromBlockBody(node)
-
-    tree[componentName] = { children: [] }
-
-    if (rootJsx.type === "JSXFragment") {
-        rootJsx.children.forEach(child => {
-            if (child.type === "JSXElement" && child.openingElement) {
-                tree[componentName].children.push(getJSXElements(child))
-            }
-        })
-    }
-    if (rootJsx.type === 'JSXElement') {
-        tree[componentName].children.push(getJSXElements(rootJsx))
-    }
 
     return tree
 }
-function getJSXElements(node) {
+function getJSXElements(node, varBindings) {
     let jsxElement = {}
-    const nodeName = node.openingElement.name.name
-    jsxElement = { name: nodeName, children: [] };
+    const nodeName =  getFullMemberExpressionName(node.openingElement.name)
+    console.log(nodeName)
+    jsxElement = { name: varBindings[nodeName] || nodeName, children: [] };
     node.children.forEach(node => {
         if (node.type === "JSXElement" && node.openingElement) {
-            jsxElement.children.push(getJSXElements(node))
+            jsxElement.children.push(getJSXElements(node, varBindings))
         }
     })
 
@@ -161,7 +167,7 @@ function getReturnedJSX(declaration) {
     if (isSingleExpresssion) {
         return declaration.init.body
     } else {
-       return getReturnedJSXFromBlockBody(declaration.init)
+        return getReturnedJSXFromBlockBody(declaration.init)
     }
 }
 
@@ -174,3 +180,16 @@ function getReturnedJSXFromBlockBody(node) {
     })
     return jsxRoot
 }
+
+function getFullMemberExpressionName(node) {
+    console.log(node.name)
+    console.log(node)
+    if (node.type === 'JSXIdentifier') {
+      return node.name;
+    } else if (node.type === 'JSXMemberExpression') {
+      return (
+        getFullMemberExpressionName(node.object) + '.' + getFullMemberExpressionName(node.property)
+      );
+    } 
+  }
+  

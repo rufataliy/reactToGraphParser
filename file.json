@@ -1,1 +1,12 @@
-{"AnotherChild":{"source":"C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\AnotherChild.tsx","isDefaultExport":true,"pointsTo":"AnotherChild"},"Child":{"source":"C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\Child.tsx","isDefaultExport":true,"pointsTo":"Child"}}
+{
+    "AnotherChild": {
+        "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\AnotherChild.tsx",
+        "isDefaultExport": true,
+        "pointsTo": "AnotherChild"
+    },
+    "Child": {
+        "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\Child.tsx",
+        "isDefaultExport": true,
+        "pointsTo": "Child"
+    }
+}

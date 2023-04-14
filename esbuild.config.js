@@ -55,12 +55,11 @@ esbuild.build({
     '*.scss',
     '*.css',
     '*.png',
-    '*.svg'
+    '*.svg',
+    '*.ts',
+    '*.js'
   ],
   jsx: "preserve",
   minifySyntax: false,
   packages: 'external',
-  keepNames: true,
-  plugins:[pluginDedupeImports()]
-  
 })

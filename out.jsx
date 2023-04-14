@@ -1,5 +1,3 @@
-var __defProp = Object.defineProperty;
-var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
   get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
 }) : x)(function(x) {
@@ -42,8 +40,8 @@ var en_default = {
   "profile.byNumberOfGroupsDescending": "By number of groups descending",
   "profile.byNumberOfUsersAscending": "By number of users ascending ",
   "profile.byNumberOfUsersDescending": "By number of users descending",
-  "profile.newGroup": "New Group",
-  "profile.inviteUser": "Invite User",
+  "profile.newGroupTitle": "New group",
+  "profile.inviteUserTitle": "Invite user",
   "profile.profileInformation": "Profile information",
   "profile.editProfile": "Edit profile",
   "profile.companyID": "Company ID",
@@ -653,7 +651,9 @@ var en_default = {
   "deviceManager.dataSource": "Data Source",
   "deviceManager.dataSource_plural": "Data Sources",
   "deviceManager.list.dataSource": "Data source",
-  "deviceManager.list.dataSource_plural": "Data sources"
+  "deviceManager.list.dataSource_plural": "Data sources",
+  "profile.newGroup": "New Group",
+  "profile.inviteUser": "Invite User"
 };
 
 // ../vlncc-frontend/src/i18n.ts
@@ -767,6 +767,15 @@ var TEST_IDS = {
   users_add_to_group_dialog_users_list_item: "users_add_to_group_dialog_users_list_item",
   users_add_to_group_dialog_user_name: "users_add_to_group_dialog_user_name",
   users_add_to_group_dialog_users_list_item_group_name: "users_add_to_group_dialog_users_list_item_group_name",
+  users_edit_profile_dialog_heading: "users_edit_profile_dialog_heading",
+  users_edit_profile_dialog_save_button: "users_edit_profile_dialog_save_button",
+  users_edit_profile_dialog_cancel_button: "users_edit_profile_dialog_cancel_button",
+  users_edit_profile_dialog_first_name_field: "users_edit_profile_dialog_first_name_field",
+  users_edit_profile_dialog_last_name_field: "users_edit_profile_dialog_last_name_field",
+  users_edit_profile_dialog_language_field: "users_edit_profile_dialog_language_field",
+  users_edit_profile_dialog_timezone_field: "users_edit_profile_dialog_timezone_field",
+  users_edit_profile_dialog_phone_field: "users_edit_profile_dialog_phone_field",
+  users_edit_profile_button: "users_edit_profile_button",
   group_list_item_edit_button: "group_list_item_edit_button",
   group_list_row: "group_list_row",
   group_delete_dialog: "group_delete_dialog",
@@ -1052,7 +1061,6 @@ var testWrapperConstants = {
 
 // ../vlncc-frontend/src/i18n.ts
 import FsBackend from "i18next-fs-backend";
-var APP_S3_HOST_VIEWLINC2 = "https://language-localization-translations-destination-460561121586.s3.us-west-2.amazonaws.com";
 var EN = "en";
 var EN_BE = "enBE";
 var BE_TRANSLATIONS = "backendTranslations";
@@ -1081,9 +1089,9 @@ var resources = {
     translation: en_default
   }
 };
-var isValidLanguage = /* @__PURE__ */ __name((lng) => {
+var isValidLanguage = (lng) => {
   return Object.values(Languages).includes(lng);
-}, "isValidLanguage");
+};
 var customBackend = {
   type: "backend",
   init: () => {
@@ -1108,14 +1116,14 @@ var customBackend = {
     }
   }
 };
-var getInitialLanguage = /* @__PURE__ */ __name(() => {
+var getInitialLanguage = () => {
   const userPreferredLng = localStorage.getItem(LS_LOCALE);
   if (userPreferredLng && isValidLanguage(userPreferredLng)) {
     return userPreferredLng;
   } else {
     return DEFAULT_LANGUAGE;
   }
-}, "getInitialLanguage");
+};
 i18n.use(Backend).use(initReactI18next).init({
   lng: getInitialLanguage(),
   fallbackLng: DEFAULT_LANGUAGE,
@@ -1146,11 +1154,10 @@ i18n.use(Backend).use(initReactI18next).init({
 var i18n_default = i18n;
 async function fetchLanguage(filename) {
   const folder = [EN, EN_BE].includes(filename) ? "templates" : "translations";
-  return await fetch(`${APP_S3_HOST_VIEWLINC2}/${folder}/${filename}.json`).then((res) => res.json()).then((data) => data).catch((err) => {
+  return await fetch(`${APP_S3_HOST_VIEWLINC}/${folder}/${filename}.json`).then((res) => res.json()).then((data) => data).catch((err) => {
     throw err;
   });
 }
-__name(fetchLanguage, "fetchLanguage");
 
 // ../vlncc-frontend/src/store/index.ts
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
@@ -1178,15 +1185,14 @@ function generalReducer(state = initialState, action) {
       return state;
   }
 }
-__name(generalReducer, "generalReducer");
-var changeLanguage = /* @__PURE__ */ __name((language) => async (dispatch) => {
+var changeLanguage = (language) => async (dispatch) => {
   localStorage.setItem(LS_LOCALE, language);
   await i18n_default.changeLanguage(language);
   await dispatch({ type: GeneralActionType.CHANGE_LANGUAGE, payload: language });
-}, "changeLanguage");
-var changeTheme = /* @__PURE__ */ __name(() => (dispatch) => dispatch({ type: GeneralActionType.CHANGE_THEME }), "changeTheme");
+};
+var changeTheme = () => (dispatch) => dispatch({ type: GeneralActionType.CHANGE_THEME });
 var actionCreators = { changeLanguage, changeTheme };
-var selectLanguage = /* @__PURE__ */ __name((state) => state.general.language, "selectLanguage");
+var selectLanguage = (state) => state.general.language;
 
 // ../vlncc-frontend/src/store/actions/profile.ts
 import { Buffer as Buffer2 } from "buffer";
@@ -1392,7 +1398,6 @@ var Api = class {
     return response;
   }
 };
-__name(Api, "Api");
 
 // ../vlncc-frontend/src/utils/common.ts
 import * as qs from "qs";
@@ -1485,14 +1490,14 @@ var RIGHTS_MASK = {
 };
 
 // ../vlncc-frontend/src/utils/groupRights.ts
-var camelCaseNotation = /* @__PURE__ */ __name((str) => {
+var camelCaseNotation = (str) => {
   while (str.includes("_")) {
     const index = str.indexOf("_");
     str = str.substring(0, index) + str.charAt(index + 1).toUpperCase() + str.substring(index + 2);
   }
   return str;
-}, "camelCaseNotation");
-var calculateRights = /* @__PURE__ */ __name((right, type) => {
+};
+var calculateRights = (right, type) => {
   const rights = { ["HAS_RIGHT" /* HAS_RIGHT */]: 0 };
   for (const key of Object.keys(RIGHTS_MASK)) {
     if (type === "ZONE" /* ZONE */ && !key.includes("MANAGE" /* MANAGE */) || type === "SITE" /* SITE */) {
@@ -1505,8 +1510,8 @@ var calculateRights = /* @__PURE__ */ __name((right, type) => {
     }
   }
   return rights;
-}, "calculateRights");
-var getBitwiseNumber = /* @__PURE__ */ __name((nodeId, rights) => {
+};
+var getBitwiseNumber = (nodeId, rights) => {
   if (rights === null || typeof rights === "undefined") {
     return 0;
   } else if (Object.prototype.hasOwnProperty.call(rights, "*")) {
@@ -1516,23 +1521,23 @@ var getBitwiseNumber = /* @__PURE__ */ __name((nodeId, rights) => {
   } else {
     return 0;
   }
-}, "getBitwiseNumber");
-var convertRightsObjToArray = /* @__PURE__ */ __name((rights) => {
+};
+var convertRightsObjToArray = (rights) => {
   const convertedRights = [];
   for (const [key, value] of Object.entries(rights)) {
     convertedRights.push({ key, value, id: camelCaseNotation(key.toLowerCase()) });
   }
   return convertedRights;
-}, "convertRightsObjToArray");
-var checkSitesRights = /* @__PURE__ */ __name((node_id, rights, type) => {
+};
+var checkSitesRights = (node_id, rights, type) => {
   const num = getBitwiseNumber(node_id, rights);
   return convertRightsObjToArray(calculateRights(num, SITE_ZONES_ACCESS_KEYS[type]));
-}, "checkSitesRights");
-var zoneNodeRights = /* @__PURE__ */ __name((nodeId, groupRights, type) => {
+};
+var zoneNodeRights = (nodeId, groupRights, type) => {
   const rights = checkSitesRights(nodeId, groupRights, type);
   return rights;
-}, "zoneNodeRights");
-var checkAndUpdateParentRights = /* @__PURE__ */ __name((parentNodeRights, node) => {
+};
+var checkAndUpdateParentRights = (parentNodeRights, node) => {
   const updatedRights = map(parentNodeRights, (right, index) => {
     if (!includes(
       ["HAS_RIGHT" /* HAS_RIGHT */, "VIEW_NON_INHERITABLE" /* VIEW_NON_INHERITABLE */],
@@ -1548,8 +1553,8 @@ var checkAndUpdateParentRights = /* @__PURE__ */ __name((parentNodeRights, node)
     return right;
   });
   return updatedRights;
-}, "checkAndUpdateParentRights");
-var validateNodesAccess = /* @__PURE__ */ __name((node, rights, parentNode = {}) => {
+};
+var validateNodesAccess = (node, rights, parentNode = {}) => {
   node.rights = zoneNodeRights(node.node_id, rights, node.type);
   if (!isEmpty(parentNode)) {
     parentNode["rights"] = checkAndUpdateParentRights(parentNode["rights"], node);
@@ -1562,8 +1567,8 @@ var validateNodesAccess = /* @__PURE__ */ __name((node, rights, parentNode = {})
     });
   }
   return node;
-}, "validateNodesAccess");
-var updateNestedParent = /* @__PURE__ */ __name((clonedGroupSites, path) => {
+};
+var updateNestedParent = (clonedGroupSites, path) => {
   const updatedValues = update(cloneDeep(clonedGroupSites), path, (zone) => {
     if (zone.children) {
       const checkBoxStatus = reduce(
@@ -1606,14 +1611,14 @@ var updateNestedParent = /* @__PURE__ */ __name((clonedGroupSites, path) => {
     return zone;
   });
   return updatedValues;
-}, "updateNestedParent");
-var updateParentNodes = /* @__PURE__ */ __name((clonedGroupSites, path) => {
+};
+var updateParentNodes = (clonedGroupSites, path) => {
   while (path.splice(-2).length > 1) {
     clonedGroupSites = updateNestedParent(clonedGroupSites, path);
   }
   return clonedGroupSites;
-}, "updateParentNodes");
-var updateZoneRights = /* @__PURE__ */ __name((rights, id, value) => {
+};
+var updateZoneRights = (rights, id, value) => {
   let updatedRightsStatus;
   if (!value && id === "view") {
     updatedRightsStatus = map(rights, (right) => {
@@ -1632,8 +1637,8 @@ var updateZoneRights = /* @__PURE__ */ __name((rights, id, value) => {
     });
   }
   return updatedRightsStatus;
-}, "updateZoneRights");
-var updateZone = /* @__PURE__ */ __name((zone, id, value) => {
+};
+var updateZone = (zone, id, value) => {
   zone.rights = updateZoneRights(zone.rights, id, value);
   if (zone.children?.length > 0) {
     forEach(zone.children, (childZone) => {
@@ -1643,21 +1648,21 @@ var updateZone = /* @__PURE__ */ __name((zone, id, value) => {
     });
   }
   return zone;
-}, "updateZone");
-var updateChildrenNodes = /* @__PURE__ */ __name((clonedGroupSites, path, id, value) => {
+};
+var updateChildrenNodes = (clonedGroupSites, path, id, value) => {
   const updatedValues = update(clonedGroupSites, path, (zone) => {
     return updateZone(zone, id, value);
   });
   return updatedValues;
-}, "updateChildrenNodes");
-var updateGroupSiteRights = /* @__PURE__ */ __name((clonedGroupSites, path, id, value) => {
+};
+var updateGroupSiteRights = (clonedGroupSites, path, id, value) => {
   clonedGroupSites = updateChildrenNodes(clonedGroupSites, path, id, value);
   if (path.length > 1) {
     clonedGroupSites = updateParentNodes(clonedGroupSites, path);
   }
   return clonedGroupSites;
-}, "updateGroupSiteRights");
-var calculateRightsValue = /* @__PURE__ */ __name((rights) => {
+};
+var calculateRightsValue = (rights) => {
   let calculatedRightValue = 0;
   forEach(rights, (right) => {
     if (right.key !== "HAS_RIGHT" /* HAS_RIGHT */ && includes([1 /* FULLY_CHECKED */, 3 /* INVERTED_CHECKED */], right.value)) {
@@ -1667,8 +1672,8 @@ var calculateRightsValue = /* @__PURE__ */ __name((rights) => {
     }
   });
   return calculatedRightValue;
-}, "calculateRightsValue");
-var getRights = /* @__PURE__ */ __name((node, rights, exclude_zeros = false) => {
+};
+var getRights = (node, rights, exclude_zeros = false) => {
   const nodeHasRights = node.rights?.length > 0 ? true : false;
   if (nodeHasRights) {
     const rightsValue = calculateRightsValue(node.rights);
@@ -1686,11 +1691,11 @@ var getRights = /* @__PURE__ */ __name((node, rights, exclude_zeros = false) => 
     });
   }
   return rights;
-}, "getRights");
-var calculateNodeBitwiseNumber = /* @__PURE__ */ __name((clonedGroupSites, exclude_zeros = false) => {
+};
+var calculateNodeBitwiseNumber = (clonedGroupSites, exclude_zeros = false) => {
   return getRights(clonedGroupSites, {}, exclude_zeros);
-}, "calculateNodeBitwiseNumber");
-var thingHasRights = /* @__PURE__ */ __name((rightsToCheck, thingRights) => {
+};
+var thingHasRights = (rightsToCheck, thingRights) => {
   for (let i = 0; i < rightsToCheck.length; i++) {
     const right = rightsToCheck[i];
     if ((right & thingRights) == right) {
@@ -1699,18 +1704,18 @@ var thingHasRights = /* @__PURE__ */ __name((rightsToCheck, thingRights) => {
     return false;
   }
   return true;
-}, "thingHasRights");
+};
 
 // ../vlncc-frontend/src/utils/common.ts
 import RFL100_no_cable from "../assets/images/RFL100_no_cable.png";
 import CA10_small_antenna from "../assets/images/CA10_small_antenna.png";
-var roundToMultipleOfFive = /* @__PURE__ */ __name((x) => {
+var roundToMultipleOfFive = (x) => {
   if (typeof x !== "number") {
     throw new TypeError(`Expected argument to be a number. But received ${typeof x}`);
   }
   return Math.ceil(x / 5) * 5;
-}, "roundToMultipleOfFive");
-var loadZxcvbnOptions = /* @__PURE__ */ __name(async (language) => {
+};
+var loadZxcvbnOptions = async (language) => {
   const zxcvbnCommonPackage = await import("@zxcvbn-ts/language-common");
   let languagePack;
   switch (language) {
@@ -1753,7 +1758,7 @@ var loadZxcvbnOptions = /* @__PURE__ */ __name(async (language) => {
     graphs: zxcvbnCommonPackage.default.adjacencyGraphs,
     translations: languagePack.default.translations
   };
-}, "loadZxcvbnOptions");
+};
 var passwordBlackList = ["vaisala", "viewlinc", "viewlinccloud"];
 async function strengthFinder(password, userInputs, policy, t, options, language) {
   const result = {
@@ -1855,8 +1860,7 @@ async function strengthFinder(password, userInputs, policy, t, options, language
   }
   return result;
 }
-__name(strengthFinder, "strengthFinder");
-var setErrorFromScore = /* @__PURE__ */ __name((errorSetter, passStrength, errorText, setParametricError) => {
+var setErrorFromScore = (errorSetter, passStrength, errorText, setParametricError) => {
   if (passStrength.score < PASSWORD_MIN_SCORE) {
     if (passStrength.feedback) {
       errorSetter(passStrength.feedback);
@@ -1865,19 +1869,19 @@ var setErrorFromScore = /* @__PURE__ */ __name((errorSetter, passStrength, error
     }
     setParametricError(passStrength.parametricError);
   }
-}, "setErrorFromScore");
-var decodeURI2 = /* @__PURE__ */ __name((uri) => {
+};
+var decodeURI2 = (uri) => {
   const map2 = { amp: "&", lt: "<", gt: ">", quot: '"', "#039": "'", "#034": "'" };
   return decodeURIComponent(uri).replace(/&([^;]+);/g, (m, c) => map2[c]);
-}, "decodeURI");
-var checkPlusForPhoneNumber = /* @__PURE__ */ __name((phoneNumber) => {
+};
+var checkPlusForPhoneNumber = (phoneNumber) => {
   if (phoneNumber.startsWith("+")) {
     return phoneNumber;
   } else {
     return "+" + phoneNumber;
   }
-}, "checkPlusForPhoneNumber");
-var splitArray = /* @__PURE__ */ __name((f, xs) => {
+};
+var splitArray = (f, xs) => {
   return xs.reduce(
     ([T, F], x, i, arr) => {
       if (f(x, i, arr) === false)
@@ -1887,16 +1891,16 @@ var splitArray = /* @__PURE__ */ __name((f, xs) => {
     },
     [[], []]
   );
-}, "splitArray");
-var getConstantFromLocalStorage = /* @__PURE__ */ __name((constant, default_) => {
+};
+var getConstantFromLocalStorage = (constant, default_) => {
   const constantValue = localStorage.getItem(constant);
   if (constantValue !== null && typeof constantValue !== "undefined") {
     return constantValue;
   } else {
     return default_ == null ? void 0 : default_;
   }
-}, "getConstantFromLocalStorage");
-var getDeviceType = /* @__PURE__ */ __name((width) => {
+};
+var getDeviceType = (width) => {
   if (width >= SCREEN_WIDTH_BREAK_POINT.XL) {
     return DEVICE_TYPE[SCREEN_WIDTH_BREAK_POINT.XL];
   } else if (width < SCREEN_WIDTH_BREAK_POINT.XL && width >= SCREEN_WIDTH_BREAK_POINT.LG) {
@@ -1906,9 +1910,9 @@ var getDeviceType = /* @__PURE__ */ __name((width) => {
   } else {
     return DEVICE_TYPE[SCREEN_WIDTH_BREAK_POINT.SM];
   }
-}, "getDeviceType");
+};
 var DEFAULT_TIME_ZONE = "UTC";
-var getTime = /* @__PURE__ */ __name(async (timeZone = DEFAULT_TIME_ZONE) => {
+var getTime = async (timeZone = DEFAULT_TIME_ZONE) => {
   const time = new Intl.DateTimeFormat("default", {
     hour: "numeric",
     minute: "numeric",
@@ -1921,8 +1925,8 @@ var getTime = /* @__PURE__ */ __name(async (timeZone = DEFAULT_TIME_ZONE) => {
     time,
     zone: timeZone?.replace(/_/g, " ")
   };
-}, "getTime");
-var siteTreeConvertor = /* @__PURE__ */ __name((obj, result, siteId, selectedNodeId, parentType) => {
+};
+var siteTreeConvertor = (obj, result, siteId, selectedNodeId, parentType) => {
   let arr = [];
   const newObj = {
     id: "",
@@ -2014,8 +2018,8 @@ var siteTreeConvertor = /* @__PURE__ */ __name((obj, result, siteId, selectedNod
     }
   }
   return [result];
-}, "siteTreeConvertor");
-var timestampToTimeString = /* @__PURE__ */ __name((timestamp) => {
+};
+var timestampToTimeString = (timestamp) => {
   const timeZone = getConstantFromLocalStorage(LS_TIME_ZONE);
   const dt = new Date(timestamp);
   const dtWithTimeZone = new Date(
@@ -2024,13 +2028,13 @@ var timestampToTimeString = /* @__PURE__ */ __name((timestamp) => {
     })
   );
   return format(dtWithTimeZone, "yyyy-MM-dd HH:mm:ss");
-}, "timestampToTimeString");
-var getUserNameForAPI = /* @__PURE__ */ __name(async () => {
+};
+var getUserNameForAPI = async () => {
   const currentCredentials = await Auth2.currentSession();
   const username = currentCredentials?.getIdToken().payload.email || "";
   return btoa(username);
-}, "getUserNameForAPI");
-var generateTimeOptions = /* @__PURE__ */ __name((maxTime = null, minTime = null, timeStep = 5) => {
+};
+var generateTimeOptions = (maxTime = null, minTime = null, timeStep = 5) => {
   let startTime = /* @__PURE__ */ new Date("2010-01-01 00:00");
   const endTime = /* @__PURE__ */ new Date("2010-01-01 23:55");
   const timeOptions = [];
@@ -2056,8 +2060,8 @@ var generateTimeOptions = /* @__PURE__ */ __name((maxTime = null, minTime = null
     startTime = addMinutes(startTime, timeStep);
   }
   return timeOptions;
-}, "generateTimeOptions");
-var modifyResponseData = /* @__PURE__ */ __name((data, formattedLocations = {}, resultObj = {}, hierarchy = []) => {
+};
+var modifyResponseData = (data, formattedLocations = {}, resultObj = {}, hierarchy = []) => {
   resultObj = JSON.parse(JSON.stringify(resultObj));
   [...data].sort((a, b) => a.created - b.created).forEach((node) => {
     resultObj[node.node_id] = {
@@ -2096,8 +2100,8 @@ var modifyResponseData = /* @__PURE__ */ __name((data, formattedLocations = {}, 
     } : {};
   });
   return resultObj;
-}, "modifyResponseData");
-var areChildrenFiltered = /* @__PURE__ */ __name((text, node) => {
+};
+var areChildrenFiltered = (text, node) => {
   let result = false;
   Object.values(node.children).forEach((n) => {
     result = result ? true : n.name.toLowerCase().includes(text);
@@ -2106,8 +2110,8 @@ var areChildrenFiltered = /* @__PURE__ */ __name((text, node) => {
     }
   });
   return result;
-}, "areChildrenFiltered");
-var filterLocationsTree = /* @__PURE__ */ __name((text, node = {}, parent_node = {}, only_locations = false) => {
+};
+var filterLocationsTree = (text, node = {}, parent_node = {}, only_locations = false) => {
   const locationsClone2 = Object.keys(node).length > 0 ? node : JSON.parse(JSON.stringify(parent_node));
   Object.values(locationsClone2).forEach((node2) => {
     if (node2.type !== SITE_KEY || only_locations && node2.type === LOCATION_KEY) {
@@ -2118,8 +2122,8 @@ var filterLocationsTree = /* @__PURE__ */ __name((text, node = {}, parent_node =
     }
   });
   return locationsClone2;
-}, "filterLocationsTree");
-var sortLocationsOnTopOfZones = /* @__PURE__ */ __name((data) => {
+};
+var sortLocationsOnTopOfZones = (data) => {
   return Object.values(data).sort((a, b) => {
     if (a.type === LOCATION_KEY && b.type === ZONE_KEY)
       return -1;
@@ -2127,13 +2131,13 @@ var sortLocationsOnTopOfZones = /* @__PURE__ */ __name((data) => {
       return 1;
     return 0;
   });
-}, "sortLocationsOnTopOfZones");
-var getInitialAssignedChartColors = /* @__PURE__ */ __name(() => {
+};
+var getInitialAssignedChartColors = () => {
   const initialColors = {};
   CHART_SERIES_COLORS.forEach((color) => initialColors[color] = null);
   return initialColors;
-}, "getInitialAssignedChartColors");
-var getAssignedChartColor = /* @__PURE__ */ __name((id, assignedColors) => {
+};
+var getAssignedChartColor = (id, assignedColors) => {
   let assignedColor;
   for (const [key, value] of Object.entries(assignedColors)) {
     if (value === id) {
@@ -2142,11 +2146,11 @@ var getAssignedChartColor = /* @__PURE__ */ __name((id, assignedColors) => {
     }
   }
   return assignedColor;
-}, "getAssignedChartColor");
-var getVisibleLocationsNumber = /* @__PURE__ */ __name((visibleLocations) => {
+};
+var getVisibleLocationsNumber = (visibleLocations) => {
   return Object.values(visibleLocations).filter((loc) => loc.visible).length;
-}, "getVisibleLocationsNumber");
-var getNearestEnabledTimeOption = /* @__PURE__ */ __name((time, step = 5) => {
+};
+var getNearestEnabledTimeOption = (time, step = 5) => {
   if (time) {
     const timeParts = time.split(":");
     let minutes = +timeParts[1];
@@ -2157,7 +2161,7 @@ var getNearestEnabledTimeOption = /* @__PURE__ */ __name((time, step = 5) => {
     return timeParts.join(":");
   }
   return time;
-}, "getNearestEnabledTimeOption");
+};
 function getStyleValues(element) {
   const style = window.getComputedStyle(element);
   return {
@@ -2187,23 +2191,22 @@ function getStyleValues(element) {
     }
   };
 }
-__name(getStyleValues, "getStyleValues");
-var getErrorClass = /* @__PURE__ */ __name((error, defaultClass = "includes-error") => error ? defaultClass : "", "getErrorClass");
-var isProd = /* @__PURE__ */ __name(() => {
+var getErrorClass = (error, defaultClass = "includes-error") => error ? defaultClass : "";
+var isProd = () => {
   return process.env.REACT_APP_STAGE === EnvStage.PROD;
-}, "isProd");
-var getHoursMinutes = /* @__PURE__ */ __name((date) => {
+};
+var getHoursMinutes = (date) => {
   let minutes = getMinutes(date);
   if (minutes < 10) {
     minutes = `0${minutes}`;
   }
   return `${getHours(date)}:${minutes}`;
-}, "getHoursMinutes");
-var setDateHoursMinutesFromTime = /* @__PURE__ */ __name((date, time) => {
+};
+var setDateHoursMinutesFromTime = (date, time) => {
   const [hours, minutes] = time.split(":");
   return set(date, { hours: Number(hours), minutes: Number(minutes) });
-}, "setDateHoursMinutesFromTime");
-var getTodayWithNearestAvailableTime = /* @__PURE__ */ __name(() => {
+};
+var getTodayWithNearestAvailableTime = () => {
   let today2 = /* @__PURE__ */ new Date();
   const todayDatetime = getHoursMinutes(today2);
   const newDatetime = getNearestEnabledTimeOption(todayDatetime);
@@ -2211,8 +2214,8 @@ var getTodayWithNearestAvailableTime = /* @__PURE__ */ __name(() => {
     today2 = setDateHoursMinutesFromTime(today2, newDatetime);
   }
   return today2;
-}, "getTodayWithNearestAvailableTime");
-var sortUsersByName = /* @__PURE__ */ __name((users) => {
+};
+var sortUsersByName = (users) => {
   const [usersWithName, usersWithoutName] = splitArray(
     (x) => x.first_name.length > 0,
     users
@@ -2223,8 +2226,8 @@ var sortUsersByName = /* @__PURE__ */ __name((users) => {
   usersWithoutName.sort((a, b) => a.user_name.localeCompare(b.user_name));
   usersWithName.push(...usersWithoutName);
   return usersWithName;
-}, "sortUsersByName");
-var parseOrDefault = /* @__PURE__ */ __name((value, default_) => {
+};
+var parseOrDefault = (value, default_) => {
   if (value != null) {
     try {
       return JSON.parse(value);
@@ -2233,22 +2236,22 @@ var parseOrDefault = /* @__PURE__ */ __name((value, default_) => {
     }
   }
   return default_;
-}, "parseOrDefault");
-var getUserSettingKey = /* @__PURE__ */ __name((username, constant) => {
+};
+var getUserSettingKey = (username, constant) => {
   return `${username}.${constant}`;
-}, "getUserSettingKey");
-var getUserSetting = /* @__PURE__ */ __name((username, constant, default_) => {
+};
+var getUserSetting = (username, constant, default_) => {
   return getConstantFromLocalStorage(getUserSettingKey(username, constant), default_);
-}, "getUserSetting");
-var setUserSetting = /* @__PURE__ */ __name((username, constant, value) => {
+};
+var setUserSetting = (username, constant, value) => {
   localStorage.setItem(getUserSettingKey(username, constant), value);
-}, "setUserSetting");
-var clearUserSettings = /* @__PURE__ */ __name((username) => {
+};
+var clearUserSettings = (username) => {
   Object.values(UserSettings).forEach((val) => {
     localStorage.removeItem(getUserSettingKey(username, val));
   });
-}, "clearUserSettings");
-var sortValueOrDefault = /* @__PURE__ */ __name((username, setting, default_, comparer) => {
+};
+var sortValueOrDefault = (username, setting, default_, comparer) => {
   let sorting = userSettings.get(username, setting, default_);
   if (sorting != null) {
     if (!comparer.find((x) => x === sorting)) {
@@ -2256,7 +2259,7 @@ var sortValueOrDefault = /* @__PURE__ */ __name((username, setting, default_, co
     }
   }
   return sorting || default_;
-}, "sortValueOrDefault");
+};
 var userSettings = {
   getKey: getUserSettingKey,
   get: getUserSetting,
@@ -2264,7 +2267,7 @@ var userSettings = {
   clear: clearUserSettings,
   sortValueOrDefault
 };
-var sortGroups = /* @__PURE__ */ __name((groups, selectedValue) => {
+var sortGroups = (groups, selectedValue) => {
   switch (selectedValue) {
     case "byName" /* byName */:
       groups.sort((a, b) => a.group_name.localeCompare(b.group_name));
@@ -2280,8 +2283,8 @@ var sortGroups = /* @__PURE__ */ __name((groups, selectedValue) => {
       break;
   }
   return groups;
-}, "sortGroups");
-var sortUsers = /* @__PURE__ */ __name((users, selectedValue) => {
+};
+var sortUsers = (users, selectedValue) => {
   let sortedUsers = [...users];
   switch (selectedValue) {
     case "byName" /* byName */: {
@@ -2299,17 +2302,17 @@ var sortUsers = /* @__PURE__ */ __name((users, selectedValue) => {
       break;
   }
   return sortedUsers;
-}, "sortUsers");
-var isAdminGroup = /* @__PURE__ */ __name((group) => {
+};
+var isAdminGroup = (group) => {
   if (group == null) {
     return false;
   }
   return group.group_id === DEFAULT_ADMIN_ID;
-}, "isAdminGroup");
-var getDeviceOrProbeCount = /* @__PURE__ */ __name((device) => {
+};
+var getDeviceOrProbeCount = (device) => {
   return device.items?.length || 0;
-}, "getDeviceOrProbeCount");
-var getDeviceOrHostText = /* @__PURE__ */ __name((device, t) => {
+};
+var getDeviceOrHostText = (device, t) => {
   let count = 0;
   let key;
   count = getDeviceOrProbeCount(device);
@@ -2319,8 +2322,8 @@ var getDeviceOrHostText = /* @__PURE__ */ __name((device, t) => {
     key = "deviceManager.device";
   }
   return `${count} ${t(key, { count })}`;
-}, "getDeviceOrHostText");
-var setAdditionalUserFields = /* @__PURE__ */ __name((user) => {
+};
+var setAdditionalUserFields = (user) => {
   user.company_alias = localStorage.getItem(LS_COMPANY_ALIAS);
   if (user.rights) {
     const siteRights = user.rights[PARENT_SITE_KEY] || user.rights["*"] || null;
@@ -2332,7 +2335,7 @@ var setAdditionalUserFields = /* @__PURE__ */ __name((user) => {
     user.canPauseAlarms = thingHasRights([RIGHTS_MASK.PAUSE_ALARMS], siteRights);
     user.canManageAlarms = thingHasRights([RIGHTS_MASK.MANAGE_ALARM_TEMPLATES], siteRights);
   }
-}, "setAdditionalUserFields");
+};
 var LANGUAGE_TEXT = {
   ["de-DE" /* dede */]: "Deutsch",
   ["en-US" /* en */]: "English",
@@ -2345,49 +2348,47 @@ var LANGUAGE_TEXT = {
   ["zh-CN" /* zhcn */]: "\u4E2D\u6587",
   ["ja-JP" /* jajp */]: "\u65E5\u672C\u8A9E"
 };
-var isEmptyObject = /* @__PURE__ */ __name((obj) => {
+var isEmptyObject = (obj) => {
   return JSON.stringify(obj) === JSON.stringify({});
-}, "isEmptyObject");
-var replaceTemplateValues = /* @__PURE__ */ __name((uri, data) => {
+};
+var replaceTemplateValues = (uri, data) => {
   Object.entries(data).map(([key, value]) => {
     uri = uri.replace(`{${key}}`, value);
   });
   return uri;
-}, "replaceTemplateValues");
-var getDeviceImage = /* @__PURE__ */ __name((deviceModel) => {
+};
+var getDeviceImage = (deviceModel) => {
   switch (deviceModel.toUpperCase()) {
     case "RFL100" /* RFL100 */:
       return RFL100_no_cable;
     default:
       return CA10_small_antenna;
   }
-}, "getDeviceImage");
-var buildDeviceId = /* @__PURE__ */ __name((identifier, serialNumber) => {
+};
+var buildDeviceId = (identifier, serialNumber) => {
   return [identifier, serialNumber].join("-");
-}, "buildDeviceId");
-var buildDataSource = /* @__PURE__ */ __name((dataSource) => {
+};
+var buildDataSource = (dataSource) => {
   return encodeURIComponent(
     `\\\\${dataSource.device_model.toUpperCase()}\\${dataSource.device_sn.toUpperCase()}\\${dataSource.probe_model.toUpperCase()}\\${dataSource.probe_sn.toUpperCase()}\\${dataSource.meas_group}\\${dataSource.meas_id}`
   );
-}, "buildDataSource");
+};
 
 // ../vlncc-frontend/src/utils/errorHandler.ts
 function isErrorWithMessage(error) {
   return typeof error === "object" && "message" in error;
 }
-__name(isErrorWithMessage, "isErrorWithMessage");
 function getErrorMessage(error) {
   if (isErrorWithMessage(error))
     return error.message;
   return String(error);
 }
-__name(getErrorMessage, "getErrorMessage");
-var reportError = /* @__PURE__ */ __name((error, message = "Unexpected error") => {
+var reportError = (error, message = "Unexpected error") => {
   if (true) {
     console.error(message, getErrorMessage(error));
   }
   return new Error(error);
-}, "reportError");
+};
 
 // ../vlncc-frontend/src/store/notifications.ts
 import { createSlice, nanoid } from "@reduxjs/toolkit";
@@ -2416,12 +2417,12 @@ var notifications = createSlice({
   }
 });
 var { addNotification, removeNotification, clearNotifications } = notifications.actions;
-var selectNotifications = /* @__PURE__ */ __name((state) => state.notifications, "selectNotifications");
+var selectNotifications = (state) => state.notifications;
 var notifications_default = notifications.reducer;
 
 // ../vlncc-frontend/src/store/actions/profile.ts
 import { NotificationType as NotificationType2 } from "@vaisala-rockhopper/components";
-var getUsers = /* @__PURE__ */ __name(() => async (dispatch) => {
+var getUsers = () => async (dispatch) => {
   dispatch({ type: GET_USER_LIST_START });
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
@@ -2441,8 +2442,8 @@ var getUsers = /* @__PURE__ */ __name(() => async (dispatch) => {
       dispatch({ type: GET_USER_LIST_FAIL, error: 1 /* usersNotFound */ });
     }
   }
-}, "getUsers");
-var getUserProfile = /* @__PURE__ */ __name((userName, includeRights = false) => async (dispatch) => {
+};
+var getUserProfile = (userName, includeRights = false) => async (dispatch) => {
   dispatch({ type: GET_USER_PROFILE_START });
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
@@ -2468,8 +2469,8 @@ var getUserProfile = /* @__PURE__ */ __name((userName, includeRights = false) =>
       dispatch({ type: GET_USER_PROFILE_FAIL, error: 1 /* usersNotFound */ });
     }
   }
-}, "getUserProfile");
-var initProfile = /* @__PURE__ */ __name(() => async (dispatch) => {
+};
+var initProfile = () => async (dispatch) => {
   const currentCredentials = await Auth3.currentSession();
   const userName = currentCredentials.getIdToken().payload.email;
   dispatch({ type: GET_MY_USER_PROFILE_ON_INIT });
@@ -2494,8 +2495,8 @@ var initProfile = /* @__PURE__ */ __name(() => async (dispatch) => {
       dispatch({ type: GET_MY_USER_PROFILE_ON_INIT_FAIL, error: 1 /* usersNotFound */ });
     }
   }
-}, "initProfile");
-var getMyProfile = /* @__PURE__ */ __name((includeRights = false) => async (dispatch) => {
+};
+var getMyProfile = (includeRights = false) => async (dispatch) => {
   const currentCredentials = await Auth3.currentSession();
   const userName = currentCredentials.getIdToken().payload.email;
   dispatch({ type: GET_MY_USER_PROFILE_START });
@@ -2523,8 +2524,8 @@ var getMyProfile = /* @__PURE__ */ __name((includeRights = false) => async (disp
       dispatch({ type: GET_MY_USER_PROFILE_FAIL, error: 1 /* usersNotFound */ });
     }
   }
-}, "getMyProfile");
-var toggleUserActivation = /* @__PURE__ */ __name((isActive, userName) => async (dispatch) => {
+};
+var toggleUserActivation = (isActive, userName) => async (dispatch) => {
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
     if (customerId) {
@@ -2539,8 +2540,8 @@ var toggleUserActivation = /* @__PURE__ */ __name((isActive, userName) => async 
     reportError(error, "Error toggling user activation(deactivation):");
     dispatch({ type: TOGGLE_USER_ACTIVATION_FAIL, error: error.code });
   }
-}, "toggleUserActivation");
-var toggleGroupActivation = /* @__PURE__ */ __name((isActive, groupId, groupName) => async (dispatch) => {
+};
+var toggleGroupActivation = (isActive, groupId, groupName) => async (dispatch) => {
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
     if (customerId) {
@@ -2576,8 +2577,8 @@ var toggleGroupActivation = /* @__PURE__ */ __name((isActive, groupId, groupName
     reportError(error, "Error toggling group activation(deavtivation):");
     dispatch({ type: TOGGLE_GROUP_ACTIVATION_FAIL, error: error.code });
   }
-}, "toggleGroupActivation");
-var editProfile = /* @__PURE__ */ __name((userProfile) => async (dispatch) => {
+};
+var editProfile = (userProfile) => async (dispatch) => {
   const body = {
     pin: userProfile.pin,
     phone: userProfile.phone,
@@ -2606,8 +2607,8 @@ var editProfile = /* @__PURE__ */ __name((userProfile) => async (dispatch) => {
     reportError(error, "Error editing profile:");
     dispatch({ type: EDIT_PROFILE_FAIL, error: error.code });
   }
-}, "editProfile");
-var getGroups = /* @__PURE__ */ __name(() => async (dispatch) => {
+};
+var getGroups = () => async (dispatch) => {
   dispatch({ type: GET_GROUP_LIST_START });
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
@@ -2623,8 +2624,8 @@ var getGroups = /* @__PURE__ */ __name(() => async (dispatch) => {
     reportError(error, "Error getting groups:");
     dispatch({ type: GET_GROUP_LIST_FAIL, error: error.code });
   }
-}, "getGroups");
-var inviteUsers = /* @__PURE__ */ __name((invitedUsers, dispatcher, name) => async (dispatch) => {
+};
+var inviteUsers = (invitedUsers, dispatcher, name) => async (dispatch) => {
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
     if (customerId) {
@@ -2694,8 +2695,8 @@ var inviteUsers = /* @__PURE__ */ __name((invitedUsers, dispatcher, name) => asy
       })
     );
   }
-}, "inviteUsers");
-var deleteUser = /* @__PURE__ */ __name((userName) => async (dispatch) => {
+};
+var deleteUser = (userName) => async (dispatch) => {
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
     if (customerId) {
@@ -2709,8 +2710,8 @@ var deleteUser = /* @__PURE__ */ __name((userName) => async (dispatch) => {
     reportError(error, "Error deleting users:");
     dispatch({ type: DELETE_USER_FAIL, error: error.code });
   }
-}, "deleteUser");
-var createGroups = /* @__PURE__ */ __name((group) => async (dispatch) => {
+};
+var createGroups = (group) => async (dispatch) => {
   const body = {
     group_name: group.group_name,
     description: group.description
@@ -2729,8 +2730,8 @@ var createGroups = /* @__PURE__ */ __name((group) => async (dispatch) => {
     reportError(error, "Error creating groups:");
     dispatch({ type: CREATE_GROUPS_FAIL, error: error.code });
   }
-}, "createGroups");
-var getGroupsDetails = /* @__PURE__ */ __name((groupId, includeRights) => async (dispatch) => {
+};
+var getGroupsDetails = (groupId, includeRights) => async (dispatch) => {
   dispatch({ type: GET_GROUP_DETAILS_START });
   if (typeof includeRights === "undefined") {
     includeRights = false;
@@ -2762,8 +2763,8 @@ var getGroupsDetails = /* @__PURE__ */ __name((groupId, includeRights) => async 
       dispatch({ type: GET_GROUP_DETAILS_FAIL, error: 2 /* groupNotFound */ });
     }
   }
-}, "getGroupsDetails");
-var editGroup = /* @__PURE__ */ __name((group) => async (dispatch) => {
+};
+var editGroup = (group) => async (dispatch) => {
   const body = {};
   if (group.group_name != null) {
     body["group_name"] = group.group_name;
@@ -2791,8 +2792,8 @@ var editGroup = /* @__PURE__ */ __name((group) => async (dispatch) => {
     reportError(error, "Error editing group:");
     dispatch({ type: EDIT_GROUP_FAIL, error: error.code });
   }
-}, "editGroup");
-var deleteGroup = /* @__PURE__ */ __name((groupId) => async (dispatch) => {
+};
+var deleteGroup = (groupId) => async (dispatch) => {
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
     if (customerId) {
@@ -2807,8 +2808,8 @@ var deleteGroup = /* @__PURE__ */ __name((groupId) => async (dispatch) => {
     reportError(error, "Error deleting a group:");
     dispatch({ type: DELETE_GROUP_FAIL, error: error.code });
   }
-}, "deleteGroup");
-var deleteGroupUsers = /* @__PURE__ */ __name((users, groupId) => async (dispatch) => {
+};
+var deleteGroupUsers = (users, groupId) => async (dispatch) => {
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
     if (customerId) {
@@ -2823,7 +2824,7 @@ var deleteGroupUsers = /* @__PURE__ */ __name((users, groupId) => async (dispatc
     reportError(error, "Error deleting users of a group:");
     dispatch({ type: DELETE_GROUP_USERS_FAIL, error: error.code });
   }
-}, "deleteGroupUsers");
+};
 var profileDispatchActions = {
   getUsers,
   getUserProfile,
@@ -2863,13 +2864,13 @@ var dialogSlice = createSlice2({
     }
   }
 });
-var selectDialog = /* @__PURE__ */ __name((state) => state.dialog.dialog, "selectDialog");
+var selectDialog = (state) => state.dialog.dialog;
 var { showDialog, hideDialog } = dialogSlice.actions;
 var dialog_default = dialogSlice.reducer;
 
 // ../vlncc-frontend/src/store/actions/auth.ts
-var convertEmail = /* @__PURE__ */ __name((email) => email.toLowerCase(), "convertEmail");
-var localStorageCleanUp = /* @__PURE__ */ __name(() => {
+var convertEmail = (email) => email.toLowerCase();
+var localStorageCleanUp = () => {
   localStorage.removeItem(LS_REGION);
   localStorage.removeItem(LS_USER_POOL_ID);
   localStorage.removeItem(LS_USER_POOL_WEB_CLIENT_ID);
@@ -2883,8 +2884,8 @@ var localStorageCleanUp = /* @__PURE__ */ __name(() => {
   localStorage.removeItem(LS_TIME_ZONE);
   localStorage.removeItem(LS_USERNAME);
   localStorage.removeItem(LS_DATA_RETENTION_MONTHS);
-}, "localStorageCleanUp");
-var getUserPoolConfig = /* @__PURE__ */ __name((companyAlias) => async () => {
+};
+var getUserPoolConfig = (companyAlias) => async () => {
   const url = "/pool/{companyAlias}" /* tenantPool */.replace(`{${LS_COMPANY_ALIAS}}`, companyAlias);
   const response = await Api.getUnauthorized("user" /* user */, url);
   if (!response.ok) {
@@ -2896,8 +2897,8 @@ var getUserPoolConfig = /* @__PURE__ */ __name((companyAlias) => async () => {
   localStorage.setItem(LS_USER_POOL_WEB_CLIENT_ID, config.pool_client_id);
   localStorage.setItem(LS_COMPANY_ALIAS, companyAlias);
   await Api.setupAmplify(config);
-}, "getUserPoolConfig");
-var login = /* @__PURE__ */ __name((username, password, companyAlias, isFirstLogin) => async (dispatch) => {
+};
+var login = (username, password, companyAlias, isFirstLogin) => async (dispatch) => {
   dispatch({ type: LOGIN });
   try {
     await dispatch(getUserPoolConfig(companyAlias));
@@ -2915,8 +2916,8 @@ var login = /* @__PURE__ */ __name((username, password, companyAlias, isFirstLog
       }
     }
   }
-}, "login");
-var loginAuthentication = /* @__PURE__ */ __name((userName, password, isFirstLogin, companyAlias) => async (dispatch) => {
+};
+var loginAuthentication = (userName, password, isFirstLogin, companyAlias) => async (dispatch) => {
   try {
     const user = await Auth4.signIn(userName, password);
     if (user.challengeName === "NEW_PASSWORD_REQUIRED" /* NEW_PASSWORD_REQUIRED */) {
@@ -2951,8 +2952,8 @@ var loginAuthentication = /* @__PURE__ */ __name((userName, password, isFirstLog
       }
     }
   }
-}, "loginAuthentication");
-var logout = /* @__PURE__ */ __name((globalSignout = false, error = null) => async (dispatch) => {
+};
+var logout = (globalSignout = false, error = null) => async (dispatch) => {
   try {
     localStorageCleanUp();
     if (globalSignout) {
@@ -2966,8 +2967,8 @@ var logout = /* @__PURE__ */ __name((globalSignout = false, error = null) => asy
   dispatch(hideDialog());
   dispatch(clearNotifications());
   dispatch({ type: LOGOUT, error });
-}, "logout");
-var getLanguageInfo = /* @__PURE__ */ __name(() => async (dispatch) => {
+};
+var getLanguageInfo = () => async (dispatch) => {
   let locale = getConstantFromLocalStorage(LS_LOCALE);
   if (typeof locale === "undefined") {
     locale = DEFAULT_LANGUAGE;
@@ -2981,8 +2982,8 @@ var getLanguageInfo = /* @__PURE__ */ __name(() => async (dispatch) => {
     }
   }
   dispatch({ type: GeneralActionType.CHANGE_LANGUAGE, payload: locale });
-}, "getLanguageInfo");
-var getAuthInfo = /* @__PURE__ */ __name(() => async (dispatch) => {
+};
+var getAuthInfo = () => async (dispatch) => {
   try {
     const user = await Auth4.currentSession();
     const timeZone = user.getIdToken().payload.zoneinfo;
@@ -2999,9 +3000,9 @@ var getAuthInfo = /* @__PURE__ */ __name(() => async (dispatch) => {
   } catch (error) {
     reportError(error, "Error when trying to get auth info:");
   }
-}, "getAuthInfo");
-var startChangePassword = /* @__PURE__ */ __name(() => (dispatch) => dispatch({ type: CHANGING_PASSWORD_START }), "startChangePassword");
-var changePassword = /* @__PURE__ */ __name((oldPassword, newPassword) => async (dispatch) => {
+};
+var startChangePassword = () => (dispatch) => dispatch({ type: CHANGING_PASSWORD_START });
+var changePassword = (oldPassword, newPassword) => async (dispatch) => {
   dispatch({ type: CHANGING_PASSWORD });
   try {
     const user = await Auth4.currentAuthenticatedUser();
@@ -3016,8 +3017,8 @@ var changePassword = /* @__PURE__ */ __name((oldPassword, newPassword) => async 
     reportError(error, "Error when changing password: ");
     dispatch({ type: CHANGING_PASSWORD_FAIL, error: error.code });
   }
-}, "changePassword");
-var sendChangePasswordConfirmation = /* @__PURE__ */ __name((customerId, userName) => async (dispatch) => {
+};
+var sendChangePasswordConfirmation = (customerId, userName) => async (dispatch) => {
   try {
     const body = { attribute: "password" };
     if (customerId !== null && typeof customerId !== "undefined" && userName !== null) {
@@ -3031,10 +3032,10 @@ var sendChangePasswordConfirmation = /* @__PURE__ */ __name((customerId, userNam
     reportError(error, 'Error sending "Change Password" confirmation:');
     dispatch({ type: SEND_RESET_PASSWORD_EMAIL_FAIL, error: error.code });
   }
-}, "sendChangePasswordConfirmation");
-var changePasswordCompleted = /* @__PURE__ */ __name(() => (dispatch) => dispatch({ type: CHANGING_PASSWORD_COMPLETED }), "changePasswordCompleted");
-var sendResetCodeInit = /* @__PURE__ */ __name(() => (dispatch) => dispatch({ type: SENDING_RESET_CODE_INIT }), "sendResetCodeInit");
-var sendResetCode = /* @__PURE__ */ __name((userName, companyAlias) => async (dispatch) => {
+};
+var changePasswordCompleted = () => (dispatch) => dispatch({ type: CHANGING_PASSWORD_COMPLETED });
+var sendResetCodeInit = () => (dispatch) => dispatch({ type: SENDING_RESET_CODE_INIT });
+var sendResetCode = (userName, companyAlias) => async (dispatch) => {
   dispatch({ type: SENDING_RESET_CODE });
   try {
     await dispatch(getUserPoolConfig(companyAlias));
@@ -3047,8 +3048,8 @@ var sendResetCode = /* @__PURE__ */ __name((userName, companyAlias) => async (di
     localStorageCleanUp();
     dispatch({ type: SENDING_RESET_CODE_FAIL, error: error.code });
   }
-}, "sendResetCode");
-var resetPassword = /* @__PURE__ */ __name((userName, resetCode, newPassword) => async (dispatch) => {
+};
+var resetPassword = (userName, resetCode, newPassword) => async (dispatch) => {
   try {
     await dispatch(getUserPoolConfig(getConstantFromLocalStorage(LS_COMPANY_ALIAS)));
   } catch (error) {
@@ -3071,8 +3072,8 @@ var resetPassword = /* @__PURE__ */ __name((userName, resetCode, newPassword) =>
       dispatch({ type: RESETTING_PASSWORD_FAIL, error: error.code });
     }
   }
-}, "resetPassword");
-var setUpPasswordPolicy = /* @__PURE__ */ __name(() => async (dispatch) => {
+};
+var setUpPasswordPolicy = () => async (dispatch) => {
   dispatch({ type: PASSWORD_POLICY_START });
   try {
     const companyAlias = getConstantFromLocalStorage(LS_COMPANY_ALIAS);
@@ -3099,8 +3100,8 @@ var setUpPasswordPolicy = /* @__PURE__ */ __name(() => async (dispatch) => {
     reportError(error, "Error setting up password policy:");
     dispatch({ type: PASSWORD_POLICY_FAIL, error: error.code });
   }
-}, "setUpPasswordPolicy");
-var setUpProfile = /* @__PURE__ */ __name((userProfile) => async (dispatch) => {
+};
+var setUpProfile = (userProfile) => async (dispatch) => {
   const body = {
     pin: userProfile.pin,
     phone: userProfile.phone,
@@ -3125,8 +3126,8 @@ var setUpProfile = /* @__PURE__ */ __name((userProfile) => async (dispatch) => {
     reportError(error, "Error setting up profile:");
     logout(false);
   }
-}, "setUpProfile");
-var setUpPassword = /* @__PURE__ */ __name((userName, oldPassword, newPassword) => async (dispatch) => {
+};
+var setUpPassword = (userName, oldPassword, newPassword) => async (dispatch) => {
   dispatch({ type: SETUP_PASSWORD_START });
   let phoneNumVerifies;
   let user;
@@ -3183,8 +3184,8 @@ var setUpPassword = /* @__PURE__ */ __name((userName, oldPassword, newPassword) 
       dispatch({ type: SETUP_PASSWORD_FAIL, error: error.code });
     }
   }
-}, "setUpPassword");
-var getCompanyInfo = /* @__PURE__ */ __name((companyAlias) => async (dispatch) => {
+};
+var getCompanyInfo = (companyAlias) => async (dispatch) => {
   try {
     const uri = "/tenants/get/{companyAlias}" /* tenantInfo */.replace(`{${LS_COMPANY_ALIAS}}`, companyAlias);
     const response = await Api.get("tenant" /* tenant */, uri);
@@ -3201,8 +3202,8 @@ var getCompanyInfo = /* @__PURE__ */ __name((companyAlias) => async (dispatch) =
     reportError(error, "Error getting company info:");
     dispatch({ type: LOADING_TENANT_INFO_FAIL });
   }
-}, "getCompanyInfo");
-var setUpMFA = /* @__PURE__ */ __name((mfa) => async (dispatch, getState) => {
+};
+var setUpMFA = (mfa) => async (dispatch, getState) => {
   dispatch({ type: MFA_PREP });
   const cognitoUser = getState().auth.mfaUser;
   try {
@@ -3216,8 +3217,8 @@ var setUpMFA = /* @__PURE__ */ __name((mfa) => async (dispatch, getState) => {
     reportError(error, "Error setting up MFA:");
     dispatch({ type: MFA_FAIL, error: error.code || "CodeMismatchException" /* CodeMismatchException */ });
   }
-}, "setUpMFA");
-var resendMFA = /* @__PURE__ */ __name(() => async (dispatch, getState) => {
+};
+var resendMFA = () => async (dispatch, getState) => {
   const { mfaUsername, mfaPassword } = getState().auth;
   try {
     const password = Buffer3.from(mfaPassword, "base64").toString("ascii");
@@ -3236,17 +3237,17 @@ var resendMFA = /* @__PURE__ */ __name(() => async (dispatch, getState) => {
     reportError(error, "Error resending MFA:");
     dispatch({ type: RESEND_MFA_FAIL });
   }
-}, "resendMFA");
-var MFABackToLogin = /* @__PURE__ */ __name(() => async (dispatch) => {
+};
+var MFABackToLogin = () => async (dispatch) => {
   dispatch({ type: MFA_END });
   localStorageCleanUp();
-}, "MFABackToLogin");
-var setAuthError = /* @__PURE__ */ __name((error) => async (dispatch) => {
+};
+var setAuthError = (error) => async (dispatch) => {
   dispatch({ type: SET_AUTH_ERROR, error });
-}, "setAuthError");
-var setResettingPasswordError = /* @__PURE__ */ __name((error) => async (dispatch) => {
+};
+var setResettingPasswordError = (error) => async (dispatch) => {
   dispatch({ type: SET_RESETTING_PASSWORD_ERROR, error });
-}, "setResettingPasswordError");
+};
 var authDispatchActions = {
   login,
   logout,
@@ -3320,7 +3321,7 @@ var schemaEventDetailInterface = {
 
 // ../vlncc-frontend/src/store/actions/events.ts
 import morphism from "morphism";
-var getEvents = /* @__PURE__ */ __name((query) => async (dispatch) => {
+var getEvents = (query) => async (dispatch) => {
   dispatch({ type: GET_EVENT_LIST_START });
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
@@ -3342,8 +3343,8 @@ var getEvents = /* @__PURE__ */ __name((query) => async (dispatch) => {
       error: 0 /* networkError */
     });
   }
-}, "getEvents");
-var getEventDetails = /* @__PURE__ */ __name((eventId, language) => async (dispatch) => {
+};
+var getEventDetails = (eventId, language) => async (dispatch) => {
   dispatch({ type: GET_EVENT_DETAIL_START });
   try {
     const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
@@ -3363,21 +3364,21 @@ var getEventDetails = /* @__PURE__ */ __name((eventId, language) => async (dispa
       error: 0 /* networkError */
     });
   }
-}, "getEventDetails");
+};
 var eventsDispatchActions = { getEvents, getEventDetails };
 
 // ../vlncc-frontend/src/store/actions/reports.ts
-var setReportLoadingState = /* @__PURE__ */ __name((isLoading) => (dispatch) => dispatch({ type: SET_REPORT_API_LOADING, loading: isLoading }), "setReportLoadingState");
-var setReportIntervalDate = /* @__PURE__ */ __name((interval) => (dispatch) => dispatch({ type: SET_REPORT_INTERVAL_DATE, interval }), "setReportIntervalDate");
-var setReportLocations = /* @__PURE__ */ __name((locations) => (dispatch) => dispatch({ type: SET_REPORT_LOCATIONS, locations }), "setReportLocations");
-var setReportSelectedFormattedLocations = /* @__PURE__ */ __name((locations) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_FORMATTED_LOCATIONS, selectedFormattedLocations: locations }), "setReportSelectedFormattedLocations");
-var setReportSelectedLocationsCustomProps = /* @__PURE__ */ __name((locations) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_LOCATIONS_CUSTOM_PROPS, locationsProps: locations }), "setReportSelectedLocationsCustomProps");
-var setReportSelectedLocationsNum = /* @__PURE__ */ __name((number) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_LOCATIONS_NUM, selectedLocationsNum: number }), "setReportSelectedLocationsNum");
-var setReportSelectedLocationsIDs = /* @__PURE__ */ __name((Ids) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_LOCATIONS_IDS, selectedLocationsIDs: Ids }), "setReportSelectedLocationsIDs");
-var setReportGraphsNum = /* @__PURE__ */ __name((num) => (dispatch) => dispatch({ type: SET_REPORT_GRAPHS_NUM, graphsNum: num }), "setReportGraphsNum");
-var setReportVisibleLocations = /* @__PURE__ */ __name((locations) => (dispatch) => dispatch({ type: SET_REPORT_VISIBLE_LOCATIONS, visibleLocations: locations }), "setReportVisibleLocations");
-var setReportAssignedChartColors = /* @__PURE__ */ __name((colors) => (dispatch) => dispatch({ type: SET_REPORT_ASSIGNED_CHART_COLORS, assignedChartColors: colors }), "setReportAssignedChartColors");
-var resetReportsState = /* @__PURE__ */ __name(() => (dispatch) => dispatch({ type: RESET_REPORTS_STATE }), "resetReportsState");
+var setReportLoadingState = (isLoading) => (dispatch) => dispatch({ type: SET_REPORT_API_LOADING, loading: isLoading });
+var setReportIntervalDate = (interval) => (dispatch) => dispatch({ type: SET_REPORT_INTERVAL_DATE, interval });
+var setReportLocations = (locations) => (dispatch) => dispatch({ type: SET_REPORT_LOCATIONS, locations });
+var setReportSelectedFormattedLocations = (locations) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_FORMATTED_LOCATIONS, selectedFormattedLocations: locations });
+var setReportSelectedLocationsCustomProps = (locations) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_LOCATIONS_CUSTOM_PROPS, locationsProps: locations });
+var setReportSelectedLocationsNum = (number) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_LOCATIONS_NUM, selectedLocationsNum: number });
+var setReportSelectedLocationsIDs = (Ids) => (dispatch) => dispatch({ type: SET_REPORT_SELECTED_LOCATIONS_IDS, selectedLocationsIDs: Ids });
+var setReportGraphsNum = (num) => (dispatch) => dispatch({ type: SET_REPORT_GRAPHS_NUM, graphsNum: num });
+var setReportVisibleLocations = (locations) => (dispatch) => dispatch({ type: SET_REPORT_VISIBLE_LOCATIONS, visibleLocations: locations });
+var setReportAssignedChartColors = (colors) => (dispatch) => dispatch({ type: SET_REPORT_ASSIGNED_CHART_COLORS, assignedChartColors: colors });
+var resetReportsState = () => (dispatch) => dispatch({ type: RESET_REPORTS_STATE });
 var reportsDispatchActions = {
   setReportLoadingState,
   setReportIntervalDate,
@@ -3499,7 +3500,6 @@ function profileReducer(state = initialState4, action) {
       return state;
   }
 }
-__name(profileReducer, "profileReducer");
 
 // ../vlncc-frontend/src/store/reducers/auth.ts
 var initialState5 = {
@@ -3662,7 +3662,6 @@ function authReducer(state = initialState5, action) {
       return state;
   }
 }
-__name(authReducer, "authReducer");
 
 // ../vlncc-frontend/src/store/devices.ts
 import { createSlice as createSlice3 } from "@reduxjs/toolkit";
@@ -3716,7 +3715,6 @@ function eventsReducer(state = initialState7, action) {
       return state;
   }
 }
-__name(eventsReducer, "eventsReducer");
 
 // ../vlncc-frontend/src/store/services/reportsApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -3797,7 +3795,7 @@ var routes = {
 
 // ../vlncc-frontend/src/store/services/utils.ts
 import { Auth as Auth5 } from "aws-amplify";
-var updateHeaders = /* @__PURE__ */ __name(async (headers) => {
+var updateHeaders = async (headers) => {
   headers.set("Accept", "application/json");
   headers.set("Content-Type", "application/json");
   headers.set("Accept-Encoding", "gzip, deflate, br");
@@ -3806,7 +3804,7 @@ var updateHeaders = /* @__PURE__ */ __name(async (headers) => {
     headers.set("Authorization", currentCredentials.getIdToken().getJwtToken());
   }
   return headers;
-}, "updateHeaders");
+};
 
 // ../vlncc-frontend/src/store/services/reportsApi.ts
 var reportsApi = createApi({
@@ -4092,7 +4090,6 @@ function reportsReducer(state = initialState8, action) {
       return state;
   }
 }
-__name(reportsReducer, "reportsReducer");
 
 // ../vlncc-frontend/src/store/siteTree.ts
 import { createSlice as createSlice4 } from "@reduxjs/toolkit";
@@ -4116,8 +4113,8 @@ var siteTreeSlice = createSlice4({
     }
   }
 });
-var selectSelectedNode = /* @__PURE__ */ __name((state) => state.siteTree.selectedNode, "selectSelectedNode");
-var selectCurrentlyRemoving = /* @__PURE__ */ __name((state) => state.siteTree.currentlyRemoving, "selectCurrentlyRemoving");
+var selectSelectedNode = (state) => state.siteTree.selectedNode;
+var selectCurrentlyRemoving = (state) => state.siteTree.currentlyRemoving;
 var { setSelectedNodeId, setLastRemoved, setCurrentlyRemoving } = siteTreeSlice.actions;
 var siteTree_default = siteTreeSlice.reducer;
 
@@ -4135,7 +4132,7 @@ var helpSlice = createSlice5({
     }
   }
 });
-var selectIsOpen = /* @__PURE__ */ __name((state) => state.help.isOpen, "selectIsOpen");
+var selectIsOpen = (state) => state.help.isOpen;
 var { setIsOpen } = helpSlice.actions;
 var help_default = helpSlice.reducer;
 
@@ -4165,7 +4162,7 @@ var devToolsConfiguration = {
     return state.reports?.selectedFormattedLocations ? { ...state, reports: { ...state.reports, selectedFormattedLocations: "Large blob" } } : state;
   }
 };
-var configure = /* @__PURE__ */ __name((preloadedState = {}) => {
+var configure = (preloadedState = {}) => {
   const store2 = configureStore({
     reducer: rootReducer,
     devTools: devToolsConfiguration,
@@ -4179,7 +4176,7 @@ var configure = /* @__PURE__ */ __name((preloadedState = {}) => {
     preloadedState
   });
   return store2;
-}, "configure");
+};
 var store = configure();
 setupListeners(store.dispatch);
 var store_default = store;
@@ -4199,7 +4196,6 @@ function unregister() {
     });
   }
 }
-__name(unregister, "unregister");
 
 // ../vlncc-frontend/src/app.tsx
 import { Route as Route7, Routes as Routes7 } from "react-router";
@@ -4238,7 +4234,7 @@ import { Size as Size3, Separator, Button, ButtonType } from "@vaisala-rockhoppe
 
 // ../vlncc-frontend/src/components/auth/PasswordHelpText.tsx
 import { useTranslation } from "react-i18next";
-var PasswordHelpText = /* @__PURE__ */ __name(({ passwordPolicy, titleClass }) => {
+var PasswordHelpText = ({ passwordPolicy, titleClass }) => {
   const { t } = useTranslation();
   const passwordRequirements = [];
   passwordPolicy.isUpperCaseRequired ? passwordRequirements.push(t("password.passwordHelperUpperCaseRequirement")) : null;
@@ -4253,7 +4249,7 @@ var PasswordHelpText = /* @__PURE__ */ __name(({ passwordPolicy, titleClass }) =
       <ul id="password-help-text-policy-list" className="vai-margin-bottom-m">{listItems}</ul>
     </> : null}
   </>;
-}, "PasswordHelpText");
+};
 
 // ../vlncc-frontend/src/hooks/usePasswordValidators.tsx
 import React2 from "react";
@@ -4271,8 +4267,7 @@ function withDisplaySize(Component) {
     };
     return result;
   }
-  __name(getDisplaySize, "getDisplaySize");
-  return /* @__PURE__ */ __name(class DisplayMode extends React.PureComponent {
+  return class DisplayMode extends React.PureComponent {
     state = getDisplaySize();
     render() {
       const { props, state } = this;
@@ -4290,20 +4285,19 @@ function withDisplaySize(Component) {
     componentWillUnmount() {
       window.removeEventListener("resize", this.onScreenSizeChanged);
     }
-  }, "DisplayMode");
+  };
 }
-__name(withDisplaySize, "withDisplaySize");
 
 // ../vlncc-frontend/src/utils/validation.ts
-var checkValidationErrorFn = /* @__PURE__ */ __name((validationType, fieldName, fieldValue) => {
+var checkValidationErrorFn = (validationType, fieldName, fieldValue) => {
   switch (validationType) {
     case "MAX_LENGTH" /* MAX_LENGTH */:
       return fieldValue?.length > FIELD_VALIDATIONS_CONFIG[fieldName][validationType];
     default:
       return false;
   }
-}, "checkValidationErrorFn");
-var validation = /* @__PURE__ */ __name((fieldName, fieldValue, validationType) => {
+};
+var validation = (fieldName, fieldValue, validationType) => {
   const validationResult = { hasError: false, errors: [] };
   if (!Array.isArray(validationType)) {
     const hasError = checkValidationErrorFn(validationType, fieldName, fieldValue);
@@ -4322,7 +4316,7 @@ var validation = /* @__PURE__ */ __name((fieldName, fieldValue, validationType) 
       return mem;
     }, validationResult);
   }
-}, "validation");
+};
 
 // ../vlncc-frontend/src/hooks/usePasswordValidators.tsx
 var defaultPasswordStrength = {
@@ -4330,7 +4324,7 @@ var defaultPasswordStrength = {
   feedback: "",
   strength: void 0
 };
-var usePasswordValidators = /* @__PURE__ */ __name((props) => {
+var usePasswordValidators = (props) => {
   const [currentPassword, setCurrentPassword] = React2.useState("");
   const [currentPasswordError, setCurrentPasswordError] = React2.useState("");
   const [newPassword, setNewPassword] = React2.useState("");
@@ -4357,7 +4351,7 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
     });
   }, [props.language]);
   const inputSize = props.displaySize === "desktop" /* desktop */ ? Size.Container : Size.Container;
-  const onCurrentPasswordChange = /* @__PURE__ */ __name((e) => {
+  const onCurrentPasswordChange = (e) => {
     const { value } = e.target;
     setCurrentPassword(value);
     if (!value.trim()) {
@@ -4368,8 +4362,8 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
     } else {
       setCurrentPasswordError("");
     }
-  }, "onCurrentPasswordChange");
-  const onNewPasswordChange = /* @__PURE__ */ __name((e) => {
+  };
+  const onNewPasswordChange = (e) => {
     const { value } = e.target;
     const passStrength = strengthFinder(value, props.passwordBlackList, props.passwordPolicy, props.t, zxcvbnOptions2);
     setNewPassword(value);
@@ -4388,11 +4382,11 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
         setErrorFromScore(setNewPasswordError, strength, "auth.passwordStrengthError", setParametricError);
       }
     });
-  }, "onNewPasswordChange");
-  const onConfirmPasswordChange = /* @__PURE__ */ __name((e) => {
+  };
+  const onConfirmPasswordChange = (e) => {
     const { value } = e.target;
     setConfirmPassword(value);
-  }, "onConfirmPasswordChange");
+  };
   React2.useEffect(() => {
     setConfirmPasswordEqualErrorsState();
   }, [newPassword, confirmPassword, newPasswordError, confirmPasswordError]);
@@ -4411,14 +4405,14 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
   }, [confirmPassword, confirmPasswordError, newPasswordError, newPassword]);
   const arePasswordsEqual = confirmPassword === newPassword;
   const hasPasswords = Boolean(newPassword) && Boolean(confirmPassword);
-  const getNewPasswordError = /* @__PURE__ */ __name(() => {
+  const getNewPasswordError = () => {
     if (parametricError !== 0)
       return props.t(`${newPasswordError}`, { length: parametricError });
     else
       return props.t(`${newPasswordError}`);
-  }, "getNewPasswordError");
+  };
   const isButtonDisabled = props.loading === true || !hasPasswords || !arePasswordsEqual || Boolean(confirmPasswordError) || Boolean(newPasswordError) || Boolean(currentPasswordError);
-  const renderNewPassword = /* @__PURE__ */ __name((labelKey = "changePassword.newPasswordLabel") => {
+  const renderNewPassword = (labelKey = "changePassword.newPasswordLabel") => {
     return <>
       <Label id="new-password-label">{props.t(labelKey)}</Label>
       <PasswordInput
@@ -4446,8 +4440,8 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
         {"\xA0"}
       </div>
     </>;
-  }, "renderNewPassword");
-  const renderConfirmPassword = /* @__PURE__ */ __name((labelKey = "signup.confirmNewPasswordLabel") => {
+  };
+  const renderConfirmPassword = (labelKey = "signup.confirmNewPasswordLabel") => {
     return <>
       <Label id="confirm-password-label">{props.t(labelKey)}</Label>
       <PasswordInput
@@ -4475,8 +4469,8 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
         {"\xA0"}
       </div>
     </>;
-  }, "renderConfirmPassword");
-  const renderCurrentPassword = /* @__PURE__ */ __name((labelKey = "changePassword.currentPasswordLabel") => {
+  };
+  const renderCurrentPassword = (labelKey = "changePassword.currentPasswordLabel") => {
     return <>
       <Label htmlId="current-password-label">{props.t(labelKey)}</Label>
       <PasswordInput
@@ -4496,7 +4490,7 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
         {"\xA0"}
       </div>
     </>;
-  }, "renderCurrentPassword");
+  };
   return {
     onConfirmPasswordChange,
     onCurrentPasswordChange,
@@ -4523,7 +4517,7 @@ var usePasswordValidators = /* @__PURE__ */ __name((props) => {
     setCurrentPasswordError,
     renderCurrentPassword
   };
-}, "usePasswordValidators");
+};
 var usePasswordValidators_default = usePasswordValidators;
 
 // ../vlncc-frontend/src/components/ChangePasswordDialog/index.tsx
@@ -4531,7 +4525,7 @@ import "./change-password-dialog.scss";
 
 // ../vlncc-frontend/src/components/BaseComponents/CenteredSpinner.tsx
 import { Flex, Spinner } from "@vaisala-rockhopper/components";
-var CenteredSpinner = /* @__PURE__ */ __name((props) => {
+var CenteredSpinner = (props) => {
   const { wrapperProps = {} } = props;
   const className = typeof props.className !== "undefined" ? props.className : "vai-margin-top-m";
   const htmlId3 = typeof props.htmlId !== "undefined" ? props.htmlId : "centered-spinner";
@@ -4539,31 +4533,31 @@ var CenteredSpinner = /* @__PURE__ */ __name((props) => {
     <Spinner htmlId={htmlId3} className={className} />
     {props.children}
   </Flex>;
-}, "CenteredSpinner");
+};
 var CenteredSpinner_default = CenteredSpinner;
 
 // ../vlncc-frontend/src/store/hooks.ts
 import { useDispatch, useSelector } from "react-redux";
-var useAppDispatch = /* @__PURE__ */ __name(() => useDispatch(), "useAppDispatch");
+var useAppDispatch = () => useDispatch();
 var useAppSelector = useSelector;
 
 // ../vlncc-frontend/src/components/Modals/ModalContainer.tsx
 import { Flex as Flex3, Modal } from "@vaisala-rockhopper/components";
 
 // ../vlncc-frontend/src/components/Modals/ModalFooter.tsx
-var ModalFooter = /* @__PURE__ */ __name(({ buttons, children }) => {
+var ModalFooter = ({ buttons, children }) => {
   return <div className="modal-footer">
     {buttons && <div className="modal-footer__actions">{buttons}</div>}
     {children && <div className="modal-footer__end">{children}</div>}
   </div>;
-}, "ModalFooter");
+};
 var ModalFooter_default = ModalFooter;
 
 // ../vlncc-frontend/src/components/Modals/ModalHeader.tsx
 import { Flex as Flex2, Heading, Icon, IconName as IconName2, Size as Size2 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation2 } from "react-i18next";
 import cx from "classnames";
-var ModalHeader = /* @__PURE__ */ __name(({ type, title, iconName }) => {
+var ModalHeader = ({ type, title, iconName }) => {
   const { t } = useTranslation2();
   let iconDetails;
   if (type === "alert-dialog") {
@@ -4581,14 +4575,14 @@ var ModalHeader = /* @__PURE__ */ __name(({ type, title, iconName }) => {
   );
   return <Flex2 className={headerClassName} justifyContent="center">
     {(iconName || type === "alert-dialog") && <Icon size={Size2.L} name={iconName} {...iconDetails} className={iconClassName} />}
-    <Heading className="modal-header__heading">{t(title)}</Heading>
+    <Heading data-testid={TEST_IDS.users_edit_profile_dialog_heading} className="modal-header__heading">{t(title)}</Heading>
   </Flex2>;
-}, "ModalHeader");
+};
 var ModalHeader_default = ModalHeader;
 
 // ../vlncc-frontend/src/components/Modals/ModalContainer.tsx
 import "./modal.scss";
-var ModalContainer = /* @__PURE__ */ __name(({
+var ModalContainer = ({
   children,
   id,
   title,
@@ -4603,10 +4597,10 @@ var ModalContainer = /* @__PURE__ */ __name(({
     <div className="modal-content">{children}</div>
     <ModalFooter_default buttons={buttons}>{footerChildren}</ModalFooter_default>
   </Flex3></Modal>;
-}, "ModalContainer");
+};
 
 // ../vlncc-frontend/src/components/ChangePasswordDialog/index.tsx
-var ChangePasswordDialog = /* @__PURE__ */ __name((props) => {
+var ChangePasswordDialog = (props) => {
   const { t } = useTranslation3();
   const dispatch = useAppDispatch();
   const passwordBlackList2 = [];
@@ -4657,8 +4651,8 @@ var ChangePasswordDialog = /* @__PURE__ */ __name((props) => {
       props.changePasswordCompleted();
     }
   }, [props.passwordChanged]);
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const onChangePassword = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const onChangePassword = () => {
     let errorExist = false;
     if (!currentPassword) {
       setCurrentPasswordError("auth.passwordCannotBeEmpty");
@@ -4667,7 +4661,7 @@ var ChangePasswordDialog = /* @__PURE__ */ __name((props) => {
     if (!errorExist) {
       props.changePassword(currentPassword, newPassword);
     }
-  }, "onChangePassword");
+  };
   const modalButtons = <>
     <Button
       id="save-password"
@@ -4702,11 +4696,11 @@ var ChangePasswordDialog = /* @__PURE__ */ __name((props) => {
     {renderConfirmPassword()}
     <div id="change-password-buttons-container" className="buttons-container" />
   </ModalContainer>;
-}, "ChangePasswordDialog");
+};
 var ChangePasswordDialog_default = ChangePasswordDialog;
 
 // ../vlncc-frontend/src/containers/ChangePassword.tsx
-var ChangePasswordContainer = /* @__PURE__ */ __name((props) => {
+var ChangePasswordContainer = (props) => {
   React4.useEffect(() => {
     props.setUpPasswordPolicy();
   }, []);
@@ -4725,8 +4719,8 @@ var ChangePasswordContainer = /* @__PURE__ */ __name((props) => {
     passwordPolicyUpperCaseRequired={props.passwordPolicyUpperCaseRequired}
     passwordPolicyLowerCaseRequired={props.passwordPolicyLowerCaseRequired}
   />;
-}, "ChangePasswordContainer");
-var mapStateToProps = /* @__PURE__ */ __name((state) => ({
+};
+var mapStateToProps = (state) => ({
   changingPassword: state.auth.changingPassword,
   passwordChanged: state.auth.passwordChanged,
   changingPasswordError: state.auth.changingPasswordError,
@@ -4737,12 +4731,12 @@ var mapStateToProps = /* @__PURE__ */ __name((state) => ({
   passwordPolicySpecialCharRequired: state.auth.passwordPolicySpecialCharRequired,
   passwordPolicyUpperCaseRequired: state.auth.passwordPolicyUpperCaseRequired,
   passwordPolicyLowerCaseRequired: state.auth.passwordPolicyLowerCaseRequired
-}), "mapStateToProps");
-var mapDispatchToProps = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps = (dispatch) => ({
   changePassword: (oldPassword, newPassword) => dispatch(authDispatchActions.changePassword(oldPassword, newPassword)),
   changePasswordCompleted: () => dispatch(authDispatchActions.changePasswordCompleted()),
   setUpPasswordPolicy: () => dispatch(authDispatchActions.setUpPasswordPolicy())
-}), "mapDispatchToProps");
+});
 var ChangePassword_default = withDisplaySize(connect(mapStateToProps, mapDispatchToProps)(ChangePasswordContainer));
 
 // ../vlncc-frontend/src/containers/ViewMyProfile.tsx
@@ -6752,9 +6746,9 @@ import { Size as Size4, Button as Button2, ButtonType as ButtonType2 } from "@va
 import Resizer from "react-image-file-resizer";
 import "./picture-uploader.scss";
 import photoPlaceholder from "../../../assets/images/photo-placeholder-70x70.png";
-var ProfilePictureUploader = /* @__PURE__ */ __name((props) => {
+var ProfilePictureUploader = (props) => {
   const [profilePictureUrl, setProfilePictureUrl] = React5.useState(props.pictureUrl);
-  const resizeImage = /* @__PURE__ */ __name((file, maxWidth, maxHeight) => new Promise((resolve) => {
+  const resizeImage = (file, maxWidth, maxHeight) => new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
       maxWidth,
@@ -6767,7 +6761,7 @@ var ProfilePictureUploader = /* @__PURE__ */ __name((props) => {
       },
       "base64"
     );
-  }), "resizeImage");
+  });
   const inputFile = useRef(null);
   return <div className="picture-uploader">
     <input
@@ -6797,7 +6791,7 @@ var ProfilePictureUploader = /* @__PURE__ */ __name((props) => {
       onClick={() => inputFile.current.click()}
     >{props.title}</Button2>
   </div>;
-}, "ProfilePictureUploader");
+};
 var PictureUploader_default = ProfilePictureUploader;
 
 // ../vlncc-frontend/src/components/profile/EditProfileDialog/index.tsx
@@ -6810,18 +6804,18 @@ import { VaiColor as VaiColor3 } from "@vaisala-rockhopper/design-tokens";
 
 // ../vlncc-frontend/src/hooks/useHtmlId.tsx
 var DEFAULT_SEPARATOR = "__";
-var useHtmlId = /* @__PURE__ */ __name((props) => {
+var useHtmlId = (props) => {
   const { separator = DEFAULT_SEPARATOR } = props;
-  const getId = /* @__PURE__ */ __name((suffix) => {
+  const getId = (suffix) => {
     return props.htmlId ? suffix ? `${props.htmlId}${separator}${suffix}` : props.htmlId : void 0;
-  }, "getId");
+  };
   return { getId, ...props };
-}, "useHtmlId");
+};
 var useHtmlId_default = useHtmlId;
 
 // ../vlncc-frontend/src/components/Utils/Infotip/index.tsx
 import "./infotip.scss";
-var Infotip = /* @__PURE__ */ __name(({ htmlId: htmlId3 = null, iconProps = {}, popoverProps = {}, children }) => {
+var Infotip = ({ htmlId: htmlId3 = null, iconProps = {}, popoverProps = {}, children }) => {
   const { getId } = useHtmlId_default({ htmlId: htmlId3 });
   const {
     color = VaiColor3.AquaVaisala,
@@ -6869,23 +6863,23 @@ var Infotip = /* @__PURE__ */ __name(({ htmlId: htmlId3 = null, iconProps = {}, 
     }
     <div className="vai-body-text">{children}</div>
   </Popover>;
-}, "Infotip");
+};
 var Infotip_default = Infotip;
 
 // ../vlncc-frontend/src/components/profile/EditProfileDialog/index.tsx
 import "react-phone-input-2/lib/style.css";
 import "./edit-profile-dialog.scss";
-var EditProfileDialog = /* @__PURE__ */ __name((props) => {
+var EditProfileDialog = (props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation4();
   const [saving, setSaving] = React6.useState(false);
-  const getTimeZone = /* @__PURE__ */ __name(() => {
+  const getTimeZone = () => {
     if (!props.userProfile.tz) {
       return Intl.DateTimeFormat().resolvedOptions().timeZone;
     } else {
       return props.userProfile.tz;
     }
-  }, "getTimeZone");
+  };
   const [firstName, setFirstName] = React6.useState(props.userProfile.first_name);
   const [firstNameError, setFirstNameError] = React6.useState("");
   const [lastName, setLastName] = React6.useState(props.userProfile.last_name);
@@ -6899,31 +6893,31 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
   const [timeZone, setTimeZone] = React6.useState(getTimeZone());
   const [timeZoneError, setTimeZoneError] = React6.useState("");
   const [profilePictureFile, setProfilePictureFile] = React6.useState(null);
-  const onFirstNameChange = /* @__PURE__ */ __name((event) => {
+  const onFirstNameChange = (event) => {
     setFirstNameError("");
     setFirstName(event.target.value);
-  }, "onFirstNameChange");
-  const onLastNameChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onLastNameChange = (event) => {
     setLastNameError("");
     setLastName(event.target.value);
-  }, "onLastNameChange");
-  const onPhoneNumberChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onPhoneNumberChange = (event) => {
     setPhoneNumberError("");
     setPhoneNumber(event);
-  }, "onPhoneNumberChange");
-  const onTimeZoneChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onTimeZoneChange = (event) => {
     setTimeZoneError("");
     setTimeZone(event);
-  }, "onTimeZoneChange");
-  const onLanguageChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onLanguageChange = (event) => {
     setLanguageError("");
     setLanguage(event);
-  }, "onLanguageChange");
-  const onPinChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onPinChange = (event) => {
     setPinError("");
     setPin(event.target.value);
-  }, "onPinChange");
-  const onSetUpProfile = /* @__PURE__ */ __name(async () => {
+  };
+  const onSetUpProfile = async () => {
     setSaving(true);
     let errorExist = false;
     const trimmedFirstName = validator.trim(firstName);
@@ -6981,8 +6975,8 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       dispatch(hideDialog());
     }
     setSaving(false);
-  }, "onSetUpProfile");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
+  };
+  const onDismiss = () => dispatch(hideDialog());
   const isDisabled = saving || !phoneNumber || !firstName || !lastName || !language || !timeZone;
   const modalButtons = <>
     <Button3
@@ -6991,6 +6985,7 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       htmlId="edit-profile-finish-button"
       onClick={onSetUpProfile}
       disabled={isDisabled}
+      data-testid={TEST_IDS.users_edit_profile_dialog_save_button}
     >{saving ? <CenteredSpinner_default htmlId="edit-profile-spinner" className="" /> : t("signup.save")}</Button3>
     <Button3
       id="edit-profile-cancel-button"
@@ -6998,6 +6993,7 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       buttonType={ButtonType3.Secondary}
       onClick={onDismiss}
       disabled={saving}
+      data-testid={TEST_IDS.users_edit_profile_dialog_cancel_button}
     >{t("signup.cancel")}</Button3>
   </>;
   return <ModalContainer
@@ -7031,6 +7027,7 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       onChange={onFirstNameChange}
       className={getErrorClass(firstNameError)}
       errors={firstNameError}
+      data-testid={TEST_IDS.users_edit_profile_dialog_first_name_field}
     />
     <Form.Item
       label={t("signup.lastName")}
@@ -7043,6 +7040,7 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       onChange={onLastNameChange}
       className={getErrorClass(lastNameError)}
       errors={lastNameError}
+      data-testid={TEST_IDS.users_edit_profile_dialog_last_name_field}
     />
     <Form.Item
       label={t("profile.language")}
@@ -7058,6 +7056,7 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       width={Size6.M}
       onChange={onLanguageChange}
       className={getErrorClass(languageError)}
+      data-testid={TEST_IDS.users_edit_profile_dialog_language_field}
     >{Object.values(Languages).map((value) => {
       const langText = LANGUAGE_TEXT[value];
       return <Select.Option
@@ -7081,6 +7080,7 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       width={Size6.M}
       onChange={onTimeZoneChange}
       className={getErrorClass(timeZoneError)}
+      data-testid={TEST_IDS.users_edit_profile_dialog_timezone_field}
     >{timeZones_default.map((option) => <Select.Option
       id={`edit-profile-time-zone-selection-${option}`}
       key={option.value}
@@ -7119,30 +7119,30 @@ var EditProfileDialog = /* @__PURE__ */ __name((props) => {
       className={getErrorClass(pinError)}
     /></Form.Item>
   </ModalContainer>;
-}, "EditProfileDialog");
+};
 var EditProfileDialog_default = EditProfileDialog;
 
 // ../vlncc-frontend/src/components/profile/ViewMyProfileDialog/index.tsx
 import "./view-my-profile-dialog.scss";
 import { useTranslation as useTranslation5 } from "react-i18next";
-var ViewMyProfileDialog = /* @__PURE__ */ __name((props) => {
+var ViewMyProfileDialog = (props) => {
   const { t } = useTranslation5();
   const [pinVisibility, setPinVisibility] = React7.useState(false);
   const dispatch = useAppDispatch();
   React7.useEffect(() => {
     props.getMyProfile();
   }, []);
-  const showEditProfileModal = /* @__PURE__ */ __name(() => {
+  const showEditProfileModal = () => {
     dispatch(
       showDialog(
         <EditProfileDialog_default disableUserInputs={false} userProfile={props.myProfile} editProfile={props.editProfile} />
       )
     );
-  }, "showEditProfileModal");
-  const toggleVisbility = /* @__PURE__ */ __name(() => {
+  };
+  const toggleVisbility = () => {
     setPinVisibility(!pinVisibility);
-  }, "toggleVisbility");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
+  };
+  const onDismiss = () => dispatch(hideDialog());
   let groupListContent = <CenteredSpinner_default htmlId="view-my-profile-group-list-spinner" />;
   if (!props.userProfileLoading) {
     groupListContent = <Table id="view-my-profile-table" tableStyle={TableStyle.Plain} className="my-profile-table vai-margin-left-s"><TableBody htmlId="view-my-profile-table-body">{props.myProfile.groups.map((row, index) => <TableRow htmlId={`view-my-profile-table-row-${index}`} key={`profile-tabrow-${index}`}>
@@ -7248,19 +7248,19 @@ var ViewMyProfileDialog = /* @__PURE__ */ __name((props) => {
     dismissOnOverlayClick={false}
     className="view-my-profile-modal"
   ><Flex5><Flex5.Item alignSelf="flex-start" flexBasis="100%">{userProfileContent}</Flex5.Item></Flex5></Modal2>;
-}, "ViewMyProfileDialog");
+};
 var ViewMyProfileDialog_default = ViewMyProfileDialog;
 
 // ../vlncc-frontend/src/containers/ViewMyProfile.tsx
-var mapDispatchToProps2 = /* @__PURE__ */ __name((dispatch) => ({
+var mapDispatchToProps2 = (dispatch) => ({
   getMyProfile: () => dispatch(profileDispatchActions.getMyProfile()),
   editProfile: (userProfile) => dispatch(profileDispatchActions.editProfile(userProfile))
-}), "mapDispatchToProps");
-var mapStateToProps2 = /* @__PURE__ */ __name(({ profile, general }) => ({
+});
+var mapStateToProps2 = ({ profile, general }) => ({
   profile,
   language: general.language
-}), "mapStateToProps");
-var ViewMyProfileContainer = /* @__PURE__ */ __name((props) => {
+});
+var ViewMyProfileContainer = (props) => {
   return <ViewMyProfileDialog_default
     getMyProfile={props.getMyProfile}
     userProfileLoading={props.profile.myProfileLoading}
@@ -7269,7 +7269,7 @@ var ViewMyProfileContainer = /* @__PURE__ */ __name((props) => {
     editProfileSucceedFlag={props.profile.isEditProfileSucceed}
     editProfileError={props.profile.editProfileError}
   />;
-}, "ViewMyProfileContainer");
+};
 var ViewMyProfile_default = withDisplaySize(connect2(mapStateToProps2, mapDispatchToProps2)(ViewMyProfileContainer));
 
 // ../vlncc-frontend/src/context/TimeContext.tsx
@@ -7277,8 +7277,8 @@ import { getMinutes as getMinutes2 } from "date-fns";
 import React8 from "react";
 
 // ../vlncc-frontend/src/store/profile.ts
-var selectCurrentUser = /* @__PURE__ */ __name((state) => state.profile.currentUser, "selectCurrentUser");
-var selectTimeZone = /* @__PURE__ */ __name((state) => state.profile?.currentUser?.tz, "selectTimeZone");
+var selectCurrentUser = (state) => state.profile.currentUser;
+var selectTimeZone = (state) => state.profile?.currentUser?.tz;
 
 // ../vlncc-frontend/src/context/TimeContext.tsx
 var TimeContext = React8.createContext(null);
@@ -7289,11 +7289,11 @@ function TimeContextProvider({ children }) {
   const mounted = React8.useRef(true);
   const timeZone = useAppSelector(selectTimeZone);
   React8.useEffect(() => {
-    const getAndSetTimeInfo = /* @__PURE__ */ __name(async () => {
+    const getAndSetTimeInfo = async () => {
       const { date, time, zone } = await getTime(timeZone);
       timeDetails.current = { date, time, zone };
       setToday(getTodayWithNearestAvailableTime());
-    }, "getAndSetTimeInfo");
+    };
     getAndSetTimeInfo();
     let interval;
     if (true) {
@@ -7308,15 +7308,14 @@ function TimeContextProvider({ children }) {
         }
       }, 1e3);
     }
-    return /* @__PURE__ */ __name(function cleanup() {
+    return function cleanup() {
       mounted.current = false;
       clearInterval(interval);
-    }, "cleanup");
+    };
   }, [timeZone]);
   const value = { today: today2, setToday, timeDetails };
   return <TimeContext.Provider value={value}>{children}</TimeContext.Provider>;
 }
-__name(TimeContextProvider, "TimeContextProvider");
 var TimeContext_default = TimeContext;
 
 // ../vlncc-frontend/src/hooks/useLaunchpad.tsx
@@ -7339,16 +7338,15 @@ function waitForElement(selector) {
     });
   });
 }
-__name(waitForElement, "waitForElement");
-var useLaunchpad = /* @__PURE__ */ __name(() => {
+var useLaunchpad = () => {
   const { t, i18n: i18n2 } = useTranslation6();
-  const replaceHeading = /* @__PURE__ */ __name(() => {
+  const replaceHeading = () => {
     const header = document.getElementsByClassName(".appcues-widget-header h4");
     if (header?.length > 0) {
       header[0].innerText = t("header.tours", { count: 2 });
     }
-  }, "replaceHeading");
-  const init = /* @__PURE__ */ __name(async () => {
+  };
+  const init = async () => {
     removeAppcues();
     const toursText = t("header.tours", { count: 2 });
     window.Appcues.loadLaunchpad("#tours", {
@@ -7379,13 +7377,13 @@ var useLaunchpad = /* @__PURE__ */ __name(() => {
       button.title = toursText;
       button.innerHTML = '<i id="tour-icon" class="vai-icon vai-icon--tour vai-header-item__icon"></i>';
     });
-  }, "init");
-  const removeAppcues = /* @__PURE__ */ __name(() => {
+  };
+  const removeAppcues = () => {
     const el = document.querySelector(".appcues");
     if (el) {
       el.remove();
     }
-  }, "removeAppcues");
+  };
   React9.useEffect(() => {
     init();
     return removeAppcues;
@@ -7394,11 +7392,11 @@ var useLaunchpad = /* @__PURE__ */ __name(() => {
     replaceHeading();
   }, [i18n2.language]);
   return { initLaunchpad: init, removeAppcues, replaceHeading };
-}, "useLaunchpad");
+};
 var useLaunchpad_default = useLaunchpad;
 
 // ../vlncc-frontend/src/store/auth.ts
-var selectIsAuthenticated = /* @__PURE__ */ __name((state) => state.auth.isAuthenticated, "selectIsAuthenticated");
+var selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 
 // ../vlncc-frontend/src/components/Sidebar/index.tsx
 import { Drawer } from "@vaisala-rockhopper/components";
@@ -7419,7 +7417,7 @@ import { ReactComponent as GenericError } from "../../../assets/images/GenericEr
 import { ReactComponent as NothingFound } from "../../../assets/images/NothingFound.svg";
 import { ReactComponent as NothingSelected } from "../../../assets/images/NothingSelected.svg";
 import { ReactComponent as ConnectionLost } from "../../../assets/images/ConnectionLost.svg";
-var Illustration = /* @__PURE__ */ __name(({ illustration, id, children }) => {
+var Illustration = ({ illustration, id, children }) => {
   let component = null;
   switch (illustration) {
     case "positive":
@@ -7450,11 +7448,11 @@ var Illustration = /* @__PURE__ */ __name(({ illustration, id, children }) => {
     {React10.cloneElement(component, { id })}
     {children}
   </>;
-}, "Illustration");
+};
 
 // ../vlncc-frontend/src/components/Utils/EmptyState/EmptyState.tsx
 import "./empty-state.scss";
-var EmptyState = /* @__PURE__ */ __name(({ heading, description, illustration, link, htmlId: htmlId3 }) => {
+var EmptyState = ({ heading, description, illustration, link, htmlId: htmlId3 }) => {
   const { t } = useTranslation7();
   const { getId } = useHtmlId_default({ htmlId: htmlId3 });
   return <Flex6
@@ -7470,15 +7468,15 @@ var EmptyState = /* @__PURE__ */ __name(({ heading, description, illustration, l
     {description && <BodyText htmlId={getId("description")} className="empty-state__body-text">{t(description)}</BodyText>}
     {link && <Link id={getId("link")} className="empty-state__link" to={link.to}>{t(link.desc)}</Link>}
   </Flex6>;
-}, "EmptyState");
+};
 
 // ../vlncc-frontend/src/components/Sidebar/index.tsx
 var LOWERED_EN = "en-US" /* en */.toLowerCase();
-var Sidebar = /* @__PURE__ */ __name(({ isOpen = false, language = "en-US" /* en */ }) => {
+var Sidebar = ({ isOpen = false, language = "en-US" /* en */ }) => {
   const [currentExtension, setCurrentExtension] = React11.useState("");
   const [content, setContent] = React11.useState(null);
   const location = useLocation();
-  const loadContent = /* @__PURE__ */ __name((language2, area, path) => {
+  const loadContent = (language2, area, path) => {
     const loweredLanguage = language2?.toLowerCase() || LOWERED_EN;
     const fullExtension = `${loweredLanguage}/${area}_${path || ROOT_LEVEL_NAME}.html`;
     const homeExtension = `${loweredLanguage}/${area}_${ROOT_LEVEL_NAME}.html`;
@@ -7512,7 +7510,7 @@ var Sidebar = /* @__PURE__ */ __name(({ isOpen = false, language = "en-US" /* en
     }
     setContent(newContent);
     setCurrentExtension(currExtension);
-  }, "loadContent");
+  };
   React11.useEffect(() => {
     const [, area, path] = location.pathname.split("/");
     loadContent(language, area, path);
@@ -7534,19 +7532,19 @@ var Sidebar = /* @__PURE__ */ __name(({ isOpen = false, language = "en-US" /* en
     }
     <div style={{ display: "none" }} data-testid={TEST_IDS.sidebar_current_route}>{currentExtension}</div>
   </Drawer>;
-}, "Sidebar");
+};
 var Sidebar_default = Sidebar;
 
 // ../vlncc-frontend/src/components/Header.tsx
-var mapStateToProps3 = /* @__PURE__ */ __name((state) => ({}), "mapStateToProps");
-var mapDispatchToProps3 = /* @__PURE__ */ __name((dispatch) => ({
+var mapStateToProps3 = (state) => ({});
+var mapDispatchToProps3 = (dispatch) => ({
   logout: (globalSignout) => dispatch(authDispatchActions.logout(globalSignout)),
   startChangePassword: () => dispatch(authDispatchActions.startChangePassword()),
   changeTheme: () => dispatch(actionCreators.changeTheme)
-}), "mapDispatchToProps");
+});
 var { Light: Light2, Dark: Dark2 } = ApplicationTheme2;
 var { Check, Settings, Logout } = IconName5;
-var Header = /* @__PURE__ */ __name(({
+var Header = ({
   logout: logout2,
   changeTheme: changeTheme2,
   startChangePassword: startChangePassword2,
@@ -7568,16 +7566,16 @@ var Header = /* @__PURE__ */ __name(({
       pageContentScrollStatus === ScrollStatus.Bottom || pageContentScrollStatus === ScrollStatus.Scrolled
     );
   }, [pageContentScrollStatus]);
-  const onChangePassword = /* @__PURE__ */ __name(() => {
+  const onChangePassword = () => {
     startChangePassword2();
     dispatch(showDialog(<ChangePassword_default />));
-  }, "onChangePassword");
-  const onViewMyProfile = /* @__PURE__ */ __name(() => {
+  };
+  const onViewMyProfile = () => {
     dispatch(showDialog(<ViewMyProfile_default />));
-  }, "onViewMyProfile");
-  const onLogout = /* @__PURE__ */ __name(() => {
+  };
+  const onLogout = () => {
     logout2(false);
-  }, "onLogout");
+  };
   React12.useEffect(() => {
     return () => {
       dispatch(setIsOpen(false));
@@ -7601,7 +7599,6 @@ var Header = /* @__PURE__ */ __name(({
         return "";
     }
   }
-  __name(getHeaderTitle, "getHeaderTitle");
   return <VaiHeader
     logoVisible={logoVisible}
     title={getHeaderTitle()}
@@ -7658,14 +7655,14 @@ var Header = /* @__PURE__ */ __name(({
       >{t("auth.logout")}</VaiHeader.MenuItem>
     </VaiHeader.Menu>
   </VaiHeader>;
-}, "Header");
+};
 var Header_default = connect3(mapStateToProps3, mapDispatchToProps3)(Header);
 
 // ../vlncc-frontend/src/components/Navigation.tsx
 import { Link as Link2, useLocation as useLocation3 } from "react-router-dom";
 import { SimpleNavigation } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation9 } from "react-i18next";
-var itemUrlName = /* @__PURE__ */ __name((hierarchyItem) => {
+var itemUrlName = (hierarchyItem) => {
   let path;
   if (typeof hierarchyItem === "string") {
     path = hierarchyItem.split("/");
@@ -7673,8 +7670,8 @@ var itemUrlName = /* @__PURE__ */ __name((hierarchyItem) => {
     path = hierarchyItem.url.split("/");
   }
   return path[path.length - 1];
-}, "itemUrlName");
-var getHierarchy = /* @__PURE__ */ __name((t, user) => {
+};
+var getHierarchy = (t, user) => {
   const reportsRouteUrl = itemUrlName(routes.reports);
   const devicesRouteUrl = itemUrlName(routes.deviceManager);
   const profileRouteUrl = itemUrlName(routes.profile);
@@ -7714,8 +7711,8 @@ var getHierarchy = /* @__PURE__ */ __name((t, user) => {
     });
   }
   return hierarchy;
-}, "getHierarchy");
-var Navigation = /* @__PURE__ */ __name(({ collapsed, onCollapseChange }) => {
+};
+var Navigation = ({ collapsed, onCollapseChange }) => {
   const location = useLocation3();
   const { t } = useTranslation9();
   const currentUser = useAppSelector(selectCurrentUser);
@@ -7726,7 +7723,7 @@ var Navigation = /* @__PURE__ */ __name(({ collapsed, onCollapseChange }) => {
     hierarchy={getHierarchy(t, currentUser)}
     productName={t("general.appName")}
   />;
-}, "Navigation");
+};
 var Navigation_default = Navigation;
 
 // ../vlncc-frontend/src/containers/Site.tsx
@@ -7761,13 +7758,12 @@ import "./empty-tree.scss";
 function EmptyTree({ message }) {
   return <div className="site-tree-empty-state"><BodyText2>{message}</BodyText2></div>;
 }
-__name(EmptyTree, "EmptyTree");
 
 // ../vlncc-frontend/src/hooks/useSiteTreeActions.tsx
 import { useEffect as useEffect6 } from "react";
 import { NotificationType as NotificationType4 } from "@vaisala-rockhopper/components";
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
-var getCreateSuccessNotificationString = /* @__PURE__ */ __name((node_type, node_name) => {
+var getCreateSuccessNotificationString = (node_type, node_name) => {
   if (node_type === SITE_KEY) {
     return i18n_default.t("site.notifySiteCreated", { siteName: node_name });
   } else if (node_type === ZONE_KEY) {
@@ -7775,8 +7771,8 @@ var getCreateSuccessNotificationString = /* @__PURE__ */ __name((node_type, node
   } else if (node_type === LOCATION_KEY) {
     return i18n_default.t("site.notifyLocationCreated", { locationName: node_name });
   }
-}, "getCreateSuccessNotificationString");
-var getCreateErrorNotificationString = /* @__PURE__ */ __name((node_type, node_name) => {
+};
+var getCreateErrorNotificationString = (node_type, node_name) => {
   if (node_type === SITE_KEY) {
     return i18n_default.t("site.notifySiteCreateFailed", { siteName: node_name });
   } else if (node_type === ZONE_KEY) {
@@ -7784,8 +7780,8 @@ var getCreateErrorNotificationString = /* @__PURE__ */ __name((node_type, node_n
   } else if (node_type === LOCATION_KEY) {
     return i18n_default.t("site.notifyLocationCreateFailed", { locationName: node_name });
   }
-}, "getCreateErrorNotificationString");
-var getDeleteSuccessNotificationString = /* @__PURE__ */ __name((node_type, node_name) => {
+};
+var getDeleteSuccessNotificationString = (node_type, node_name) => {
   if (node_type === SITE_KEY) {
     return i18n_default.t("site.notifySiteDeleted", { siteName: node_name });
   } else if (node_type === ZONE_KEY) {
@@ -7793,8 +7789,8 @@ var getDeleteSuccessNotificationString = /* @__PURE__ */ __name((node_type, node
   } else if (node_type === LOCATION_KEY) {
     return i18n_default.t("site.notifyLocationDeleted", { locationName: node_name });
   }
-}, "getDeleteSuccessNotificationString");
-var getDeleteErrorNotificationString = /* @__PURE__ */ __name((node_type, node_name) => {
+};
+var getDeleteErrorNotificationString = (node_type, node_name) => {
   if (node_type === SITE_KEY) {
     return i18n_default.t("site.notifySiteDeleteFailed", { siteName: node_name });
   } else if (node_type === ZONE_KEY) {
@@ -7802,8 +7798,8 @@ var getDeleteErrorNotificationString = /* @__PURE__ */ __name((node_type, node_n
   } else if (node_type === LOCATION_KEY) {
     return i18n_default.t("site.notifyLocationDeleteFailed", { locationName: node_name });
   }
-}, "getDeleteErrorNotificationString");
-var getEditSuccessNotificationString = /* @__PURE__ */ __name((node_type, node_name) => {
+};
+var getEditSuccessNotificationString = (node_type, node_name) => {
   if (node_type === SITE_KEY) {
     return i18n_default.t("site.notifySiteEdited", { siteName: node_name });
   } else if (node_type === ZONE_KEY) {
@@ -7811,8 +7807,8 @@ var getEditSuccessNotificationString = /* @__PURE__ */ __name((node_type, node_n
   } else if (node_type === LOCATION_KEY) {
     return i18n_default.t("site.notifyLocationEdited", { locationName: node_name });
   }
-}, "getEditSuccessNotificationString");
-var getEditErrorNotificationString = /* @__PURE__ */ __name((node_type, node_name) => {
+};
+var getEditErrorNotificationString = (node_type, node_name) => {
   if (node_type === SITE_KEY) {
     return i18n_default.t("site.notifySiteEditFailed", { siteName: node_name });
   } else if (node_type === ZONE_KEY) {
@@ -7820,8 +7816,8 @@ var getEditErrorNotificationString = /* @__PURE__ */ __name((node_type, node_nam
   } else if (node_type === LOCATION_KEY) {
     return i18n_default.t("site.notifyLocationEditFailed", { locationName: node_name });
   }
-}, "getEditErrorNotificationString");
-var getMoveErrorNotificationString = /* @__PURE__ */ __name((type, name, errorKey) => {
+};
+var getMoveErrorNotificationString = (type, name, errorKey) => {
   let message;
   if (errorKey) {
     const translation = i18n_default.t(errorKey);
@@ -7830,8 +7826,8 @@ var getMoveErrorNotificationString = /* @__PURE__ */ __name((type, name, errorKe
     message = i18n_default.t("site.notifyMoveFailed", { name, type: `$t(commonTitles.${type})` });
   }
   return message;
-}, "getMoveErrorNotificationString");
-var useSiteTreeActions = /* @__PURE__ */ __name(() => {
+};
+var useSiteTreeActions = () => {
   const dispatch = useAppDispatch();
   const [
     createTreeNode,
@@ -7978,12 +7974,11 @@ var useSiteTreeActions = /* @__PURE__ */ __name(() => {
     }
   }, [moveTreeNodeStatus, moveTreeNodeError, backendErrorKey]);
   return { createTreeNode, linkTreeNode, unlinkTreeNode, editTreeNode, deleteTreeNode, moveTreeNode };
-}, "useSiteTreeActions");
+};
 var useSiteTreeActions_default = useSiteTreeActions;
 function isFetchBaseQueryError(modeNodeError) {
   return Boolean(modeNodeError && modeNodeError.data && modeNodeError.data.errKey);
 }
-__name(isFetchBaseQueryError, "isFetchBaseQueryError");
 
 // ../vlncc-frontend/src/components/SiteTree/Location/LocationFormDialog.tsx
 import { useState as useState6 } from "react";
@@ -7992,18 +7987,18 @@ import { useTranslation as useTranslation12 } from "react-i18next";
 
 // ../vlncc-frontend/src/components/validator/validate.ts
 import { isString } from "lodash";
-var validateCannotBeEmpty = /* @__PURE__ */ __name((value) => {
+var validateCannotBeEmpty = (value) => {
   return isString(value) && value !== "";
-}, "validateCannotBeEmpty");
-var validateCharacterMaxLength = /* @__PURE__ */ __name((value, maxLength, optional) => {
+};
+var validateCharacterMaxLength = (value, maxLength, optional) => {
   if (optional && !value) {
     return true;
   }
   return value.length <= maxLength ? true : false;
-}, "validateCharacterMaxLength");
-var validateCannotMatch = /* @__PURE__ */ __name((value, match) => {
+};
+var validateCannotMatch = (value, match) => {
   return value !== match ? true : false;
-}, "validateCannotMatch");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/DecimalPlaces.tsx
 import { Form as Form2, Select as Select2, Size as Size8 } from "@vaisala-rockhopper/components";
@@ -8038,7 +8033,7 @@ var decimalPlaces_default = [
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/DecimalPlaces.tsx
 var [_one_decimal, default_two_decimal] = decimalPlaces_default;
-var DecimalPlaces = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage, action }) => {
+var DecimalPlaces = ({ label, onChange, value, errorMessage, action }) => {
   return <Form2.Item
     label={label}
     component={Select2}
@@ -8056,7 +8051,7 @@ var DecimalPlaces = /* @__PURE__ */ __name(({ label, onChange, value, errorMessa
     value={option.value}
     id={`${action}-zone-and-location-dialog-${option.value}`}
   >{option.label}</Select2.Option>)}</Form2.Item>;
-}, "DecimalPlaces");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/MeasurementType.tsx
 import { Form as Form3, Select as Select3, Size as Size9 } from "@vaisala-rockhopper/components";
@@ -8088,7 +8083,7 @@ var measurementTypes_default = [
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/MeasurementType.tsx
 import { useTranslation as useTranslation10 } from "react-i18next";
-var MeasurementTypes = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage, action }) => {
+var MeasurementTypes = ({ label, onChange, value, errorMessage, action }) => {
   const { t } = useTranslation10();
   return <Form3.Item
     label={label}
@@ -8108,11 +8103,11 @@ var MeasurementTypes = /* @__PURE__ */ __name(({ label, onChange, value, errorMe
     value={option.value}
     id={`${action}-zone-and-location-dialog-${option.value}`}
   >{t(`general.${option.label}`)}</Select3.Option>)}</Form3.Item>;
-}, "MeasurementTypes");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/Name.tsx
 import { Form as Form4, InputField as InputField2, Size as Size10 } from "@vaisala-rockhopper/components";
-var Name = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage, action }) => {
+var Name = ({ label, onChange, value, errorMessage, action }) => {
   return <Form4.Item
     component={InputField2}
     label={label}
@@ -8125,11 +8120,11 @@ var Name = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage, actio
     errors={errorMessage}
     data-testid={TEST_IDS.site_tree_form_dialog_name_field}
   />;
-}, "Name");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/Description.tsx
 import { Form as Form5, Size as Size11, TextArea } from "@vaisala-rockhopper/components";
-var Description = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage, action }) => {
+var Description = ({ label, onChange, value, errorMessage, action }) => {
   return <Form5.Item
     component={TextArea}
     placeholder={i18n_default.t("general.optional")}
@@ -8144,7 +8139,7 @@ var Description = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage
     errors={errorMessage}
     data-testid={TEST_IDS.site_tree_form_dialog_description_field}
   />;
-}, "Description");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/UnitType.tsx
 import { Form as Form6, Select as Select4, Size as Size12 } from "@vaisala-rockhopper/components";
@@ -8164,7 +8159,7 @@ var unitTypes = {
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/UnitType.tsx
 import { useTranslation as useTranslation11 } from "react-i18next";
-var UnitTypes = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage, measurementType, action }) => {
+var UnitTypes = ({ label, onChange, value, errorMessage, measurementType, action }) => {
   const { t } = useTranslation11();
   return <Form6.Item
     label={label}
@@ -8183,14 +8178,14 @@ var UnitTypes = /* @__PURE__ */ __name(({ label, onChange, value, errorMessage, 
     value={option.value}
     id={`${action}-zone-and-location-dialog-${option.value}`}
   >{t(`site.${option.label}`)}</Select4.Option>)}</Form6.Item>;
-}, "UnitTypes");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/FormDialog.tsx
 import { Size as Size14, Button as Button5, ButtonType as ButtonType5 } from "@vaisala-rockhopper/components";
 
 // ../vlncc-frontend/src/components/SiteTree/Form/Fields/ParentZone.tsx
 import { Icon as Icon5, IconName as IconName6, RequiredAsterisk as RequiredAsterisk2, Size as Size13 } from "@vaisala-rockhopper/components";
-var ParentZone = /* @__PURE__ */ __name(({ iconName, parentZoneName }) => {
+var ParentZone = ({ iconName, parentZoneName }) => {
   return <div
     data-ta={TEST_IDS.site_tree_form_dialog_parent_zone}
     id="zone-and-location-dialog-parent-name-container"
@@ -8210,10 +8205,10 @@ var ParentZone = /* @__PURE__ */ __name(({ iconName, parentZoneName }) => {
       className="zone-and-location-dialog-parent-zone-name"
     >{parentZoneName}</span>
   </div>;
-}, "ParentZone");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/FormDialog.tsx
-var SiteTreeFormDialog = /* @__PURE__ */ __name(({
+var SiteTreeFormDialog = ({
   title,
   onDismiss,
   saveButtonDisabled,
@@ -8253,7 +8248,7 @@ var SiteTreeFormDialog = /* @__PURE__ */ __name(({
     {parentZoneName && <ParentZone iconName={iconName} parentZoneName={parentZoneName} />}
     {children}
   </ModalContainer>;
-}, "SiteTreeFormDialog");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Location/LocationFormDialog.tsx
 import "../zone-and-location-dialog.scss";
@@ -8262,7 +8257,7 @@ var [{ value: defaultHumidityOptionValue }] = unitTypes.humidity;
 var [{ value: defaultCelsiusOptionValue }] = unitTypes.temperature;
 var [{ value: defaultCo2OptionValue }] = unitTypes.co2;
 var [__, { value: defaultDecimalPlaceValue }] = decimalPlaces_default;
-var LocationFormDialog = /* @__PURE__ */ __name(({
+var LocationFormDialog = ({
   siblingNames,
   onSave,
   selectedItemObject,
@@ -8287,22 +8282,22 @@ var LocationFormDialog = /* @__PURE__ */ __name(({
     formAction === "edit" /* EDIT */ ? selectedItemObject.decimal_places : defaultDecimalPlaceValue
   );
   const [decimalPlaceError, setDecimalPlaceError] = useState6("");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const onNameChange = /* @__PURE__ */ __name((event) => {
+  const onDismiss = () => dispatch(hideDialog());
+  const onNameChange = (event) => {
     setNameError("");
     setName(event.target.value);
     if (!validateCharacterMaxLength(event.target.value, SITE_NAME_MAX_LENGTH)) {
       setNameError(t("site.characterMaxLengthError", { charLen: SITE_NAME_MAX_LENGTH }));
     }
-  }, "onNameChange");
-  const onDescriptionChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onDescriptionChange = (event) => {
     setDescriptionError("");
     setDescription(event.target.value);
     if (!validateCharacterMaxLength(event.target.value, SITE_DESCRIPTION_MAX_LENGTH)) {
       setDescriptionError(t("site.characterMaxLengthError", { charLen: SITE_DESCRIPTION_MAX_LENGTH }));
     }
-  }, "onDescriptionChange");
-  const onMeasurementTypeChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onMeasurementTypeChange = (event) => {
     setMeasurementTypeError("");
     setMeasurementType(event);
     switch (event) {
@@ -8318,16 +8313,16 @@ var LocationFormDialog = /* @__PURE__ */ __name(({
       default:
         setUnitType(void 0);
     }
-  }, "onMeasurementTypeChange");
-  const onUnitTypeChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onUnitTypeChange = (event) => {
     setUnitTypeError("");
     setUnitType(event);
-  }, "onUnitTypeChange");
-  const onDecimalPlaceChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onDecimalPlaceChange = (event) => {
     setDecimalPlaceError("");
     setDecimalPlace(event);
-  }, "onDecimalPlaceChange");
-  const onCreateNewNode = /* @__PURE__ */ __name(() => {
+  };
+  const onCreateNewNode = () => {
     let errorExist = false;
     const trimmedName = validator2.trim(name);
     const trimmedDescription = validator2.trim(description);
@@ -8354,7 +8349,7 @@ var LocationFormDialog = /* @__PURE__ */ __name(({
       onSave(newTreeNode);
       onDismiss();
     }
-  }, "onCreateNewNode");
+  };
   const isNameInvalid = !name || nameError.length > 0;
   const isDescriptionInvalid = descriptionError.length > 0;
   const hasformChanged = selectedItemObject?.text !== name || selectedItemObject?.description !== description || selectedItemObject?.meas_id !== measurementType || selectedItemObject?.symbol_id !== unitType || selectedItemObject?.decimal_places !== decimalPlace;
@@ -8405,14 +8400,14 @@ var LocationFormDialog = /* @__PURE__ */ __name(({
       label={t("general.description")}
     />
   </SiteTreeFormDialog>;
-}, "LocationFormDialog");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Zone/ZoneFormDialog.tsx
 import { useState as useState7 } from "react";
 import validator3 from "validator";
 import { useTranslation as useTranslation13 } from "react-i18next";
 import "../zone-and-location-dialog.scss";
-var ZoneFormDialog = /* @__PURE__ */ __name(({
+var ZoneFormDialog = ({
   childNames,
   siblingNames,
   onSave,
@@ -8428,22 +8423,22 @@ var ZoneFormDialog = /* @__PURE__ */ __name(({
   const [nameError, setNameError] = useState7("");
   const [description, setDescription] = useState7(selectedItemObject?.description || "");
   const [descriptionError, setDescriptionError] = useState7("");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const onNameChange = /* @__PURE__ */ __name((event) => {
+  const onDismiss = () => dispatch(hideDialog());
+  const onNameChange = (event) => {
     setNameError("");
     setName(event.target.value);
     if (!validateCharacterMaxLength(event.target.value, SITE_NAME_MAX_LENGTH)) {
       setNameError(t("site.characterMaxLengthError", { charLen: SITE_NAME_MAX_LENGTH }));
     }
-  }, "onNameChange");
-  const onDescriptionChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onDescriptionChange = (event) => {
     setDescriptionError("");
     setDescription(event.target.value);
     if (!validateCharacterMaxLength(event.target.value, SITE_DESCRIPTION_MAX_LENGTH)) {
       setDescriptionError(t("site.characterMaxLengthError", { charLen: SITE_DESCRIPTION_MAX_LENGTH }));
     }
-  }, "onDescriptionChange");
-  const handleSave = /* @__PURE__ */ __name(() => {
+  };
+  const handleSave = () => {
     let errorExist = false;
     const trimmedName = validator3.trim(name);
     const trimmedDescription = validator3.trim(description);
@@ -8471,7 +8466,7 @@ var ZoneFormDialog = /* @__PURE__ */ __name(({
       onSave(newTreeNode);
       onDismiss();
     }
-  }, "handleSave");
+  };
   const isNameInvalid = !name || nameError.length > 0;
   const isDescriptionInvalid = descriptionError.length > 0;
   const hasformChanged = selectedItemObject?.text !== name || selectedItemObject?.description !== description;
@@ -8500,12 +8495,12 @@ var ZoneFormDialog = /* @__PURE__ */ __name(({
       label={t("general.description")}
     />
   </SiteTreeFormDialog>;
-}, "ZoneFormDialog");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Form/DeleteNodeSection.tsx
 import { Flex as Flex7, FlexItem as FlexItem3, Button as Button6, ButtonType as ButtonType6, Icon as Icon6, Separator as Separator3 } from "@vaisala-rockhopper/components";
 import { VaiIcon as VaiIcon3 } from "@vaisala-rockhopper/design-tokens";
-var DeleteNodeSection = /* @__PURE__ */ __name(({ constraintText, label, onDelete, canBeDeleted }) => {
+var DeleteNodeSection = ({ constraintText, label, onDelete, canBeDeleted }) => {
   return <>
     <Separator3 id="edit-zone-and-location-delete-separator" />
     <Flex7 id="edit-zone-and-location-delete-flex-container" justifyContent="space-between">
@@ -8523,13 +8518,13 @@ var DeleteNodeSection = /* @__PURE__ */ __name(({ constraintText, label, onDelet
       >{constraintText}</span></FlexItem3>
     </Flex7>
   </>;
-}, "DeleteNodeSection");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/DeleteZoneAndLocationDialog/index.tsx
 import "./delete-zone-and-location.scss";
 import { Size as Size15, Button as Button7, ButtonType as ButtonType7, BodyText as BodyText3 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation14 } from "react-i18next";
-var DeleteZoneAndLocationDialog = /* @__PURE__ */ __name(({
+var DeleteZoneAndLocationDialog = ({
   node_id,
   name,
   type,
@@ -8538,11 +8533,11 @@ var DeleteZoneAndLocationDialog = /* @__PURE__ */ __name(({
 }) => {
   const { t } = useTranslation14();
   const dispatch = useAppDispatch();
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const deleteNodes = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const deleteNodes = () => {
     deleteTreeNode({ node_id, type, parent_id, name });
     onDismiss();
-  }, "deleteNodes");
+  };
   let modalHeader = null;
   if (type === ZONE_KEY) {
     modalHeader = t("site.deleteZone");
@@ -8570,12 +8565,12 @@ var DeleteZoneAndLocationDialog = /* @__PURE__ */ __name(({
     role="alert-dialog"
     buttons={modalButtons}
   ><BodyText3 id="delete-zones-and-locations-body" className="delete-zones-and-locations-body">{type === ZONE_KEY ? t("site.deleteZonesAlert", { nodeName: name }) : t("site.deleteLocationsAlert", { nodeName: name })}</BodyText3></ModalContainer>;
-}, "DeleteZoneAndLocationDialog");
+};
 var DeleteZoneAndLocationDialog_default = DeleteZoneAndLocationDialog;
 
 // ../vlncc-frontend/src/utils/site.ts
 import { VaiColor as VaiColor4, VaiIcon as VaiIcon4 } from "@vaisala-rockhopper/design-tokens";
-var showMeasurementSymbol = /* @__PURE__ */ __name((symbol_id) => {
+var showMeasurementSymbol = (symbol_id) => {
   const symbols = {
     celsius: "\xB0C",
     fahrenheit: "\xB0F",
@@ -8584,8 +8579,8 @@ var showMeasurementSymbol = /* @__PURE__ */ __name((symbol_id) => {
     percent: "%CO\u2082"
   };
   return symbols[symbol_id] || "";
-}, "showMeasurementSymbol");
-var getIcon = /* @__PURE__ */ __name((value) => {
+};
+var getIcon = (value) => {
   const icons = {
     OK: { name: VaiIcon4.AlertOk, color: VaiColor4.AlertOk },
     WARN: { name: VaiIcon4.AlertWarning, color: VaiColor4.AlertWarning },
@@ -8597,8 +8592,8 @@ var getIcon = /* @__PURE__ */ __name((value) => {
     treeControl: { name: VaiIcon4.TreeControl, color: VaiColor4.BlueDark }
   };
   return icons[value];
-}, "getIcon");
-var sortTree = /* @__PURE__ */ __name((nodes, sortBy2) => {
+};
+var sortTree = (nodes, sortBy2) => {
   if (Array.isArray(nodes) && nodes.length > 1) {
     if (sortBy2 === "alphabetically") {
       nodes.sort((a, b) => {
@@ -8611,14 +8606,14 @@ var sortTree = /* @__PURE__ */ __name((nodes, sortBy2) => {
     return nodes;
   }
   return nodes;
-}, "sortTree");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/Site/SiteFormDialog.tsx
 import { useState as useState8 } from "react";
 import validator4 from "validator";
 import { useTranslation as useTranslation15 } from "react-i18next";
 import "../zone-and-location-dialog.scss";
-var SiteFormDialog = /* @__PURE__ */ __name(({
+var SiteFormDialog = ({
   childNames,
   siblingNames,
   onSave,
@@ -8631,22 +8626,22 @@ var SiteFormDialog = /* @__PURE__ */ __name(({
   const [nameError, setNameError] = useState8("");
   const [description, setDescription] = useState8(selectedItemObject?.description || "");
   const [descriptionError, setDescriptionError] = useState8("");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const onNameChange = /* @__PURE__ */ __name((event) => {
+  const onDismiss = () => dispatch(hideDialog());
+  const onNameChange = (event) => {
     setNameError("");
     setName(event.target.value);
     if (!validateCharacterMaxLength(event.target.value, SITE_NAME_MAX_LENGTH)) {
       setNameError(t("site.characterMaxLengthError", { charLen: SITE_NAME_MAX_LENGTH }));
     }
-  }, "onNameChange");
-  const onDescriptionChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onDescriptionChange = (event) => {
     setDescriptionError("");
     setDescription(event.target.value);
     if (!validateCharacterMaxLength(event.target.value, SITE_DESCRIPTION_MAX_LENGTH)) {
       setDescriptionError(t("site.characterMaxLengthError", { charLen: SITE_DESCRIPTION_MAX_LENGTH }));
     }
-  }, "onDescriptionChange");
-  const handleSave = /* @__PURE__ */ __name(() => {
+  };
+  const handleSave = () => {
     let errorExist = false;
     const trimmedName = validator4.trim(name);
     const trimmedDescription = validator4.trim(description);
@@ -8666,7 +8661,7 @@ var SiteFormDialog = /* @__PURE__ */ __name(({
       onSave(newTreeNode);
       onDismiss();
     }
-  }, "handleSave");
+  };
   const isNameInvalid = !name || nameError.length > 0;
   const isDescriptionInvalid = descriptionError.length > 0;
   const hasformChanged = selectedItemObject?.text !== name || selectedItemObject?.description !== description;
@@ -8693,19 +8688,19 @@ var SiteFormDialog = /* @__PURE__ */ __name(({
       label={t("general.description")}
     />
   </SiteTreeFormDialog>;
-}, "SiteFormDialog");
+};
 
 // ../vlncc-frontend/src/components/SiteTree/SiteTree.tsx
 import "./Tree/siteTree.scss";
 import "./Tree/Resizable.scss";
 import "@vaisala/rockhub-tree-menu/dist/style.css";
-var getNodeObjectById = /* @__PURE__ */ __name((NodeId, tree) => {
+var getNodeObjectById = (NodeId, tree) => {
   const filteredTree = tree.filter((site) => {
     return site.id === NodeId;
   });
   return filteredTree[0];
-}, "getNodeObjectById");
-var getChildList = /* @__PURE__ */ __name((parentId, tree) => {
+};
+var getChildList = (parentId, tree) => {
   const list = [];
   tree.map((node) => {
     if (node.parent === parentId) {
@@ -8713,8 +8708,8 @@ var getChildList = /* @__PURE__ */ __name((parentId, tree) => {
     }
   });
   return list;
-}, "getChildList");
-var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, userInfoLoading }) => {
+};
+var SiteTree = ({ site, canManageSites, siteLoading, userInfoLoading }) => {
   const { t } = useTranslation16();
   const ref = useRef2(null);
   const dispatch = useAppDispatch();
@@ -8728,7 +8723,7 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
   const [sortBy2, setSortBy] = useState9("byDefault");
   const { createTreeNode, editTreeNode, deleteTreeNode, moveTreeNode } = useSiteTreeActions_default();
   const selectedNodeId = useAppSelector(selectSelectedNode);
-  const openAll = /* @__PURE__ */ __name(() => {
+  const openAll = () => {
     if (!isTreeOpen) {
       ref.current?.openAll();
       setIsTreeOpen(true);
@@ -8736,8 +8731,8 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
       ref.current?.closeAll();
       setIsTreeOpen(false);
     }
-  }, "openAll");
-  const updateSingleTree = /* @__PURE__ */ __name((index, tree, dragSource, dropTarget) => {
+  };
+  const updateSingleTree = (index, tree, dragSource, dropTarget) => {
     const newTree = [...tree];
     const childList = getChildList(dropTarget.id, newTree).concat(getChildList(dragSource.id, newTree));
     const parentName = dropTarget.text;
@@ -8780,7 +8775,7 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
       position,
       type: dragSourceNode.type
     });
-  }, "updateSingleTree");
+  };
   useEffect7(() => {
     if (selectedNodeId && treeData[0]) {
       const selectedItemObject = getNodeObjectById(selectedNodeId, treeData[0]);
@@ -8804,14 +8799,14 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
       handleSortChange(sortBy2);
     }
   }, [initialTreeData]);
-  const handleSortChange = /* @__PURE__ */ __name((selectedValue) => {
+  const handleSortChange = (selectedValue) => {
     setSortBy(selectedValue);
     if (selectedValue === "byDefault") {
       return setTreeData(siteTreeConvertor(site, [], PARENT_SITE_KEY, selectedNodeId));
     }
     return setTreeData([sortTree(treeData[0], selectedValue)]);
-  }, "handleSortChange");
-  const handleZonesAndLocations = /* @__PURE__ */ __name((handleAction) => {
+  };
+  const handleZonesAndLocations = (handleAction) => {
     const selectedItemObject = getNodeObjectById(selectedNodeId, treeData[0]);
     const childNames = getChildList(selectedNodeId, treeData[0]).filter(
       (item) => item !== selectedItemObject.text.toLocaleLowerCase()
@@ -8864,8 +8859,8 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
         showEditNode(selectedNodeId);
         break;
     }
-  }, "handleZonesAndLocations");
-  const getNodeParentsIds = /* @__PURE__ */ __name((node, ids = []) => {
+  };
+  const getNodeParentsIds = (node, ids = []) => {
     if (node) {
       const id = node.id;
       ids = [...ids, id];
@@ -8877,8 +8872,8 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
       }
       return ids;
     }
-  }, "getNodeParentsIds");
-  const getNodeParents = /* @__PURE__ */ __name((child, arr) => {
+  };
+  const getNodeParents = (child, arr) => {
     const result = [];
     while (child.parent !== null) {
       for (const entity of initialTreeData[0]) {
@@ -8891,15 +8886,15 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
       }
     }
     return result;
-  }, "getNodeParents");
-  const getParents = /* @__PURE__ */ __name((arr) => {
+  };
+  const getParents = (arr) => {
     let entityArray = [...arr];
     for (const child of arr) {
       entityArray = entityArray.concat(getNodeParents(child, entityArray));
     }
     return entityArray;
-  }, "getParents");
-  const filter = /* @__PURE__ */ __name((e) => {
+  };
+  const filter = (e) => {
     const keyword = e.target.value;
     if (keyword !== "") {
       const results = initialTreeData[0].filter((site2) => {
@@ -8923,8 +8918,8 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
       openAll();
     }
     setSearchCriteria(keyword);
-  }, "filter");
-  const showEditNode = /* @__PURE__ */ __name((SelectedNodeId) => {
+  };
+  const showEditNode = (SelectedNodeId) => {
     if (canManageSites) {
       if (SelectedNodeId === void 0) {
         SelectedNodeId = treeDataRef.current[0][0].id;
@@ -8949,7 +8944,7 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
         }
       }
       const iconName = selectedItemObject.parentType === SITE_KEY ? VaiIcon5.MapMarkerHexagon : VaiIcon5.FolderOpen;
-      const showDeleteConfirmDialog = /* @__PURE__ */ __name(() => {
+      const showDeleteConfirmDialog = () => {
         const { id, type, parent, text } = selectedItemObject;
         dispatch(
           showDialog(
@@ -8962,7 +8957,7 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
             />
           )
         );
-      }, "showDeleteConfirmDialog");
+      };
       dispatch(
         showDialog(
           selectedItemObject.type === LOCATION_KEY ? <LocationFormDialog
@@ -9016,7 +9011,7 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
         )
       );
     }
-  }, "showEditNode");
+  };
   let siteContent = <CenteredSpinner_default htmlId="group-list-spinner" />;
   if (!canManageSites && !userInfoLoading && !site)
     siteContent = <EmptyState heading="site.noSiteRights" illustration={"nothingSelected" /* nothingSelected */} />;
@@ -9146,7 +9141,7 @@ var SiteTree = /* @__PURE__ */ __name(({ site, canManageSites, siteLoading, user
     </div>
     <Separator4 className={editingTree ? "site-tree-exit-button-separator" : "site-tree-display-none"} />
   </></ResizableBox></Flex8>;
-}, "SiteTree");
+};
 var SiteTree_default = SiteTree;
 
 // ../vlncc-frontend/src/containers/Site.tsx
@@ -9158,7 +9153,7 @@ import { useEffect as useEffect8, useState as useState10 } from "react";
 import { useTranslation as useTranslation17 } from "react-i18next";
 import { NavLink, Outlet, useLocation as useLocation4, useParams } from "react-router-dom";
 import "./tabNavigation.scss";
-var TabNavigation = /* @__PURE__ */ __name(({ tabs, addRoutes, contentClassName, noPaper }) => {
+var TabNavigation = ({ tabs, addRoutes, contentClassName, noPaper }) => {
   const { id, ...rest } = useParams();
   const location = useLocation4();
   const { t } = useTranslation17();
@@ -9203,7 +9198,7 @@ var TabNavigation = /* @__PURE__ */ __name(({ tabs, addRoutes, contentClassName,
       className={contentClassName}
     ><Outlet /></Paper>}
   </Flex9></>;
-}, "TabNavigation");
+};
 
 // ../vlncc-frontend/src/components/Site/Status/Status.tsx
 import { BodyText as BodyText6, Flex as Flex12, FlexItem as FlexItem6, Separator as Separator5 } from "@vaisala-rockhopper/components";
@@ -9213,7 +9208,7 @@ import { Link as Link3, useParams as useParams2 } from "react-router-dom";
 
 // ../vlncc-frontend/src/hooks/useLocationStatus.tsx
 import { useState as useState11, useEffect as useEffect9 } from "react";
-var useLocationStatus = /* @__PURE__ */ __name((data) => {
+var useLocationStatus = (data) => {
   const [locationStatus2, setLocationStatus] = useState11(LOCATION_STATUS.NO_DATA_SOURCE);
   const [deviceStatus, setDeviceStatus] = useState11(DEVICE_STATUS.UNLINKED);
   const [thresholdStatus, setThresholdStatus] = useState11(THRESHOLD_STATUS.NOT_SET);
@@ -9233,7 +9228,7 @@ var useLocationStatus = /* @__PURE__ */ __name((data) => {
     }
   }, [data]);
   return { locationStatus: locationStatus2, deviceStatus, thresholdStatus, locationLastMeasurement };
-}, "useLocationStatus");
+};
 
 // ../vlncc-frontend/src/components/Site/Status/Status.tsx
 import "./status.scss";
@@ -9242,7 +9237,7 @@ import "./status.scss";
 import { BodyText as BodyText4, Flex as Flex10, FlexItem as FlexItem4, Icon as Icon8, Size as Size17 } from "@vaisala-rockhopper/components";
 import { VaiIcon as VaiIcon6 } from "@vaisala-rockhopper/design-tokens";
 import { useTranslation as useTranslation18 } from "react-i18next";
-var isStatusError = /* @__PURE__ */ __name((type, status) => {
+var isStatusError = (type, status) => {
   if (type === STATUS_TYPES.DEVICE) {
     if (status !== DEVICE_STATUS.OK) {
       return true;
@@ -9259,17 +9254,17 @@ var isStatusError = /* @__PURE__ */ __name((type, status) => {
     }
   }
   return false;
-}, "isStatusError");
-var StatusItem = /* @__PURE__ */ __name(({ status, label, type, translationKey }) => {
+};
+var StatusItem = ({ status, label, type, translationKey }) => {
   const statusItemErrorCl = "status-item status-item--error";
   const { t } = useTranslation18();
-  const getStatusValue = /* @__PURE__ */ __name((status2) => {
+  const getStatusValue = (status2) => {
     if (typeof status2 === "string") {
       return t(status2);
     } else if (typeof status2 === "number") {
       return timestampToTimeString(status2);
     }
-  }, "getStatusValue");
+  };
   return <FlexItem4 flexGrow={3} className={isStatusError(type, status) ? statusItemErrorCl : "status-item"}><Flex10 flexDirection="row" flexWrap="nowrap" alignContent="center">
     <FlexItem4 alignSelf="center">
       {type === STATUS_TYPES.THRESHOLD && <Icon8 className="status-item__icon" size={Size17.M} name={VaiIcon6.Thermometer} />}
@@ -9283,7 +9278,7 @@ var StatusItem = /* @__PURE__ */ __name(({ status, label, type, translationKey }
       </BodyText4>
     </FlexItem4>
   </Flex10></FlexItem4>;
-}, "StatusItem");
+};
 
 // ../vlncc-frontend/src/components/Site/Location/LocationHeader.tsx
 import { BodyText as BodyText5, Flex as Flex11, FlexItem as FlexItem5, Heading as Heading4, Toggle } from "@vaisala-rockhopper/components";
@@ -9293,7 +9288,7 @@ import { useTranslation as useTranslation19 } from "react-i18next";
 import { Icon as Icon9 } from "@vaisala-rockhopper/components";
 import { VaiIcon as VaiIcon7 } from "@vaisala-rockhopper/design-tokens";
 import "./locationIcon.scss";
-var LocationIcon = /* @__PURE__ */ __name(({ status }) => {
+var LocationIcon = ({ status }) => {
   return <div className="location-icon" data-testid={TEST_IDS.location_icon}>
     {status === DEVICE_STATUS.UNLINKED ? <Icon9
       className="location-icon__link"
@@ -9308,12 +9303,12 @@ var LocationIcon = /* @__PURE__ */ __name(({ status }) => {
     />}
     <Icon9 className="location-icon__map" style={{ fontSize: "50px" }} name={VaiIcon7.MapMarker} />
   </div>;
-}, "LocationIcon");
+};
 var LocationIcon_default = LocationIcon;
 
 // ../vlncc-frontend/src/components/Site/Location/LocationHeader.tsx
 import "./locationHeader.scss";
-var LocationHeader = /* @__PURE__ */ __name(({
+var LocationHeader = ({
   location,
   toggle = false,
   toggleActiveDisplay,
@@ -9337,11 +9332,11 @@ var LocationHeader = /* @__PURE__ */ __name(({
       className="location-header__toggle"
     /></FlexItem5>}
   </Flex11>;
-}, "LocationHeader");
+};
 var LocationHeader_default = LocationHeader;
 
 // ../vlncc-frontend/src/components/Site/Status/Status.tsx
-var Status = /* @__PURE__ */ __name(() => {
+var Status = () => {
   const { id } = useParams2();
   const { t } = useTranslation20();
   const currentlyRemovingNodeId = useAppSelector(selectCurrentlyRemoving);
@@ -9401,7 +9396,7 @@ var Status = /* @__PURE__ */ __name(() => {
     </Flex12>
     <Separator5 />
   </>;
-}, "Status");
+};
 
 // ../vlncc-frontend/src/components/Site/SiteTable.tsx
 import { useRef as useRef3 } from "react";
@@ -9411,7 +9406,7 @@ import "./siteTable.scss";
 // ../vlncc-frontend/src/components/Site/SiteTableFormatters.tsx
 import { Icon as Icon10, Size as Size18 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation21 } from "react-i18next";
-var locationStatus = /* @__PURE__ */ __name((location) => {
+var locationStatus = (location) => {
   if (location.device == null) {
     return "UNLINK";
   }
@@ -9422,8 +9417,8 @@ var locationStatus = /* @__PURE__ */ __name((location) => {
     return location.thres_alarms;
   }
   return location.status;
-}, "locationStatus");
-var formatDataForTable = /* @__PURE__ */ __name((data) => {
+};
+var formatDataForTable = (data) => {
   const tableData = data.map((item) => {
     return {
       status: locationStatus(item),
@@ -9439,19 +9434,19 @@ var formatDataForTable = /* @__PURE__ */ __name((data) => {
     };
   });
   return tableData;
-}, "formatDataForTable");
-var IconFormatter = /* @__PURE__ */ __name(({ value }) => {
+};
+var IconFormatter = ({ value }) => {
   return <div className="cell cell--icon"><Icon10
     size={Size18.L}
     {...getIcon(value)}
     data-testid="icon"
     className={value === "treeControl" ? "icon--disabled" : ""}
   /></div>;
-}, "IconFormatter");
-var ValueFormatter = /* @__PURE__ */ __name(({ value }) => {
+};
+var ValueFormatter = ({ value }) => {
   return <div>{value ? value : "--"}</div>;
-}, "ValueFormatter");
-var ThresholdAlarmFormatter = /* @__PURE__ */ __name(({ value }) => {
+};
+var ThresholdAlarmFormatter = ({ value }) => {
   const { t } = useTranslation21();
   if (value === "NONE" /* NOT_SET */) {
     return <div className="cell cell--deactive">{t("site.statusThresholdNotSet")}</div>;
@@ -9460,8 +9455,8 @@ var ThresholdAlarmFormatter = /* @__PURE__ */ __name(({ value }) => {
     return <div>{t("site.settingsAlarmsPaused")}</div>;
   }
   return <div>{t("site.settingsThresholdAlarmsSet")}</div>;
-}, "ThresholdAlarmFormatter");
-var DeviceAlarmFormatter = /* @__PURE__ */ __name(({ value }) => {
+};
+var DeviceAlarmFormatter = ({ value }) => {
   const { t } = useTranslation21();
   if (value === "default") {
     return <div>{t("site.settingsDeviceAlarmsDefault")}</div>;
@@ -9473,28 +9468,28 @@ var DeviceAlarmFormatter = /* @__PURE__ */ __name(({ value }) => {
     return <div>{t("site.settingsAlarmsPaused")}</div>;
   }
   return <div>{t("site.settingsDeviceAlarmsSet")}</div>;
-}, "DeviceAlarmFormatter");
-var DeviceFormatter = /* @__PURE__ */ __name(({ value }) => {
+};
+var DeviceFormatter = ({ value }) => {
   const { t } = useTranslation21();
   if (typeof value === "string") {
     return <div className="cell cell--deactive">{t(value)}</div>;
   }
   return <div>{buildDeviceId(value.device_model, value.device_sn)}</div>;
-}, "DeviceFormatter");
+};
 
 // ../vlncc-frontend/src/hooks/useResizeObserver.tsx
 import { useLayoutEffect, useState as useState12 } from "react";
-var useResizeObserver = /* @__PURE__ */ __name((ref, defaultHeight) => {
+var useResizeObserver = (ref, defaultHeight) => {
   const [width, setWidth] = useState12();
   const [height, setHeight] = useState12(defaultHeight);
-  const handleResize = /* @__PURE__ */ __name((entries) => {
+  const handleResize = (entries) => {
     if (!Array.isArray(entries)) {
       return;
     }
     const entry = entries[0];
     setWidth(entry.contentRect.width);
     setHeight(entry.contentRect.height);
-  }, "handleResize");
+  };
   useLayoutEffect(() => {
     if (!ref.current) {
       return;
@@ -9507,16 +9502,16 @@ var useResizeObserver = /* @__PURE__ */ __name((ref, defaultHeight) => {
     };
   }, [ref]);
   return [width, height];
-}, "useResizeObserver");
+};
 
 // ../vlncc-frontend/src/components/Site/SiteTable.tsx
-var SiteTable = /* @__PURE__ */ __name(({ data, type }) => {
+var SiteTable = ({ data, type }) => {
   const tableData = formatDataForTable(data);
   const ref = useRef3();
   const [, height] = useResizeObserver(ref, 400);
-  const getRows = /* @__PURE__ */ __name((rowIdx) => {
+  const getRows = (rowIdx) => {
     return tableData[rowIdx];
-  }, "getRows");
+  };
   const StatusColumns = [
     {
       key: "status",
@@ -9598,34 +9593,34 @@ var SiteTable = /* @__PURE__ */ __name(({ data, type }) => {
     sortColumn="location"
     minHeight={height}
   />}</div>;
-}, "SiteTable");
+};
 
 // ../vlncc-frontend/src/components/Site/Status/StatusList.tsx
 import { useParams as useParams3 } from "react-router-dom";
 
 // ../vlncc-frontend/src/hooks/useGetUsername.tsx
 import { useEffect as useEffect10, useState as useState13 } from "react";
-var useGetUserName = /* @__PURE__ */ __name(() => {
+var useGetUserName = () => {
   const [username, setUserName] = useState13(null);
   useEffect10(() => {
     let mounted = true;
-    const getUsername = /* @__PURE__ */ __name(async () => {
+    const getUsername = async () => {
       const username2 = await getUserNameForAPI();
       if (mounted) {
         setUserName(username2);
       }
-    }, "getUsername");
+    };
     getUsername();
     return () => {
       mounted = false;
     };
   }, []);
   return { username };
-}, "useGetUserName");
+};
 var useGetUsername_default = useGetUserName;
 
 // ../vlncc-frontend/src/components/Site/Status/StatusList.tsx
-var StatusList = /* @__PURE__ */ __name(({ siteId }) => {
+var StatusList = ({ siteId }) => {
   const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
   const { username } = useGetUsername_default();
   const { id } = useParams3();
@@ -9648,22 +9643,22 @@ var StatusList = /* @__PURE__ */ __name(({ siteId }) => {
     return <EmptyState illustration={"emptyFolder" /* emptyFolder */} heading="site.emptyZoneHeading" />;
   }
   return <SiteTable key={id} data={nodes} type="status" />;
-}, "StatusList");
+};
 
 // ../vlncc-frontend/src/components/Site/AlarmsList.tsx
-var AlarmsList = /* @__PURE__ */ __name(() => {
+var AlarmsList = () => {
   return <h2>Alarms list</h2>;
-}, "AlarmsList");
+};
 
 // ../vlncc-frontend/src/components/Site/Alarm.tsx
 import { useParams as useParams4 } from "react-router-dom";
-var Alarm = /* @__PURE__ */ __name(() => {
+var Alarm = () => {
   const { id } = useParams4();
   return <><h2>
     {"Alarm for node: "}
     {id}
   </h2></>;
-}, "Alarm");
+};
 
 // ../vlncc-frontend/src/components/Site/Setting/Settings.tsx
 import {
@@ -9696,7 +9691,7 @@ import { nanoid as nanoid2 } from "@reduxjs/toolkit";
 import { Button as Button9, ButtonType as ButtonType9, Flex as Flex13, Icon as Icon11, Size as Size19, Stack } from "@vaisala-rockhopper/components";
 import { VaiColor as VaiColor5, VaiIcon as VaiIcon8 } from "@vaisala-rockhopper/design-tokens";
 import { useTranslation as useTranslation22 } from "react-i18next";
-var ListError = /* @__PURE__ */ __name(({
+var ListError = ({
   errorMsgTranslationKey,
   htmlId: htmlId3 = nanoid2(),
   separator,
@@ -9739,21 +9734,21 @@ var ListError = /* @__PURE__ */ __name(({
       </Button9>
     </Flex13>}
   </Stack>;
-}, "ListError");
+};
 var ListError_default = ListError;
 
 // ../vlncc-frontend/src/components/Utils/MeasurementTypeIcon/index.tsx
 import { Icon as Icon12, Size as Size20 } from "@vaisala-rockhopper/components";
 import { VaiColor as VaiColor6, VaiIcon as VaiIcon9 } from "@vaisala-rockhopper/design-tokens";
-var MeasurementTypeIcon = /* @__PURE__ */ __name(({ size = Size20.M, type, htmlId: htmlId3, ...rest }) => {
-  const getIconData = /* @__PURE__ */ __name((value) => {
+var MeasurementTypeIcon = ({ size = Size20.M, type, htmlId: htmlId3, ...rest }) => {
+  const getIconData = (value) => {
     const icons = {
       [CO2_ID]: { name: VaiIcon9.Dust, color: VaiColor6.BlueDark },
       [TEMP_ID]: { name: VaiIcon9.Thermometer, color: VaiColor6.BlueDark },
       [HUMIDITY_ID]: { name: VaiIcon9.Humidity, color: VaiColor6.BlueDark }
     };
     return icons[value];
-  }, "getIconData");
+  };
   return <Icon12
     htmlId={htmlId3}
     size={size}
@@ -9762,7 +9757,7 @@ var MeasurementTypeIcon = /* @__PURE__ */ __name(({ size = Size20.M, type, htmlI
     {...getIconData(type)}
     {...rest}
   />;
-}, "MeasurementTypeIcon");
+};
 var MeasurementTypeIcon_default = MeasurementTypeIcon;
 
 // ../vlncc-frontend/src/components/Site/LinkDataSourceDialog/DataSourceList.tsx
@@ -9776,7 +9771,7 @@ import cx3 from "classnames";
 import { nanoid as nanoid3 } from "@reduxjs/toolkit";
 import { VaiIcon as VaiIcon10 } from "@vaisala-rockhopper/design-tokens";
 import "./index.scss";
-var DataSourceListItem = /* @__PURE__ */ __name(({
+var DataSourceListItem = ({
   dataSource,
   checked = false,
   initial,
@@ -9830,12 +9825,12 @@ var DataSourceListItem = /* @__PURE__ */ __name(({
       <span className="vai-margin-left-s" data-testid={TEST_IDS.data_source_list_item_symbol}>{showMeasurementSymbol(symbolId)}</span>
     </FlexItem7>
   </ListItem>;
-}, "DataSourceListItem");
+};
 var DataSourceListItem_default = DataSourceListItem;
 
 // ../vlncc-frontend/src/components/Site/LinkDataSourceDialog/DataSourceList.tsx
 import { nanoid as nanoid4 } from "@reduxjs/toolkit";
-var DataSourceList = /* @__PURE__ */ __name(({
+var DataSourceList = ({
   dataSources = [],
   symbolId,
   initialItem = null,
@@ -9845,18 +9840,18 @@ var DataSourceList = /* @__PURE__ */ __name(({
 }) => {
   const { getId } = useHtmlId_default({ htmlId: htmlId3, separator });
   const [selectedItem, setSelectedItem] = React20.useState(initialItem);
-  const isItemSelected = /* @__PURE__ */ __name((item) => {
+  const isItemSelected = (item) => {
     if (selectedItem == null) {
       return false;
     }
     return selectedItem.probe_sn === item.probe_sn && selectedItem.meas_group === item.meas_group;
-  }, "isItemSelected");
-  const isInitial = /* @__PURE__ */ __name((item) => {
+  };
+  const isInitial = (item) => {
     if (initialItem == null) {
       return false;
     }
     return initialItem.probe_sn === item.probe_sn && initialItem.meas_group === item.meas_group;
-  }, "isInitial");
+  };
   const arrangedDataSources = React20.useMemo(() => {
     const items = initialItem ? [initialItem].concat(
       dataSources.filter(
@@ -9882,7 +9877,7 @@ var DataSourceList = /* @__PURE__ */ __name(({
     checked={selectedItem ? isItemSelected(dataSource) : false}
     initial={isInitial(dataSource)}
   />)}</List>;
-}, "DataSourceList");
+};
 var DataSourceList_default = DataSourceList;
 
 // ../vlncc-frontend/src/components/Site/LinkDataSourceDialog/DataSourceConfirmationModal.tsx
@@ -9892,7 +9887,7 @@ import { useTranslation as useTranslation24 } from "react-i18next";
 import { VaiIcon as VaiIcon11 } from "@vaisala-rockhopper/design-tokens";
 import "./index.scss";
 var htmlId = "link-data-source-confirmation-modal";
-var DataSourceConfirmationModal = /* @__PURE__ */ __name(({
+var DataSourceConfirmationModal = ({
   location = null,
   selectedItem,
   linkTreeNode,
@@ -9906,9 +9901,9 @@ var DataSourceConfirmationModal = /* @__PURE__ */ __name(({
   const oldDeviceId = location.device ? buildDeviceId(location.device.device_model, location.device.device_sn) : "";
   const oldProbeId = location.device ? buildDeviceId(location.device.probe_model, location.device.probe_sn) : "";
   const dispatch = useAppDispatch();
-  const onDismiss = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => {
     dispatch(hideDialog());
-  }, "onDismiss");
+  };
   const modalAction = useMemo2(() => {
     if (!location.device) {
       return "link" /* LINK */;
@@ -9918,7 +9913,7 @@ var DataSourceConfirmationModal = /* @__PURE__ */ __name(({
       return "unlink" /* UNLINK */;
     }
   }, [location, selectedItem]);
-  const onConfirm = /* @__PURE__ */ __name(async () => {
+  const onConfirm = async () => {
     setSaving(true);
     const nodeLink = {
       linkedNode: {
@@ -9954,7 +9949,7 @@ var DataSourceConfirmationModal = /* @__PURE__ */ __name(({
       }
     }
     onDismiss();
-  }, "onConfirm");
+  };
   const cancelId = getId("cancel-button");
   const confirmId = getId("confirm-button");
   const ModalButtons = <>
@@ -10025,7 +10020,7 @@ var DataSourceConfirmationModal = /* @__PURE__ */ __name(({
     </Flex14>
     <Flex14><FlexItem8 className="vai-margin-left-s vai-margin-top-m" flexBasis="100%"><p id={getId("message")} data-testid={TEST_IDS.link_data_source_confirmation_modal_message}>{modalAction === "unlink" /* UNLINK */ ? t("unlinkDataSourceConfirmationModal.message") : t("linkDataSourceConfirmationModal.message")}</p></FlexItem8></Flex14>
   </ModalContainer>;
-}, "DataSourceConfirmationModal");
+};
 var DataSourceConfirmationModal_default = DataSourceConfirmationModal;
 
 // ../vlncc-frontend/src/components/Site/LinkDataSourceDialog/index.tsx
@@ -10050,7 +10045,7 @@ var MOCK_DATA = [
 ];
 var appName = APP_NAME;
 var htmlId2 = "link-data-source-dialog";
-var LinkDataSourceDialog = /* @__PURE__ */ __name(({ location = null, linkTreeNode, unlinkTreeNode }) => {
+var LinkDataSourceDialog = ({ location = null, linkTreeNode, unlinkTreeNode }) => {
   const { t } = useTranslation25();
   const { getId } = useHtmlId_default({ htmlId: htmlId2, separator: "-" });
   const dispatch = useAppDispatch();
@@ -10070,10 +10065,10 @@ var LinkDataSourceDialog = /* @__PURE__ */ __name(({ location = null, linkTreeNo
   );
   const [initialItem, setInitialItem] = React22.useState(location.device);
   const [selectedItem, setSelectedItem] = React22.useState(initialItem);
-  const onDismiss = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => {
     dispatch(hideDialog());
-  }, "onDismiss");
-  const showDataSourceConfirmationModal = /* @__PURE__ */ __name(() => {
+  };
+  const showDataSourceConfirmationModal = () => {
     const newSelectedItem = initialItem && selectedItem == null ? initialItem : selectedItem;
     dispatch(
       showDialog(
@@ -10085,12 +10080,12 @@ var LinkDataSourceDialog = /* @__PURE__ */ __name(({ location = null, linkTreeNo
         />
       )
     );
-  }, "showDataSourceConfirmationModal");
-  const onChange = /* @__PURE__ */ __name((e) => {
+  };
+  const onChange = (e) => {
     const { value } = e.currentTarget;
     setSearchValue(value);
-  }, "onChange");
-  const itemHasChanged = /* @__PURE__ */ __name(() => {
+  };
+  const itemHasChanged = () => {
     if (initialItem) {
       if (selectedItem == null) {
         return true;
@@ -10098,7 +10093,7 @@ var LinkDataSourceDialog = /* @__PURE__ */ __name(({ location = null, linkTreeNo
       return buildDeviceId(initialItem.probe_model, initialItem.probe_sn) !== buildDeviceId(selectedItem.probe_model, selectedItem.probe_sn);
     }
     return selectedItem != null;
-  }, "itemHasChanged");
+  };
   React22.useEffect(() => {
     if (location.device) {
       setInitialItem(location.device);
@@ -10116,7 +10111,7 @@ var LinkDataSourceDialog = /* @__PURE__ */ __name(({ location = null, linkTreeNo
     >{t("general.save")}</Button11>
     <Button11 id={cancelId} htmlId={cancelId} buttonType={ButtonType11.Secondary} onClick={onDismiss}>{t("general.cancel")}</Button11>
   </>;
-  const renderDataSources = /* @__PURE__ */ __name(() => {
+  const renderDataSources = () => {
     if (dataSources.length === 0) {
       return <EmptyState
         htmlId={getId("data-source-empty-state")}
@@ -10132,7 +10127,7 @@ var LinkDataSourceDialog = /* @__PURE__ */ __name(({ location = null, linkTreeNo
       dataSources={dataSources}
       symbolId={location.symbol_id}
     />;
-  }, "renderDataSources");
+  };
   return <ModalContainer
     id={getId()}
     isOpen
@@ -10185,11 +10180,11 @@ var LinkDataSourceDialog = /* @__PURE__ */ __name(({ location = null, linkTreeNo
       refreshResults={refetch}
     /></Flex15> : renderDataSources()}</div>
   </ModalContainer>;
-}, "LinkDataSourceDialog");
+};
 var LinkDataSourceDialog_default = LinkDataSourceDialog;
 
 // ../vlncc-frontend/src/components/Site/Setting/Settings.tsx
-var Settings2 = /* @__PURE__ */ __name(() => {
+var Settings2 = () => {
   const { id } = useParams5();
   const { t } = useTranslation26();
   const dispatch = useAppDispatch();
@@ -10200,19 +10195,19 @@ var Settings2 = /* @__PURE__ */ __name(() => {
   const { linkTreeNode, unlinkTreeNode } = useSiteTreeActions_default();
   const { locationStatus: locationStatus2, deviceStatus } = useLocationStatus(location);
   const [openAccordion, setOpenAccordion] = React23.useState("");
-  const handleAccordionChange = /* @__PURE__ */ __name((isExpanded, accordionKey) => {
+  const handleAccordionChange = (isExpanded, accordionKey) => {
     setOpenAccordion(accordionKey);
-  }, "handleAccordionChange");
-  const renderLinkDataSourceDialog = /* @__PURE__ */ __name(() => {
+  };
+  const renderLinkDataSourceDialog = () => {
     currentUser?.canManageSites && dispatch(
       showDialog(
         <LinkDataSourceDialog_default linkTreeNode={linkTreeNode} unlinkTreeNode={unlinkTreeNode} location={location} />
       )
     );
-  }, "renderLinkDataSourceDialog");
-  const toggleActiveDisplay = /* @__PURE__ */ __name(() => {
+  };
+  const toggleActiveDisplay = () => {
     console.log("toggle");
-  }, "toggleActiveDisplay");
+  };
   if (!location) {
     return <><CenteredSpinner_default /></>;
   }
@@ -10267,11 +10262,11 @@ var Settings2 = /* @__PURE__ */ __name(() => {
       <Accordion accordionKey="deviceAccordion" title={t("site.deviceAlarmSettings")}>Coming soon.</Accordion>
     </AccordionList>
   </>;
-}, "Settings");
+};
 
 // ../vlncc-frontend/src/components/Site/Setting/SettingsList.tsx
 import { useParams as useParams6 } from "react-router-dom";
-var SettingsList = /* @__PURE__ */ __name(({ siteId }) => {
+var SettingsList = ({ siteId }) => {
   const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
   const { username } = useGetUsername_default();
   const { id } = useParams6();
@@ -10294,22 +10289,7 @@ var SettingsList = /* @__PURE__ */ __name(({ siteId }) => {
     return <EmptyState illustration={"emptyFolder" /* emptyFolder */} heading="site.emptyZoneHeading" />;
   }
   return <SiteTable key={id} data={nodes} type="settings" />;
-}, "SettingsList");
-
-// ../vlncc-frontend/src/components/Site/RightsList.tsx
-var RightsList = /* @__PURE__ */ __name(() => {
-  return <h2>Rights list</h2>;
-}, "RightsList");
-
-// ../vlncc-frontend/src/components/Site/Rights.tsx
-import { useParams as useParams7 } from "react-router-dom";
-var Rights = /* @__PURE__ */ __name(() => {
-  const { id } = useParams7();
-  return <><h2>
-    {"Rights for node: "}
-    {id}
-  </h2></>;
-}, "Rights");
+};
 
 // ../vlncc-frontend/src/containers/Site.tsx
 import { connect as connect4 } from "react-redux";
@@ -10328,20 +10308,20 @@ var siteTabs = [
     tabKey: "settings" /* settings */,
     title: "Settings",
     translationKey: "site.settings"
-  },
-  {
-    tabKey: "rights" /* rights */,
-    title: "Rights",
-    translationKey: "site.rights"
   }
+  // {
+  //   tabKey: SiteTabKeys.rights,
+  //   title: 'Rights',
+  //   translationKey: 'site.rights'
+  // }
 ];
-var mapStateToProps4 = /* @__PURE__ */ __name(({ profile }) => ({
+var mapStateToProps4 = ({ profile }) => ({
   canManageSites: profile.currentUser?.canManageSites || false,
   canPauseAlarms: profile.currentUser?.canPauseAlarms || false,
   canManageAlarms: profile.currentUser?.canManageAlarms || false,
   userInfoLoading: profile.initProfileLoading
-}), "mapStateToProps");
-var SiteTreeContainer = /* @__PURE__ */ __name(({
+});
+var SiteTreeContainer = ({
   canManageSites,
   userInfoLoading,
   canManageAlarms,
@@ -10411,14 +10391,24 @@ var SiteTreeContainer = /* @__PURE__ */ __name(({
         <Route path="zone/:id" element={<SettingsList siteId={siteId} />} />
         <Route path=":id" element={<Settings2 />} />
       </Route>}
-      <Route path="rights">
-        <Route index element={<RightsList />} />
-        <Route path="zone/:id" element={<Rights />} />
-        <Route path=":id" element={<Rights />} />
-      </Route>
+      {
+        /* <Route path="rights"> */
+      }
+      {
+        /*   <Route index element={<RightsList />} /> */
+      }
+      {
+        /*   <Route path="zone/:id" element={<Rights />} /> */
+      }
+      {
+        /*   <Route path=":id" element={<Rights />} /> */
+      }
+      {
+        /* </Route> */
+      }
     </Route></Routes></Flex17>
   </Flex17></PageContainer.Content>;
-}, "SiteTreeContainer");
+};
 var Site_default = connect4(mapStateToProps4)(SiteTreeContainer);
 
 // ../vlncc-frontend/src/components/auth/Login.tsx
@@ -10427,7 +10417,7 @@ import { Login as VaiLogin } from "@vaisala-rockhopper/components";
 import { Routes as Routes2, Route as Route2 } from "react-router";
 import "./login.scss";
 import { useTranslation as useTranslation27 } from "react-i18next";
-var Login = /* @__PURE__ */ __name(({
+var Login = ({
   auth,
   sendResetCode: sendResetCode2,
   resetPassword: resetPassword2,
@@ -10491,11 +10481,11 @@ var Login = /* @__PURE__ */ __name(({
     },
     [auth.resettingPasswordError, t]
   );
-  const onLogin = /* @__PURE__ */ __name((username, password, companyName) => {
+  const onLogin = (username, password, companyName) => {
     if (!auth.loading) {
       login2(username, password, companyName, false);
     }
-  }, "onLogin");
+  };
   const hasAuthError = auth.error !== null && typeof auth.error !== "undefined";
   return <VaiLogin
     copyright={t("general.copyright")}
@@ -10591,7 +10581,7 @@ var Login = /* @__PURE__ */ __name(({
       element={<LoginForm_default loading={auth.loading} onLogin={onLogin} sendResetCodeInit={sendResetCodeInit2} />}
     />
   </Routes2></VaiLogin>;
-}, "Login");
+};
 var Login_default = Login;
 
 // ../vlncc-frontend/src/components/auth/LoginRedirect.tsx
@@ -10599,8 +10589,8 @@ import * as React26 from "react";
 import { connect as connect5 } from "react-redux";
 import { stringify as stringify2 } from "querystring";
 import { useLocation as useLocation6, useNavigate as useNavigate2 } from "react-router-dom";
-var mapStateToProps5 = /* @__PURE__ */ __name(({ auth }) => ({ isAuthenticated: auth.isAuthenticated }), "mapStateToProps");
-var LoginRedirect = /* @__PURE__ */ __name(({ children, isAuthenticated }) => {
+var mapStateToProps5 = ({ auth }) => ({ isAuthenticated: auth.isAuthenticated });
+var LoginRedirect = ({ children, isAuthenticated }) => {
   const location = useLocation6();
   const navigate = useNavigate2();
   React26.useEffect(() => {
@@ -10611,7 +10601,7 @@ var LoginRedirect = /* @__PURE__ */ __name(({ children, isAuthenticated }) => {
     }
   }, [isAuthenticated]);
   return children;
-}, "LoginRedirect");
+};
 var LoginRedirect_default = connect5(mapStateToProps5)(LoginRedirect);
 
 // ../vlncc-frontend/src/components/auth/Logout.tsx
@@ -10619,18 +10609,17 @@ function AppLogout() {
   window.location.pathname = routes.login.url;
   return null;
 }
-__name(AppLogout, "AppLogout");
 
 // ../vlncc-frontend/src/components/auth/MainRedirect.tsx
 import { useEffect as useEffect13 } from "react";
 import { useLocation as useLocation7, useNavigate as useNavigate3 } from "react-router-dom";
 import { connect as connect6 } from "react-redux";
 import { parse as parse2 } from "querystring";
-var mapStateToProps6 = /* @__PURE__ */ __name(({ auth }) => ({ auth }), "mapStateToProps");
-var mapDispatchToProps4 = /* @__PURE__ */ __name((dispatch) => ({
+var mapStateToProps6 = ({ auth }) => ({ auth });
+var mapDispatchToProps4 = (dispatch) => ({
   getAuthInfo: () => dispatch(authDispatchActions.getAuthInfo())
-}), "mapDispatchToProps");
-var MainRedirect = /* @__PURE__ */ __name(({ getAuthInfo: getAuthInfo2, auth, children }) => {
+});
+var MainRedirect = ({ getAuthInfo: getAuthInfo2, auth, children }) => {
   const location = useLocation7();
   const navigate = useNavigate3();
   useEffect13(() => {
@@ -10643,7 +10632,7 @@ var MainRedirect = /* @__PURE__ */ __name(({ getAuthInfo: getAuthInfo2, auth, ch
     }
   }, [auth.isAuthenticated]);
   return <>{children}</>;
-}, "MainRedirect");
+};
 var MainRedirect_default = connect6(mapStateToProps6, mapDispatchToProps4)(MainRedirect);
 
 // ../vlncc-frontend/src/components/auth/ForgotPassword.tsx
@@ -10653,7 +10642,7 @@ import { Form as Form7, Heading as Heading6, Label as Label3, InputField as Inpu
 import { Link as Link4, useNavigate as useNavigate4 } from "react-router-dom";
 import "./forgot-password.scss";
 import { useTranslation as useTranslation28 } from "react-i18next";
-var ForgotPassword = /* @__PURE__ */ __name(({
+var ForgotPassword = ({
   sendingResetCode,
   sendingResetCodeError,
   sendResetCode: sendResetCode2
@@ -10690,13 +10679,13 @@ var ForgotPassword = /* @__PURE__ */ __name(({
       }
     }
   }, [sendingResetCodeError]);
-  const onSubmit = /* @__PURE__ */ __name(() => {
+  const onSubmit = () => {
     const trimmedEmail = validator5.trim(email);
     const trimmedCompanyName = validator5.trim(companyName);
     sendResetCode2(trimmedEmail, trimmedCompanyName);
     setRequestSent(true);
-  }, "onSubmit");
-  const onChange = /* @__PURE__ */ __name((e) => {
+  };
+  const onChange = (e) => {
     const { value, name } = e.currentTarget;
     setInputError("");
     if (name === "email") {
@@ -10706,7 +10695,7 @@ var ForgotPassword = /* @__PURE__ */ __name(({
       setCompanyName(value);
       value.length > COMPANY_NAME_MAX_CHARACTERS_LENGTH ? setCompanyError(true) : setCompanyError(false);
     }
-  }, "onChange");
+  };
   const isButtonDisabled = React27.useCallback(() => {
     return emailError || !email || !validator5.isEmail(validator5.trim(email)) || validator5.trim(companyName).length < COMPANY_NAME_MIN_CHARACTERS_LENGTH || companyError;
   }, [sendingResetCode, companyName, email, companyError]);
@@ -10737,7 +10726,7 @@ var ForgotPassword = /* @__PURE__ */ __name(({
       <Button13 id="forgot-password" disabled={isButtonDisabled()} type="submit">{sendingResetCode ? <Spinner2 htmlId="login-spinner" /> : t("auth.sendEmailButton")}</Button13>
     </div>
   </Form7>;
-}, "ForgotPassword");
+};
 var ForgotPassword_default = ForgotPassword;
 
 // ../vlncc-frontend/src/components/auth/ResetPassword.tsx
@@ -10747,7 +10736,7 @@ import { Form as Form8, Heading as Heading7, Button as Button14 } from "@vaisala
 import { Link as Link5, useLocation as useLocation8, useNavigate as useNavigate5 } from "react-router-dom";
 import { useTranslation as useTranslation29 } from "react-i18next";
 import "./reset-password.scss";
-var ResetPassword = /* @__PURE__ */ __name(({
+var ResetPassword = ({
   isPasswordReset,
   resetPassword: resetPassword2,
   setUpPasswordPolicy: setUpPasswordPolicy2,
@@ -10874,7 +10863,7 @@ var ResetPassword = /* @__PURE__ */ __name(({
       <Button14 htmlId="reset-password" id="reset-password" disabled={!canSend} type="submit">{resettingPassword ? <CenteredSpinner_default htmlId="reset-password-spinner" className="" /> : t("general.save")}</Button14>
     </div>
   </Form8>;
-}, "ResetPassword");
+};
 var ResetPassword_default = ResetPassword;
 
 // ../vlncc-frontend/src/components/auth/ResetPasswordConfirmation.tsx
@@ -10882,12 +10871,12 @@ import { Heading as Heading8, Button as Button15, ButtonType as ButtonType13 } f
 import "./reset-password-confirmation.scss";
 import { useNavigate as useNavigate6 } from "react-router-dom";
 import { useTranslation as useTranslation30 } from "react-i18next";
-var ResetPasswordConfirmation = /* @__PURE__ */ __name(() => {
+var ResetPasswordConfirmation = () => {
   const navigate = useNavigate6();
   const { t } = useTranslation30();
-  const goBack = /* @__PURE__ */ __name(() => {
+  const goBack = () => {
     navigate(routes.login.url);
-  }, "goBack");
+  };
   return <div>
     <Heading8 id="reset-password-confirmation-help-heading" level={2}>{t("auth.checkEmailTitle")}</Heading8>
     <p id="reset-password-confirmation-help-check-email-body" className="reset-password-confirmation-help">{t("auth.checkEmailBodyText", { appName: APP_NAME_FULL })}</p>
@@ -10903,7 +10892,7 @@ var ResetPasswordConfirmation = /* @__PURE__ */ __name(() => {
       onClick={goBack}
     >{t("general.back")}</Button15>
   </div>;
-}, "ResetPasswordConfirmation");
+};
 var ResetPasswordConfirmation_default = ResetPasswordConfirmation;
 
 // ../vlncc-frontend/src/components/auth/LoginForm.tsx
@@ -10912,7 +10901,7 @@ import validator6 from "validator";
 import { Button as Button16, Form as Form9, Heading as Heading9, InputField as InputField6, PasswordInput as PasswordInput3, Label as Label4, Size as Size26 } from "@vaisala-rockhopper/components";
 import { Link as Link6 } from "react-router-dom";
 import { useTranslation as useTranslation31 } from "react-i18next";
-var LoginForm = /* @__PURE__ */ __name(({ loading, sendResetCodeInit: sendResetCodeInit2, onLogin }) => {
+var LoginForm = ({ loading, sendResetCodeInit: sendResetCodeInit2, onLogin }) => {
   const { t } = useTranslation31();
   const [username, setUsername] = React29.useState("");
   const [password, setPassword] = React29.useState("");
@@ -10920,7 +10909,7 @@ var LoginForm = /* @__PURE__ */ __name(({ loading, sendResetCodeInit: sendResetC
   const [usernameError, setUsernameError] = React29.useState(false);
   const [companyError, setCompanyError] = React29.useState(false);
   const [passwordError, setPasswordError] = React29.useState(false);
-  const onChange = /* @__PURE__ */ __name((e) => {
+  const onChange = (e) => {
     const { value, name } = e.currentTarget;
     if (name === "username") {
       setUsername(value);
@@ -10932,10 +10921,10 @@ var LoginForm = /* @__PURE__ */ __name(({ loading, sendResetCodeInit: sendResetC
       setCompanyName(value);
       value.length > COMPANY_NAME_MAX_CHARACTERS_LENGTH ? setCompanyError(true) : setCompanyError(false);
     }
-  }, "onChange");
-  const onLoginSubmit = /* @__PURE__ */ __name(() => {
+  };
+  const onLoginSubmit = () => {
     onLogin(validator6.trim(username).toLowerCase(), password, validator6.trim(companyName).toLowerCase());
-  }, "onLoginSubmit");
+  };
   const isButtonDisabled = React29.useCallback(() => {
     return loading || !password || !username || !companyName || companyError || usernameError || passwordError;
   }, [loading, password, username, companyName, companyError, usernameError, passwordError]);
@@ -10984,21 +10973,21 @@ var LoginForm = /* @__PURE__ */ __name(({ loading, sendResetCodeInit: sendResetC
       <Button16 id="login-submit" htmlId="login-submit" disabled={isButtonDisabled()} type="submit">{loading ? <CenteredSpinner_default htmlId="save-button-spinner" className="" /> : t("login")}</Button16>
     </div>
   </Form9>;
-}, "LoginForm");
+};
 var LoginForm_default = LoginForm;
 
 // ../vlncc-frontend/src/components/auth/PasswordReset.tsx
 import { Heading as Heading10 } from "@vaisala-rockhopper/components";
 import { Link as Link7 } from "react-router-dom";
 import { useTranslation as useTranslation32 } from "react-i18next";
-var PasswordReset = /* @__PURE__ */ __name(() => {
+var PasswordReset = () => {
   const { t } = useTranslation32();
   return <div>
     <Heading10 id="password-rest-title" level={2} className="reset-password-title">{t("auth.passwordResetTitle")}</Heading10>
     <p id="password-reset-help" className="vai-margin-left-none">{t("auth.passwordResetHelp")}</p>
     <div id="password-reset-back-link-container" className="app-login-submit vai-margin-top-m"><Link7 id="password-reset-back-link" to={routes.login.url}>{t("general.back")}</Link7></div>
   </div>;
-}, "PasswordReset");
+};
 var PasswordReset_default = PasswordReset;
 
 // ../vlncc-frontend/src/components/auth/SetUpPassword.tsx
@@ -11008,7 +10997,7 @@ import { includes as includes3 } from "lodash";
 import { Form as Form10, Heading as Heading11, Button as Button17 } from "@vaisala-rockhopper/components";
 import { useLocation as useLocation9, useNavigate as useNavigate7 } from "react-router-dom";
 import { useTranslation as useTranslation33 } from "react-i18next";
-var SetUpPassword = /* @__PURE__ */ __name(({
+var SetUpPassword = ({
   login: login2,
   setUpPassword: setUpPassword2,
   changeLanguage: changeLanguage2,
@@ -11102,9 +11091,9 @@ var SetUpPassword = /* @__PURE__ */ __name(({
       login2(urlUsernameParameter, urlPasswordParameter, urlCompanyAlias, true);
     }
   }, []);
-  const onChangePassword = /* @__PURE__ */ __name(() => {
+  const onChangePassword = () => {
     setUpPassword2(urlUsername, urlPassword, newPassword);
-  }, "onChangePassword");
+  };
   if (firstLoginError === 3 /* firstLoginInvalidCredentialError */) {
     navigate(routes.login.url);
   }
@@ -11124,7 +11113,7 @@ var SetUpPassword = /* @__PURE__ */ __name(({
     </Form10>;
   }
   return <div id="setup-password-wrapper">{content}</div>;
-}, "SetUpPassword");
+};
 var SetUpPassword_default = SetUpPassword;
 
 // ../vlncc-frontend/src/components/auth/SetUpMFA.tsx
@@ -11133,7 +11122,7 @@ import { Form as Form11, Heading as Heading12, InputField as InputField7, Label 
 import { useNavigate as useNavigate8 } from "react-router-dom";
 import { useTranslation as useTranslation34 } from "react-i18next";
 import "./setup-mfa.scss";
-var SetUpMFA = /* @__PURE__ */ __name(({
+var SetUpMFA = ({
   setUpMFA: setUpMFA2,
   resendMFA: resendMFA2,
   setAuthError: setAuthError2,
@@ -11145,35 +11134,35 @@ var SetUpMFA = /* @__PURE__ */ __name(({
   const navigate = useNavigate8();
   const [mfa, setMfa] = React31.useState("");
   React31.useEffect(() => {
-    const browserBackCb = /* @__PURE__ */ __name(() => MFABackToLogin2(), "browserBackCb");
+    const browserBackCb = () => MFABackToLogin2();
     window.addEventListener("popstate", browserBackCb);
     return () => {
       window.removeEventListener("popstate", browserBackCb);
     };
   }, []);
-  const onSubmitMFA = /* @__PURE__ */ __name(() => {
+  const onSubmitMFA = () => {
     if (canSend()) {
       setUpMFA2(mfa);
     }
-  }, "onSubmitMFA");
-  const goBack = /* @__PURE__ */ __name(() => {
+  };
+  const goBack = () => {
     navigate(routes.login.url);
     MFABackToLogin2();
-  }, "goBack");
+  };
   const canSend = React31.useCallback(() => {
     return mfa.length === MFA_LENGTH;
   }, [mfa]);
-  const onMFAChange = /* @__PURE__ */ __name((event) => {
+  const onMFAChange = (event) => {
     const { value } = event.currentTarget;
     error != null && setAuthError2(void 0);
     const re = /^[0-9\b]+$/;
     if (value === "" || re.test(value)) {
       setMfa(value);
     }
-  }, "onMFAChange");
-  const onMFAResend = /* @__PURE__ */ __name(() => {
+  };
+  const onMFAResend = () => {
     resendMFA2();
-  }, "onMFAResend");
+  };
   return <div id="mfa-wrapper"><Form11 htmlId="mfa-form">
     <Heading12 htmlId="mfa-title" level={2}>{t("mfa.title")}</Heading12>
     <p id="mfa-explanation" className="mfa-explanation">{t("mfa.explanation")}</p>
@@ -11199,7 +11188,7 @@ var SetUpMFA = /* @__PURE__ */ __name(({
       >{loading ? <CenteredSpinner_default htmlId="save-button-spinner" className="" /> : t("mfa.enter")}</Button18></Flex18.Item>
     </Flex18>
   </Form11></div>;
-}, "SetUpMFA");
+};
 var SetUpMFA_default = SetUpMFA;
 
 // ../vlncc-frontend/src/components/auth/SetUpProfile.tsx
@@ -11223,13 +11212,13 @@ import "react-phone-input-2/lib/style.css";
 import { useTranslation as useTranslation35 } from "react-i18next";
 import { Auth as Auth6 } from "aws-amplify";
 import "./setup-profile.scss";
-var SetUpProfile = /* @__PURE__ */ __name((props) => {
+var SetUpProfile = (props) => {
   const { t } = useTranslation35();
   const [saving, setSaving] = React32.useState(false);
   const { setUpProfile: setUpProfile2, changeLanguage: changeLanguage2, userName } = props;
-  const getTimeZoneFromBrowser = /* @__PURE__ */ __name(() => {
+  const getTimeZoneFromBrowser = () => {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
-  }, "getTimeZoneFromBrowser");
+  };
   const [firstName, setFirstName] = React32.useState("");
   const [firstNameEmptyError, setFirstNameEmptyError] = React32.useState(false);
   const [firstNameMaxLengthError, setFirstNameMaxLengthError] = React32.useState(false);
@@ -11246,17 +11235,17 @@ var SetUpProfile = /* @__PURE__ */ __name((props) => {
   const [timeZoneError, setTimeZoneError] = React32.useState(false);
   const [profilePictureFile, setProfilePictureFile] = React32.useState(null);
   React32.useEffect(() => {
-    const setLanguageFromSession = /* @__PURE__ */ __name(async () => {
+    const setLanguageFromSession = async () => {
       try {
         const session = await Auth6.currentSession();
         const { locale } = session.getIdToken().payload;
         setLanguage(locale);
       } catch (exception) {
       }
-    }, "setLanguageFromSession");
+    };
     setLanguageFromSession();
   }, []);
-  const onFirstNameChange = /* @__PURE__ */ __name((event) => {
+  const onFirstNameChange = (event) => {
     setFirstNameEmptyError(false);
     setFirstNameMaxLengthError(false);
     setFirstName(event.target.value);
@@ -11267,8 +11256,8 @@ var SetUpProfile = /* @__PURE__ */ __name((props) => {
     if (trimmedFirstName && trimmedFirstName.length > NAME_MAX_LENGTH) {
       setFirstNameMaxLengthError(true);
     }
-  }, "onFirstNameChange");
-  const onLastNameChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onLastNameChange = (event) => {
     setLastNameEmptyError(false);
     setLastNameMaxLengthError(false);
     setLastName(event.target.value);
@@ -11279,33 +11268,33 @@ var SetUpProfile = /* @__PURE__ */ __name((props) => {
     if (trimmedLastName && trimmedLastName.length > NAME_MAX_LENGTH) {
       setLastNameMaxLengthError(true);
     }
-  }, "onLastNameChange");
-  const onPhoneNumberChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onPhoneNumberChange = (event) => {
     setPhoneNumberError(false);
     setPhoneNumber(event);
-  }, "onPhoneNumberChange");
-  const onTimeZoneChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onTimeZoneChange = (event) => {
     setTimeZoneError(false);
     setTimeZone(event);
     if (!timeZone) {
       setTimeZoneError(true);
     }
-  }, "onTimeZoneChange");
-  const onLanguageChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onLanguageChange = (event) => {
     setLanguageError(false);
     setLanguage(event);
     if (props.language !== event) {
       changeLanguage2(event);
     }
-  }, "onLanguageChange");
-  const onPinChange = /* @__PURE__ */ __name((event) => {
+  };
+  const onPinChange = (event) => {
     setPinError(false);
     setPin(event.target.value);
     if (event.target.value && (!/^\d+$/.test(event.target.value) || event.target.value.length < PIN_MIN_LENGTH || event.target.value.length > PIN_MAX_LENGTH)) {
       setPinError(true);
     }
-  }, "onPinChange");
-  const onSetUpProfile = /* @__PURE__ */ __name(async () => {
+  };
+  const onSetUpProfile = async () => {
     setSaving(true);
     let errorExist = false;
     const trimmedFirstName = validator7.trim(firstName);
@@ -11357,9 +11346,9 @@ var SetUpProfile = /* @__PURE__ */ __name((props) => {
       await setUpProfile2(userProfile);
     }
     setSaving(false);
-  }, "onSetUpProfile");
+  };
   const isDisabled = saving || !phoneNumber || !firstName || !lastName || !language || !timeZone;
-  const getFirstNameError = /* @__PURE__ */ __name(() => {
+  const getFirstNameError = () => {
     if (firstNameEmptyError) {
       return t("signup.firstNameCannotBeEmpty");
     } else if (firstNameMaxLengthError) {
@@ -11367,8 +11356,8 @@ var SetUpProfile = /* @__PURE__ */ __name((props) => {
     } else {
       return "";
     }
-  }, "getFirstNameError");
-  const getLastNameError = /* @__PURE__ */ __name(() => {
+  };
+  const getLastNameError = () => {
     if (lastNameEmptyError) {
       return t("signup.lastNameCannotBeEmpty");
     } else if (lastNameMaxLengthError) {
@@ -11376,7 +11365,7 @@ var SetUpProfile = /* @__PURE__ */ __name((props) => {
     } else {
       return "";
     }
-  }, "getLastNameError");
+  };
   return <Form12 mode="wide" htmlId="signup-setup-profile-form">
     <Heading13 level={2}>{t("signup.setupccounttitle")}</Heading13>
     <PictureUploader_default
@@ -11490,7 +11479,7 @@ var SetUpProfile = /* @__PURE__ */ __name((props) => {
       disabled={isDisabled}
     >{saving ? <CenteredSpinner_default htmlId="signup-finish-button-spinner" className="" /> : t("signup.finishBtn")}</Button19></div>
   </Form12>;
-}, "SetUpProfile");
+};
 var SetUpProfile_default = SetUpProfile;
 
 // ../vlncc-frontend/src/containers/Profile.tsx
@@ -11534,14 +11523,14 @@ import * as React33 from "react";
 import validator8 from "validator";
 import { IconName as IconName9, Size as Size29, InputField as InputField9, Form as Form13, Label as Label7, Button as Button20, ButtonType as ButtonType15, TextArea as TextArea2 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation36 } from "react-i18next";
-var CreateGroupsDialog = /* @__PURE__ */ __name((props) => {
+var CreateGroupsDialog = (props) => {
   const { t } = useTranslation36();
   const [groupName, setGroupName] = React33.useState("");
   const [groupNameError, setGroupNameError] = React33.useState("");
   const [description, setDescription] = React33.useState("");
   const [descriptionError, setDescriptionError] = React33.useState("");
   const dispatch = useAppDispatch();
-  const onChange = /* @__PURE__ */ __name((e) => {
+  const onChange = (e) => {
     const { value, name } = e.currentTarget;
     if (name === "groupName") {
       setGroupName(value);
@@ -11552,11 +11541,11 @@ var CreateGroupsDialog = /* @__PURE__ */ __name((props) => {
         t("profile.createGroupsMaxLengthError", { charLen: GROUP_DESCRIPTION_MAX_CHARACHTERS_LENGTH })
       ) : setDescriptionError("");
     }
-  }, "onChange");
-  const onDismiss = /* @__PURE__ */ __name(() => {
+  };
+  const onDismiss = () => {
     dispatch(hideDialog());
-  }, "onDismiss");
-  const onCreateGroup = /* @__PURE__ */ __name(() => {
+  };
+  const onCreateGroup = () => {
     let errorExist = false;
     const trimmedGroupName = validator8.trim(groupName);
     const trimmedDescription = validator8.trim(description);
@@ -11585,7 +11574,7 @@ var CreateGroupsDialog = /* @__PURE__ */ __name((props) => {
       props.createGroups(newGroup);
       dispatch(hideDialog());
     }
-  }, "onCreateGroup");
+  };
   const modalButtons = <>
     <Button20
       id="create-groups-confirm"
@@ -11639,21 +11628,21 @@ var CreateGroupsDialog = /* @__PURE__ */ __name((props) => {
       <span className="input-error">{descriptionError}</span>
     </Label7>
   </Form13></ModalContainer>;
-}, "CreateGroupsDialog");
+};
 var CreateGroupsDialog_default = CreateGroupsDialog;
 
 // ../vlncc-frontend/src/components/profile/UserActivationDialog/index.tsx
 import "./user-activation-dialog.scss";
 import { Size as Size30, Button as Button21, ButtonType as ButtonType16, BodyText as BodyText8 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation37 } from "react-i18next";
-var UserActivationDialog = /* @__PURE__ */ __name((props) => {
+var UserActivationDialog = (props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation37();
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const confirmAlertModal = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const confirmAlertModal = () => {
     props.toggleUserActivation(props.userActive, props.userProfile.user_name);
     onDismiss();
-  }, "confirmAlertModal");
+  };
   const alertModalVisibleMsg = props.userActive ? t("profile.activateUserMsg", {
     name: props.userProfile.first_name || props.userProfile.last_name ? props.userProfile.first_name + " " + props.userProfile.last_name : props.userProfile.user_name
   }) : t("profile.deactivateUserMsg", {
@@ -11681,7 +11670,7 @@ var UserActivationDialog = /* @__PURE__ */ __name((props) => {
     title={props.userActive ? "profile.activateUserHeader" : "profile.deactivateUserHeader"}
     buttons={modalButtons}
   ><BodyText8 id="user-activation-text" className="activate-user-body">{alertModalVisibleMsg}</BodyText8></ModalContainer>;
-}, "UserActivationDialog");
+};
 var UserActivationDialog_default = UserActivationDialog;
 
 // ../vlncc-frontend/src/components/profile/InviteUsersDialog/index.tsx
@@ -11720,7 +11709,7 @@ import { VaiIcon as VaiIcon13 } from "@vaisala-rockhopper/design-tokens";
 import * as React34 from "react";
 import validator9 from "validator";
 import "./tag-input.scss";
-var TagInput = /* @__PURE__ */ __name((props) => {
+var TagInput = (props) => {
   const [tags, setTags] = React34.useState([]);
   const { getId } = useHtmlId_default({ htmlId: props.htmlId });
   React34.useEffect(() => {
@@ -11735,13 +11724,13 @@ var TagInput = /* @__PURE__ */ __name((props) => {
     props.onTagsUpdated?.(validTags);
     setTags(temp);
   }, [props.tags]);
-  const handleBlur = /* @__PURE__ */ __name((event) => {
+  const handleBlur = (event) => {
     const { value } = event.target;
     const valid = props.validation === "email" ? validator9.isEmail(value) : true;
     if (valid) {
       props.addTagData(event);
     }
-  }, "handleBlur");
+  };
   return <div id={getId("container")} className="tag-input">
     <ul id={getId("ul")} className="tags">{tags.map((tag, index) => <li
       data-ta={TEST_IDS.tag_input_list_item}
@@ -11770,15 +11759,15 @@ var TagInput = /* @__PURE__ */ __name((props) => {
       placeholder={tags.length > 0 ? "" : props.placeholder}
     />
   </div>;
-}, "TagInput");
+};
 var TagInput_default = TagInput;
 
 // ../vlncc-frontend/src/hooks/useEmails.tsx
-var useEmails = /* @__PURE__ */ __name((props) => {
+var useEmails = (props) => {
   const [emails, setEmails] = React35.useState(props ? props.emails || [] : []);
   const [validEmails, setValidEmails] = React35.useState(props ? props.emails || [] : []);
   const nextItemTriggers = [",", ";", " "];
-  const addTagData = /* @__PURE__ */ __name((event) => {
+  const addTagData = (event) => {
     const text = event.target.value;
     if (isTriggerInValue(text)) {
       const textArray = text.replace(/[;,]/g, " ").split(" ") || [];
@@ -11792,7 +11781,7 @@ var useEmails = /* @__PURE__ */ __name((props) => {
     } else {
       findEmailExistence(event);
     }
-  }, "addTagData");
+  };
   function handleLoopTesting(data, index, mutableArray) {
     if (index === data.length) {
       return setEmails([...emails, ...mutableArray]);
@@ -11806,11 +11795,10 @@ var useEmails = /* @__PURE__ */ __name((props) => {
       return handleLoopTesting(data, index + 1, mutableArray);
     }
   }
-  __name(handleLoopTesting, "handleLoopTesting");
-  const isTriggerInValue = /* @__PURE__ */ __name((value) => {
+  const isTriggerInValue = (value) => {
     return nextItemTriggers.some((el) => value.indexOf(el) > -1);
-  }, "isTriggerInValue");
-  const findEmailExistence = /* @__PURE__ */ __name((event) => {
+  };
+  const findEmailExistence = (event) => {
     let userEmail = event.target.value;
     if (userEmail !== "") {
       if (isTriggerInValue(userEmail)) {
@@ -11822,14 +11810,14 @@ var useEmails = /* @__PURE__ */ __name((props) => {
       }
       event.target.value = "";
     }
-  }, "findEmailExistence");
-  const removeTagData = /* @__PURE__ */ __name((indexToRemove) => {
+  };
+  const removeTagData = (indexToRemove) => {
     setEmails([...emails.filter((_, index) => index !== indexToRemove)]);
-  }, "removeTagData");
-  const onTagsUpdated = /* @__PURE__ */ __name((validTags) => {
+  };
+  const onTagsUpdated = (validTags) => {
     setValidEmails(validTags);
-  }, "onTagsUpdated");
-  const renderTagInput = /* @__PURE__ */ __name((inputProps) => {
+  };
+  const renderTagInput = (inputProps) => {
     return <TagInput_default
       {...inputProps}
       tags={emails}
@@ -11838,7 +11826,7 @@ var useEmails = /* @__PURE__ */ __name((props) => {
       removeTagData={removeTagData}
       validation="email"
     />;
-  }, "renderTagInput");
+  };
   return {
     emails,
     setEmails,
@@ -11849,16 +11837,16 @@ var useEmails = /* @__PURE__ */ __name((props) => {
     removeTagData,
     onTagsUpdated
   };
-}, "useEmails");
+};
 var useEmails_default = useEmails;
 
 // ../vlncc-frontend/src/components/profile/UserRejectionDialog/index.tsx
-var UserRejectionDialog = /* @__PURE__ */ __name((props) => {
+var UserRejectionDialog = (props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation38();
   const [saving, setSaving] = React36.useState(false);
   const { setEmails, validEmails, setValidEmails, renderTagInput } = useEmails_default({ emails: props.rejectedUsers });
-  const handleInviteUsers = /* @__PURE__ */ __name(async () => {
+  const handleInviteUsers = async () => {
     setSaving(true);
     const invitedUsers = [];
     props.rejectedUsers.map((email) => {
@@ -11883,8 +11871,8 @@ var UserRejectionDialog = /* @__PURE__ */ __name((props) => {
       setValidEmails(emailsToKeep);
     }
     setSaving(false);
-  }, "handleInviteUsers");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
+  };
+  const onDismiss = () => dispatch(hideDialog());
   const modalButtons = <div id="user-rejection-dialog-buttons" className="vai-margin-top-m reject-user-button-container">
     <Button22
       id="user-rejection-confirm"
@@ -11914,13 +11902,13 @@ var UserRejectionDialog = /* @__PURE__ */ __name((props) => {
     <BodyText9 id="reject-user-body-text" className="reject-user-body">{t("inviteUsers.userRejectionMsg")}</BodyText9>
     {renderTagInput({ htmlId: "user-rejection-tag-input", placeholder: "" })}
   </ModalContainer>;
-}, "UserRejectionDialog");
+};
 var UserRejectionDialog_default = UserRejectionDialog;
 
 // ../vlncc-frontend/src/components/profile/InviteUsersDialog/index.tsx
 import { useTranslation as useTranslation39 } from "react-i18next";
 import "./invite-users.scss";
-var InviteUsersDialog = /* @__PURE__ */ __name((props) => {
+var InviteUsersDialog = (props) => {
   const { t } = useTranslation39();
   const dispatch = useAppDispatch();
   const [searchCriteria, setSearchCriteria] = React37.useState("");
@@ -11929,21 +11917,21 @@ var InviteUsersDialog = /* @__PURE__ */ __name((props) => {
   const [groupSelected, isGroupSelected] = React37.useState(false);
   const [saving, setSaving] = React37.useState(false);
   const { validEmails, renderTagInput } = useEmails_default();
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const initializeGroups = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const initializeGroups = () => {
     const temp = [];
     props.groups.map((group) => {
       temp.push({ ...group, checked: false });
     });
     setFoundGroups(temp);
-  }, "initializeGroups");
+  };
   React37.useEffect(() => {
     initializeGroups();
   }, [props.groups]);
-  const onLanguageChange = /* @__PURE__ */ __name((value) => {
+  const onLanguageChange = (value) => {
     setSelectedLanguage(value);
-  }, "onLanguageChange");
-  const filter = /* @__PURE__ */ __name((e) => {
+  };
+  const filter = (e) => {
     const keyword = e.currentTarget.value;
     if (keyword !== "") {
       const results = foundGroups.filter((group) => {
@@ -11954,8 +11942,8 @@ var InviteUsersDialog = /* @__PURE__ */ __name((props) => {
       initializeGroups();
     }
     setSearchCriteria(keyword);
-  }, "filter");
-  const checkBoxChangeHandler = /* @__PURE__ */ __name((index) => {
+  };
+  const checkBoxChangeHandler = (index) => {
     const temp = [...foundGroups];
     temp[index].checked = !temp[index].checked;
     setFoundGroups(temp);
@@ -11966,8 +11954,8 @@ var InviteUsersDialog = /* @__PURE__ */ __name((props) => {
         return;
       }
     });
-  }, "checkBoxChangeHandler");
-  const inviteUsers2 = /* @__PURE__ */ __name(async () => {
+  };
+  const inviteUsers2 = async () => {
     setSaving(true);
     const selectedGroupIds = [];
     foundGroups.map((group) => {
@@ -12004,7 +11992,7 @@ var InviteUsersDialog = /* @__PURE__ */ __name((props) => {
     } else {
       onDismiss();
     }
-  }, "inviteUsers");
+  };
   const modalButtons = <>
     <Button23
       id="invite-users-invite-button"
@@ -12097,21 +12085,21 @@ var InviteUsersDialog = /* @__PURE__ */ __name((props) => {
       <Separator7 />
     </Flex20.Item>
   </Flex20></ModalContainer>;
-}, "InviteUsersDialog");
+};
 var InviteUsersDialog_default = InviteUsersDialog;
 
 // ../vlncc-frontend/src/components/profile/UserDeletionDialog/index.tsx
 import "./user-deletion-dialog.scss";
 import { Size as Size34, Button as Button24, ButtonType as ButtonType19, BodyText as BodyText10 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation40 } from "react-i18next";
-var UserDeletionDialog = /* @__PURE__ */ __name((props) => {
+var UserDeletionDialog = (props) => {
   const { t } = useTranslation40();
   const dispatch = useAppDispatch();
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const deleteUser2 = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const deleteUser2 = () => {
     props.deleteUser(props.userName);
     onDismiss();
-  }, "deleteUser");
+  };
   const modalButtons = <>
     <Button24 id="user-deletion-confirm" htmlId="user-deletion-confirm" onClick={deleteUser2}>{t("profile.delete")}</Button24>
     <Button24
@@ -12133,7 +12121,7 @@ var UserDeletionDialog = /* @__PURE__ */ __name((props) => {
     role="alert-dialog"
     buttons={modalButtons}
   ><BodyText10 id="delete-user-text" className="delete-user-body">{t("profile.userDeletionMsg", { userName: props.userName })}</BodyText10></ModalContainer>;
-}, "UserDeletionDialog");
+};
 var UserDeletionDialog_default = UserDeletionDialog;
 
 // ../vlncc-frontend/src/components/profile/userEffectiveRightsDialog/index.tsx
@@ -12149,25 +12137,25 @@ import { Flex as Flex21 } from "@vaisala-rockhopper/components";
 import * as React38 from "react";
 import { Checkbox as Checkbox2, Accordion as Accordion2, Icon as Icon19, IconName as IconName11, Size as Size35, Grid } from "@vaisala-rockhopper/components";
 import "./site-tree-accordion.scss";
-var SiteTreeAccordion = /* @__PURE__ */ __name((props) => {
+var SiteTreeAccordion = (props) => {
   const { nodeId, nodeName, nodeType, nodeRights, nodeChildren, level, smallView = false, isReadonly, ...rest } = props;
   const hasRights = nodeRights && nodeRights[0] && nodeRights[0].value;
   const defaultExpandState = nodeType === "SITE" /* SITE */ && !isReadonly && { [nodeId]: true } || {};
   const [hasExpanded, setExpanded] = React38.useState(defaultExpandState);
-  const handleAccordionChange = /* @__PURE__ */ __name((expanded, accordionKey) => {
+  const handleAccordionChange = (expanded, accordionKey) => {
     const rightsExpandedData = { [accordionKey]: expanded };
     setExpanded((prev) => {
       return { ...prev, ...rightsExpandedData };
     });
-  }, "handleAccordionChange");
+  };
   React38.useEffect(() => {
     props.onExpanded?.(hasExpanded);
   }, [hasExpanded]);
-  const handleCheckboxChange = /* @__PURE__ */ __name((right) => (e) => {
+  const handleCheckboxChange = (right) => (e) => {
     right.value = e.target.checked ? 1 /* FULLY_CHECKED */ : 0 /* NOT_CHECKED */;
     rest.siteChangesCb({ level, nodeId, right });
-  }, "handleCheckboxChange");
-  const rightsCheckBox = /* @__PURE__ */ __name((cloneRights) => cloneRights.map((right) => {
+  };
+  const rightsCheckBox = (cloneRights) => cloneRights.map((right) => {
     const { id, value } = right;
     const htmlId3 = `${id}--${nodeId}`;
     const isPartiallyCheck = value === 2 /* PARTIALLY_CHECKED */ ? "partially" : "";
@@ -12180,8 +12168,8 @@ var SiteTreeAccordion = /* @__PURE__ */ __name((props) => {
       label={props.t(`profile.${id}`)}
       disabled={isReadonly}
     /></div></Grid.Col>;
-  }), "rightsCheckBox");
-  const showGroupRights = /* @__PURE__ */ __name(() => {
+  });
+  const showGroupRights = () => {
     if (nodeRights?.length > 0) {
       const cloneRights = nodeRights.reduce(
         (mem, value) => {
@@ -12202,7 +12190,7 @@ var SiteTreeAccordion = /* @__PURE__ */ __name((props) => {
       </Grid.Row></Grid> : null;
     }
     return;
-  }, "showGroupRights");
+  };
   const showChildrenNode = React38.useCallback(() => {
     if (nodeRights?.length > 0 && hasExpanded[nodeId]) {
       const sortedByPositionChildren = [...nodeChildren].sort((a, b) => a.position - b.position);
@@ -12223,7 +12211,7 @@ var SiteTreeAccordion = /* @__PURE__ */ __name((props) => {
     }
     return;
   }, [nodeRights, hasExpanded, nodeId]);
-  const getAccordionTitle = /* @__PURE__ */ __name(() => {
+  const getAccordionTitle = () => {
     let iconName = IconName11.MapMarkerHexagon;
     if (nodeType === "ZONE" /* ZONE */) {
       iconName = hasExpanded[nodeId] ? IconName11.FolderOpen : IconName11.Folder;
@@ -12232,8 +12220,8 @@ var SiteTreeAccordion = /* @__PURE__ */ __name((props) => {
       <Icon19 name={iconName} size={Size35.M} />
       <span className="groups-rights--accordion-margin">{nodeName}</span>
     </>;
-  }, "getAccordionTitle");
-  const getAccordionSummary = /* @__PURE__ */ __name(() => {
+  };
+  const getAccordionSummary = () => {
     if (rest.deviceType === "MOBILE_PHONE" || nodeType === "SITE" /* SITE */) {
       return;
     }
@@ -12242,7 +12230,7 @@ var SiteTreeAccordion = /* @__PURE__ */ __name((props) => {
       <Icon19 name={IconName11.Check} size={Size35.M} />
       <span className="groups-rights--accordion-margin">{rest.t("groupsRights.hasRights")}</span>
     </> : <span className="groups-rights--accordion-margin">{rest.t("groupsRights.noRights")}</span>;
-  }, "getAccordionSummary");
+  };
   const containerSize = `groups-rights-accordion ${smallView ? "groups-rights-accordion--small" : nodeType === "SITE" /* SITE */ ? "groups-rights-accordion--parent" : ""}`;
   const title = getAccordionTitle();
   return <div id="groups-rights-accordion-container" className={containerSize}>
@@ -12258,15 +12246,15 @@ var SiteTreeAccordion = /* @__PURE__ */ __name((props) => {
     >{showGroupRights()}</Accordion2>
     {showChildrenNode()}
   </div>;
-}, "SiteTreeAccordion");
+};
 var SiteTreeAccordion_default = withDisplaySize(SiteTreeAccordion);
 
 // ../vlncc-frontend/src/components/profile/GroupsRights/Infotip.tsx
 import { Checkbox as Checkbox3, Table as Table3, TableBody as TableBody3, TableCell as TableCell3, TableRow as TableRow3 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation41 } from "react-i18next";
-var GroupRightsInfotip = /* @__PURE__ */ __name((props) => {
+var GroupRightsInfotip = (props) => {
   const { t } = useTranslation41();
-  const renderRightsTableHelp = /* @__PURE__ */ __name(() => {
+  const renderRightsTableHelp = () => {
     const values = [
       [
         <div key="dummy-checked" className="group-rights-accordion-checkbox"><Checkbox3 disabled={true} id="dummy-checked" checked={true} /></div>,
@@ -12292,25 +12280,25 @@ var GroupRightsInfotip = /* @__PURE__ */ __name((props) => {
         <TableCell3 className="vai-padding-vertical-s">{text}</TableCell3>
       </TableRow3>;
     });
-  }, "renderRightsTableHelp");
+  };
   return <Infotip_default {...props}>
     <h4>{t("infotip.rights.heading")}</h4>
     <Table3><TableBody3>{renderRightsTableHelp()}</TableBody3></Table3>
     <p className="vai-margin-top-m vai-margin-horizontal-none">{t("infotip.rights.para1")}</p>
   </Infotip_default>;
-}, "GroupRightsInfotip");
+};
 var Infotip_default2 = GroupRightsInfotip;
 
 // ../vlncc-frontend/src/components/profile/GroupsRights/index.tsx
 import "./groups-rights.scss";
-var GroupsRights = /* @__PURE__ */ __name((props) => {
+var GroupsRights = (props) => {
   const [groupSites, setGroupSites] = React39.useState([]);
   React39.useEffect(() => {
     if (props.site) {
       const cloneSite = cloneDeep2(props.site);
       const verifiedRights = validateNodesAccess(cloneSite, props.rights);
       let groupSiteRights = [verifiedRights];
-      const iterate = /* @__PURE__ */ __name((node, path = "0") => {
+      const iterate = (node, path = "0") => {
         if (node.children?.length > 0) {
           node.children.forEach((zone, index) => {
             if (zone.type === "LOC" /* LOC */) {
@@ -12333,7 +12321,7 @@ var GroupsRights = /* @__PURE__ */ __name((props) => {
             iterate(zone, innerPath);
           });
         }
-      }, "iterate");
+      };
       const siteRights = groupSiteRights[0];
       iterate(siteRights);
       const bitwiseNumber = calculateNodeBitwiseNumber(siteRights);
@@ -12344,7 +12332,7 @@ var GroupsRights = /* @__PURE__ */ __name((props) => {
   }, [props.rights]);
   React39.useEffect(() => {
     if (props.groupsRightSaveClicked) {
-      const save = /* @__PURE__ */ __name(async () => {
+      const save = async () => {
         const updatedGroupDetails = {
           group_id: props.groupId,
           rights: groupSites.length > 0 ? calculateNodeBitwiseNumber(groupSites[0], true) : {},
@@ -12352,11 +12340,11 @@ var GroupsRights = /* @__PURE__ */ __name((props) => {
         };
         await props.editGroup(updatedGroupDetails);
         props.onSave && props.onSave();
-      }, "save");
+      };
       save();
     }
   }, [props.groupsRightSaveClicked]);
-  const handleSiteChanges = /* @__PURE__ */ __name((selectedRight) => {
+  const handleSiteChanges = (selectedRight) => {
     const { id, value } = selectedRight.right;
     const path = selectedRight.level.split("_");
     const clonedGroupsites = cloneDeep2(groupSites);
@@ -12365,7 +12353,7 @@ var GroupsRights = /* @__PURE__ */ __name((props) => {
     if (props.onRightsChange && updatedGroupSites.length > 0) {
       props.onRightsChange(calculateNodeBitwiseNumber(updatedGroupSites[0]));
     }
-  }, "handleSiteChanges");
+  };
   return <div id="groups-rights-container">
     {!props.isReadonly && <Flex21 id="groups-rights-flex-container" justifyContent="space-between">
       <Flex21 flexDirection="column">
@@ -12397,19 +12385,19 @@ var GroupsRights = /* @__PURE__ */ __name((props) => {
       /></div>;
     })}
   </div>;
-}, "GroupsRights");
-var mapDispatchToProps5 = /* @__PURE__ */ __name((dispatch) => ({
+};
+var mapDispatchToProps5 = (dispatch) => ({
   editGroup: (group) => dispatch(profileDispatchActions.editGroup(group))
-}), "mapDispatchToProps");
+});
 var GroupsRights_default = connect7(null, mapDispatchToProps5)(GroupsRights);
 
 // ../vlncc-frontend/src/components/profile/userEffectiveRightsDialog/index.tsx
 import "./user-effective-rights.scss";
 import { useTranslation as useTranslation42 } from "react-i18next";
-var UserEffectiveRightsDialog = /* @__PURE__ */ __name((props) => {
+var UserEffectiveRightsDialog = (props) => {
   const { t } = useTranslation42();
   const dispatch = useAppDispatch();
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
+  const onDismiss = () => dispatch(hideDialog());
   return <Modal3
     id="user-effective-rights-dialog"
     isOpen
@@ -12426,7 +12414,7 @@ var UserEffectiveRightsDialog = /* @__PURE__ */ __name((props) => {
     <br />
     <GroupsRights_default isReadonly={true} t={t} site={props.site} rights={props.userProfile.rights} />
   </Modal3>;
-}, "UserEffectiveRightsDialog");
+};
 var UserEffectiveRightsDialog_default = UserEffectiveRightsDialog;
 
 // ../vlncc-frontend/src/components/profile/AddGroupsToUserDialog/index.tsx
@@ -12450,15 +12438,15 @@ import {
 } from "@vaisala-rockhopper/components";
 import "./add-groups-to-user.scss";
 import { useTranslation as useTranslation43 } from "react-i18next";
-var AddGroupsToUserDialog = /* @__PURE__ */ __name((props) => {
+var AddGroupsToUserDialog = (props) => {
   const { t } = useTranslation43();
   const dispatch = useAppDispatch();
   const [searchCriteria, setSearchCriteria] = React40.useState("");
   const [foundGroups, setFoundGroups] = React40.useState([]);
   const [saving, setSaving] = React40.useState(false);
   const [groupSelected, isGroupSelected] = React40.useState(false);
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const initializeGroups = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const initializeGroups = () => {
     const temp = [];
     const existingGroups = [];
     props.userProfile.groups.forEach((group) => {
@@ -12470,11 +12458,11 @@ var AddGroupsToUserDialog = /* @__PURE__ */ __name((props) => {
       }
     });
     setFoundGroups(temp);
-  }, "initializeGroups");
+  };
   React40.useEffect(() => {
     initializeGroups();
   }, [props.groups]);
-  const filter = /* @__PURE__ */ __name((e) => {
+  const filter = (e) => {
     let keyword = e.currentTarget.value;
     keyword = validator10.ltrim(keyword);
     if (keyword !== "") {
@@ -12486,8 +12474,8 @@ var AddGroupsToUserDialog = /* @__PURE__ */ __name((props) => {
       initializeGroups();
     }
     setSearchCriteria(keyword);
-  }, "filter");
-  const checkBoxChangeHandler = /* @__PURE__ */ __name((index) => {
+  };
+  const checkBoxChangeHandler = (index) => {
     const temp = [...foundGroups];
     temp[index].checked = !temp[index].checked;
     setFoundGroups(temp);
@@ -12498,11 +12486,11 @@ var AddGroupsToUserDialog = /* @__PURE__ */ __name((props) => {
         return;
       }
     });
-  }, "checkBoxChangeHandler");
-  const getUserTitle = /* @__PURE__ */ __name(() => {
+  };
+  const getUserTitle = () => {
     return props.userProfile.first_name || props.userProfile.last_name ? props.userProfile.first_name + " " + props.userProfile.last_name : props.userProfile.user_name;
-  }, "getUserTitle");
-  const inviteUsers2 = /* @__PURE__ */ __name(async () => {
+  };
+  const inviteUsers2 = async () => {
     setSaving(true);
     const name = getUserTitle();
     const invitedGroups = [];
@@ -12523,7 +12511,7 @@ var AddGroupsToUserDialog = /* @__PURE__ */ __name((props) => {
     };
     await props.inviteUsers(users, ADD_GROUP_TO_USER, name);
     onDismiss();
-  }, "inviteUsers");
+  };
   let userListContent;
   if (foundGroups.length > 0) {
     userListContent = foundGroups.map((row, index) => <TableRow4
@@ -12601,14 +12589,14 @@ var AddGroupsToUserDialog = /* @__PURE__ */ __name((props) => {
       className="add-groups-to-users-users-list-table"
     ><TableBody4 htmlId="add-groups-to-users-users-list-table-body">{userListContent}</TableBody4></Table4></div>
   </ModalContainer>;
-}, "AddGroupsToUserDialog");
+};
 var AddGroupsToUserDialog_default = AddGroupsToUserDialog;
 
 // ../vlncc-frontend/src/components/profile/User.tsx
 import { useTranslation as useTranslation44 } from "react-i18next";
 
 // ../vlncc-frontend/src/hooks/useUserSettings.tsx
-var useUserSettings = /* @__PURE__ */ __name(() => {
+var useUserSettings = () => {
   const username = getConstantFromLocalStorage(LS_USERNAME);
   const showInactiveUsers = parseOrDefault(
     userSettings.get(username, "userSettings.userListShowInactive" /* USER_LIST_SHOW_INACTIVE */, "true"),
@@ -12632,12 +12620,12 @@ var useUserSettings = /* @__PURE__ */ __name(() => {
   );
   const timezone = getConstantFromLocalStorage(LS_TIME_ZONE) || Intl.DateTimeFormat().resolvedOptions().timeZone;
   return { username, showInactiveUsers, showInactiveGroups, groupListSorting, userListSorting, timezone };
-}, "useUserSettings");
+};
 var useUserSettings_default = useUserSettings;
 
 // ../vlncc-frontend/src/components/profile/User.tsx
 import "./user-and-group.scss";
-var User = /* @__PURE__ */ __name((props) => {
+var User = (props) => {
   const { username, userListSorting, showInactiveUsers } = useUserSettings_default();
   const dispatch = useAppDispatch();
   const { t } = useTranslation44();
@@ -12669,7 +12657,7 @@ var User = /* @__PURE__ */ __name((props) => {
       addTableRowHandler();
     }
   }, [foundUsers, props.userProfile]);
-  const showEditProfileModal = /* @__PURE__ */ __name(() => {
+  const showEditProfileModal = () => {
     dispatch(
       showDialog(
         <EditProfileDialog_default
@@ -12679,11 +12667,11 @@ var User = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "showEditProfileModal");
-  const showCreateGroupsModal = /* @__PURE__ */ __name(() => {
+  };
+  const showCreateGroupsModal = () => {
     dispatch(showDialog(<CreateGroupsDialog_default groups={props.groups} createGroups={props.createGroups} />));
-  }, "showCreateGroupsModal");
-  const showInviteUsersModal = /* @__PURE__ */ __name(() => {
+  };
+  const showInviteUsersModal = () => {
     dispatch(
       showDialog(
         <InviteUsersDialog_default
@@ -12694,21 +12682,21 @@ var User = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "showInviteUsersModal");
-  const showAddGroupsToUserDialog = /* @__PURE__ */ __name(() => {
+  };
+  const showAddGroupsToUserDialog = () => {
     dispatch(
       showDialog(
         <AddGroupsToUserDialog_default groups={props.groups} userProfile={props.userProfile} inviteUsers={props.inviteUsers} />
       )
     );
-  }, "showAddGroupsToUserDialog");
-  const deleteUser2 = /* @__PURE__ */ __name(() => {
+  };
+  const deleteUser2 = () => {
     dispatch(showDialog(<UserDeletionDialog_default userName={props.userProfile.user_name} deleteUser={props.deleteUser} />));
-  }, "deleteUser");
-  const showRightSummary = /* @__PURE__ */ __name(() => {
+  };
+  const showRightSummary = () => {
     dispatch(showDialog(<UserEffectiveRightsDialog_default userProfile={props.userProfile} site={props.site} />));
-  }, "showRightSummary");
-  const addTableRowHandler = /* @__PURE__ */ __name(() => {
+  };
+  const addTableRowHandler = () => {
     const table = document.getElementById("user-list-table");
     const rows = table.getElementsByTagName("tr");
     for (let i = 0; i < rows.length; i++) {
@@ -12716,17 +12704,17 @@ var User = /* @__PURE__ */ __name((props) => {
       if (currentRow.getAttribute("id") === props.userProfile.user_name) {
         currentRow.classList.add("user-selected-row");
       }
-      const createClickHandler = /* @__PURE__ */ __name(() => {
+      const createClickHandler = () => {
         if (!currentRow.classList.contains("user-selected-row")) {
           props.getUserProfile(foundUsers[i].user_name, true);
           removeSiblingsBorder(currentRow);
         }
         currentRow.classList.add("user-selected-row");
-      }, "createClickHandler");
+      };
       currentRow.onclick = createClickHandler;
     }
-  }, "addTableRowHandler");
-  const removeSiblingsBorder = /* @__PURE__ */ __name((e) => {
+  };
+  const removeSiblingsBorder = (e) => {
     if (!e.parentNode) {
       return;
     }
@@ -12739,8 +12727,8 @@ var User = /* @__PURE__ */ __name((props) => {
       sibling = sibling.nextSibling;
     }
     return;
-  }, "removeSiblingsBorder");
-  const filter = /* @__PURE__ */ __name((e) => {
+  };
+  const filter = (e) => {
     const keyword = e.target.value;
     let sortedUsers = [...props.users];
     if (!displayInactiveUsers) {
@@ -12759,15 +12747,15 @@ var User = /* @__PURE__ */ __name((props) => {
       setFoundUsers(sortedUsers);
     }
     setSearchCriteria(keyword);
-  }, "filter");
-  const handleChange = /* @__PURE__ */ __name((selectedValue) => () => {
+  };
+  const handleChange = (selectedValue) => () => {
     userSettings.set(username, "userSettings.userListSorting" /* USER_LIST_SORTING */, selectedValue);
     setSortValue(selectedValue);
     let sortedUsers = [...props.users];
     sortedUsers = sortUsers(sortedUsers, selectedValue);
     setFoundUsers(sortedUsers);
-  }, "handleChange");
-  const handleNewChange = /* @__PURE__ */ __name((selectedValue) => () => {
+  };
+  const handleNewChange = (selectedValue) => () => {
     switch (selectedValue) {
       case "newUser" /* newUser */:
         showInviteUsersModal();
@@ -12776,8 +12764,8 @@ var User = /* @__PURE__ */ __name((props) => {
         showCreateGroupsModal();
         break;
     }
-  }, "handleNewChange");
-  const toggleActiveUsersDiplay = /* @__PURE__ */ __name(() => {
+  };
+  const toggleActiveUsersDiplay = () => {
     const changed = !displayInactiveUsers;
     userSettings.set(username, "userSettings.userListShowInactive" /* USER_LIST_SHOW_INACTIVE */, changed);
     setDisplayInactiveUsers(changed);
@@ -12791,8 +12779,8 @@ var User = /* @__PURE__ */ __name((props) => {
     } else {
       props.getUserProfile(props.userProfile.user_name);
     }
-  }, "toggleActiveUsersDiplay");
-  const activeToggleChange = /* @__PURE__ */ __name((toggleVal) => {
+  };
+  const activeToggleChange = (toggleVal) => {
     dispatch(
       showDialog(
         <UserActivationDialog_default
@@ -12802,10 +12790,10 @@ var User = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "activeToggleChange");
-  const toggleVisibility = /* @__PURE__ */ __name(() => {
+  };
+  const toggleVisibility = () => {
     setPinVisibility(!pinVisibility);
-  }, "toggleVisibility");
+  };
   const isSortActiveClass = React41.useCallback(
     (value) => {
       return cx4({ "vai-menu-button__list-item--active": sortValue && sortValue === value });
@@ -12844,7 +12832,7 @@ var User = /* @__PURE__ */ __name((props) => {
       <TableCell5 id={`user-group-list-trash-${row.group_name}`}><Icon21 name={IconName13.Trash} /></TableCell5>
     </TableRow5>)}</TableBody5></Table5>;
   }
-  const renderDetails = /* @__PURE__ */ __name(() => {
+  const renderDetails = () => {
     if (!props.userProfile) {
       return;
     }
@@ -12877,6 +12865,7 @@ var User = /* @__PURE__ */ __name((props) => {
               buttonType={ButtonType21.Secondary}
               className="user-top-right-button"
               onClick={showEditProfileModal}
+              data-testid={TEST_IDS.users_edit_profile_button}
             >{t("profile.editProfile")}</Button26></FlexItem14>
           </Flex23>
           <Table5
@@ -12968,9 +12957,9 @@ var User = /* @__PURE__ */ __name((props) => {
         </FlexItem14>
       </Flex23>
     </>;
-  }, "renderDetails");
+  };
   const userProfileContent = <Paper3 className="user-profile-paper">{renderDetails()}</Paper3>;
-  const renderListHeader = /* @__PURE__ */ __name(() => {
+  const renderListHeader = () => {
     return <>
       <InputField12
         htmlId="user-search-input"
@@ -13022,11 +13011,11 @@ var User = /* @__PURE__ */ __name((props) => {
             <MenuButtonListItem2
               htmlId="user-new-users-groups__item--new-group"
               onSelect={handleNewChange("newGroup" /* newGroup */)}
-            >{t("profile.newGroup")}</MenuButtonListItem2>
+            >{t("profile.newGroupTitle")}</MenuButtonListItem2>
             <MenuButtonListItem2
               htmlId="user-new-users-groups__item--new-user"
               onSelect={handleNewChange("newUser" /* newUser */)}
-            >{t("profile.inviteUser")}</MenuButtonListItem2>
+            >{t("profile.inviteUserTitle")}</MenuButtonListItem2>
           </MenuButtonList2>
         </MenuButton2>
       </Flex23>
@@ -13045,7 +13034,7 @@ var User = /* @__PURE__ */ __name((props) => {
         /></FlexItem14>
       </Flex23>
     </>;
-  }, "renderListHeader");
+  };
   return <Flex23 id="user-wrapper">
     <FlexItem14 id="user-left-panel" className="vai-margin-right-75-rem" alignSelf="flex-start" flexBasis="23%"><Paper3 htmlId="user-list-paper" className="user-list-paper">
       {renderListHeader()}
@@ -13053,7 +13042,7 @@ var User = /* @__PURE__ */ __name((props) => {
     </Paper3></FlexItem14>
     <FlexItem14 id="user-profile-content-wrapper" alignSelf="flex-start" flexBasis="77%">{userProfileContent}</FlexItem14>
   </Flex23>;
-}, "User");
+};
 var User_default = User;
 
 // ../vlncc-frontend/src/components/profile/Group.tsx
@@ -13106,14 +13095,14 @@ import {
 // ../vlncc-frontend/src/components/profile/GroupDeletionDialog/index.tsx
 import { Size as Size39, Button as Button27, ButtonType as ButtonType22, BodyText as BodyText11 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation45 } from "react-i18next";
-var GroupDeletionDialog = /* @__PURE__ */ __name(({ deleteGroup: deleteGroup2, groupId }) => {
+var GroupDeletionDialog = ({ deleteGroup: deleteGroup2, groupId }) => {
   const { t } = useTranslation45();
   const dispatch = useAppDispatch();
-  const deleteGroupOnClick = /* @__PURE__ */ __name(() => {
+  const deleteGroupOnClick = () => {
     deleteGroup2(groupId);
     onDismiss();
-  }, "deleteGroupOnClick");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
+  };
+  const onDismiss = () => dispatch(hideDialog());
   const modalButtons = <>
     <Button27
       dataTa={TEST_IDS.group_delete_dialog_confirm}
@@ -13141,20 +13130,20 @@ var GroupDeletionDialog = /* @__PURE__ */ __name(({ deleteGroup: deleteGroup2, g
     showCloseIcon
     buttons={modalButtons}
   ><BodyText11 id="delete-group-body-text" className="delete-group-body">{t("profile.groupDeletionMsg")}</BodyText11></ModalContainer>;
-}, "GroupDeletionDialog");
+};
 var GroupDeletionDialog_default = GroupDeletionDialog;
 
 // ../vlncc-frontend/src/components/profile/EditGroupsDialog/index.tsx
 import { useTranslation as useTranslation46 } from "react-i18next";
 import { isEmpty as isEmpty2 } from "lodash";
-var EditGroupsDialog = /* @__PURE__ */ __name((props) => {
+var EditGroupsDialog = (props) => {
   const { t } = useTranslation46();
   const dispatch = useAppDispatch();
   const [groupName, setGroupName] = React42.useState(props.groupDetails.group_name);
   const [groupNameError, setGroupNameError] = React42.useState("");
   const [description, setDescription] = React42.useState(props.groupDetails.description);
   const [descriptionError, setDescriptionError] = React42.useState("");
-  const onChange = /* @__PURE__ */ __name((e) => {
+  const onChange = (e) => {
     const { value, name } = e.currentTarget;
     if (name === "groupName") {
       setGroupName(value);
@@ -13165,9 +13154,9 @@ var EditGroupsDialog = /* @__PURE__ */ __name((props) => {
         t("profile.editGroupsMaxLengthError", { charLen: GROUP_DESCRIPTION_MAX_CHARACHTERS_LENGTH })
       ) : setDescriptionError("");
     }
-  }, "onChange");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const onEditGroup = /* @__PURE__ */ __name(() => {
+  };
+  const onDismiss = () => dispatch(hideDialog());
+  const onEditGroup = () => {
     let errorExist = false;
     const trimmedGroupName = validator11.trim(groupName);
     const trimmedDescription = validator11.trim(description);
@@ -13197,8 +13186,8 @@ var EditGroupsDialog = /* @__PURE__ */ __name((props) => {
       props.editGroup(newGroup);
       dispatch(hideDialog());
     }
-  }, "onEditGroup");
-  const onDeleteGroup = /* @__PURE__ */ __name(() => {
+  };
+  const onDeleteGroup = () => {
     onDismiss();
     dispatch(
       showDialog(
@@ -13208,7 +13197,7 @@ var EditGroupsDialog = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "onDeleteGroup");
+  };
   const isConfirmDisabled = props.groupDetails.group_name === groupName || !isEmpty2(groupNameError) || !isEmpty2(descriptionError) || groupName.length === 0;
   const modalButtons = <div className="edit-groups-button-container">
     <Button28
@@ -13271,7 +13260,7 @@ var EditGroupsDialog = /* @__PURE__ */ __name((props) => {
       <span className="input-error">{descriptionError}</span>
     </Label8>
   </Form14></ModalContainer>;
-}, "EditGroupsDialog");
+};
 var EditGroupsDialog_default = EditGroupsDialog;
 
 // ../vlncc-frontend/src/components/profile/addGroupMembersDialog/index.tsx
@@ -13296,7 +13285,7 @@ import {
 } from "@vaisala-rockhopper/components";
 import "./add-group-members.scss";
 import { useTranslation as useTranslation47 } from "react-i18next";
-var AddGroupMembersDialog = /* @__PURE__ */ __name((props) => {
+var AddGroupMembersDialog = (props) => {
   const { t } = useTranslation47();
   const dispatch = useAppDispatch();
   const [searchCriteria, setSearchCriteria] = React43.useState("");
@@ -13304,8 +13293,8 @@ var AddGroupMembersDialog = /* @__PURE__ */ __name((props) => {
   const [saving, setSaving] = React43.useState(false);
   const { validEmails, renderTagInput } = useEmails_default();
   const [userSelected, isUserSelected] = React43.useState(false);
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const initializeUsers = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const initializeUsers = () => {
     const temp = [];
     const existingusers = [];
     props.groupDetails.users.forEach((user) => {
@@ -13317,11 +13306,11 @@ var AddGroupMembersDialog = /* @__PURE__ */ __name((props) => {
       }
     });
     setFoundUsers(temp);
-  }, "initializeUsers");
+  };
   React43.useEffect(() => {
     initializeUsers();
   }, [props.users]);
-  const filter = /* @__PURE__ */ __name((e) => {
+  const filter = (e) => {
     let keyword = e.currentTarget.value;
     keyword = validator12.ltrim(keyword);
     if (keyword !== "") {
@@ -13337,8 +13326,8 @@ var AddGroupMembersDialog = /* @__PURE__ */ __name((props) => {
       initializeUsers();
     }
     setSearchCriteria(keyword);
-  }, "filter");
-  const checkBoxChangeHandler = /* @__PURE__ */ __name((index) => {
+  };
+  const checkBoxChangeHandler = (index) => {
     const temp = [...foundUsers];
     temp[index].checked = !temp[index].checked;
     setFoundUsers(temp);
@@ -13349,8 +13338,8 @@ var AddGroupMembersDialog = /* @__PURE__ */ __name((props) => {
         return;
       }
     });
-  }, "checkBoxChangeHandler");
-  const inviteUsers2 = /* @__PURE__ */ __name(async () => {
+  };
+  const inviteUsers2 = async () => {
     setSaving(true);
     const invitedUsers = [];
     foundUsers.forEach((user) => {
@@ -13380,7 +13369,7 @@ var AddGroupMembersDialog = /* @__PURE__ */ __name((props) => {
     };
     await props.inviteUsers(users, INVITE_USER_FROM_GROUP);
     onDismiss();
-  }, "inviteUsers");
+  };
   let userListContent;
   if (foundUsers.length > 0) {
     userListContent = foundUsers.map((row, index) => <TableRow6
@@ -13476,21 +13465,21 @@ var AddGroupMembersDialog = /* @__PURE__ */ __name((props) => {
     <br />
     <div id="add-group-members-users-container" className="add-group-members-users-container"><Table6 id="add-group-members-users-list-table" tableStyle={TableStyle5.Plain} className="user-and-group-table"><TableBody6 htmlId="add-group-members-users-list-table-body">{userListContent}</TableBody6></Table6></div>
   </ModalContainer>;
-}, "AddGroupMembersDialog");
+};
 var AddGroupMembersDialog_default = AddGroupMembersDialog;
 
 // ../vlncc-frontend/src/components/profile/DeleteGroupUsersDialog/index.tsx
 import "./delete-group-users.scss";
 import { Size as Size42, Button as Button30, ButtonType as ButtonType25, BodyText as BodyText12 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation48 } from "react-i18next";
-var DeleteGroupUsersDialog = /* @__PURE__ */ __name((props) => {
+var DeleteGroupUsersDialog = (props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation48();
-  const deleteGroupUsers2 = /* @__PURE__ */ __name(() => {
+  const deleteGroupUsers2 = () => {
     props.deleteGroupUsers(props.selectedUsers, props.group_id);
     onDismiss();
-  }, "deleteGroupUsers");
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
+  };
+  const onDismiss = () => dispatch(hideDialog());
   const modalButtons = <>
     <Button30
       id="delete-group-users-confirm"
@@ -13513,21 +13502,21 @@ var DeleteGroupUsersDialog = /* @__PURE__ */ __name((props) => {
     role="alert-dialog"
     buttons={modalButtons}
   ><BodyText12 id="elete-group-users-body-text" className="delete-group-users-body">{t("profile.deleteGroupUsersMsg", { numberOfGroups: props.selectedUsers.length, groupName: props.group_name })}</BodyText12></ModalContainer>;
-}, "DeleteGroupUsersDialog");
+};
 var DeleteGroupUsersDialog_default = DeleteGroupUsersDialog;
 
 // ../vlncc-frontend/src/components/profile/GroupActivationDialog/index.tsx
 import "./group-activation-dialog.scss";
 import { Size as Size43, Button as Button31, ButtonType as ButtonType26, BodyText as BodyText13 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation49 } from "react-i18next";
-var GroupActivationDialog = /* @__PURE__ */ __name((props) => {
+var GroupActivationDialog = (props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation49();
-  const onDismiss = /* @__PURE__ */ __name(() => dispatch(hideDialog()), "onDismiss");
-  const confirmAlertModal = /* @__PURE__ */ __name(() => {
+  const onDismiss = () => dispatch(hideDialog());
+  const confirmAlertModal = () => {
     props.toggleGroupActivation(props.groupActive, props.groupDetails.group_id, props.groupDetails.group_name);
     onDismiss();
-  }, "confirmAlertModal");
+  };
   const alertModalVisibleFirstMsg = props.groupActive ? t("profile.activateGroupMsg") : t("profile.deactivateGroupFirstMsg");
   const alertModalVisibleSecondMsg = props.groupActive ? "" : t("profile.deactivateGroupSecondMsg");
   const modalButtons = <>
@@ -13555,7 +13544,7 @@ var GroupActivationDialog = /* @__PURE__ */ __name((props) => {
     <br />
     <p>{alertModalVisibleSecondMsg}</p>
   </BodyText13></ModalContainer>;
-}, "GroupActivationDialog");
+};
 var GroupActivationDialog_default = GroupActivationDialog;
 
 // ../vlncc-frontend/src/components/GroupsRightsDialog/index.tsx
@@ -13563,18 +13552,18 @@ import * as React44 from "react";
 import { isEqual } from "lodash";
 import { Size as Size44, Button as Button32, ButtonType as ButtonType27 } from "@vaisala-rockhopper/components";
 import "./groups-rights-dialog.scss";
-var GroupsRightsDialog = /* @__PURE__ */ __name((props) => {
+var GroupsRightsDialog = (props) => {
   const [hasEdits, setHasEdits] = React44.useState(false);
   const [groupsRightSaveClicked, setGroupsRightSaveClicked] = React44.useState(false);
   React44.useEffect(() => {
     setHasEdits(!isEqual(props.defaultRights, props.currentRights));
   }, [props.defaultRights, props.currentRights]);
-  const handleGroupsRightsDialogSave = /* @__PURE__ */ __name(() => {
+  const handleGroupsRightsDialogSave = () => {
     setGroupsRightSaveClicked(true);
-  }, "handleGroupsRightsDialogSave");
-  const onClose = /* @__PURE__ */ __name(() => {
+  };
+  const onClose = () => {
     props.hideDialog();
-  }, "onClose");
+  };
   const modalButtons = <>
     <Button32
       id="groups-rights-edit-save-button"
@@ -13602,13 +13591,13 @@ var GroupsRightsDialog = /* @__PURE__ */ __name((props) => {
     title="groupsRightsDialog.header"
     buttons={modalButtons}
   >{props.content(groupsRightSaveClicked, setGroupsRightSaveClicked)}</ModalContainer>;
-}, "GroupsRightsDialog");
+};
 var GroupsRightsDialog_default = withDisplaySize(GroupsRightsDialog);
 
 // ../vlncc-frontend/src/components/profile/Group.tsx
 import { useTranslation as useTranslation50 } from "react-i18next";
 import "./user-and-group.scss";
-var Group = /* @__PURE__ */ __name((props) => {
+var Group = (props) => {
   const { username, groupListSorting, showInactiveGroups } = useUserSettings_default();
   const { t } = useTranslation50();
   const dispatch = useAppDispatch();
@@ -13626,14 +13615,14 @@ var Group = /* @__PURE__ */ __name((props) => {
   const groupDetailsContentRef = React45.useRef(null);
   const topRef = React45.useRef(null);
   const [_triggerUpdate, setTriggerUpdate] = React45.useState(/* @__PURE__ */ new Date());
-  const initializeGroupUsers = /* @__PURE__ */ __name(() => {
+  const initializeGroupUsers = () => {
     let temp = [];
     props.groupDetails.users.map((user) => {
       temp.push({ ...user, checked: false });
     });
     temp = sortUsersByName(temp);
     setGroupUsers(temp);
-  }, "initializeGroupUsers");
+  };
   React45.useEffect(() => {
     let sortedGroups = [...props.groups];
     if (sortValue) {
@@ -13656,12 +13645,12 @@ var Group = /* @__PURE__ */ __name((props) => {
       initializeGroupUsers();
     }
   }, [foundGroups, props.groupDetails]);
-  const addTableRowHandler = /* @__PURE__ */ __name(() => {
+  const addTableRowHandler = () => {
     const table = document.getElementById("group-list-table");
     const rows = table.getElementsByTagName("tr");
     for (let i = 0; i < rows.length; i++) {
       const currentRow = rows[i];
-      const createClickHandler = /* @__PURE__ */ __name((i2, currRow) => {
+      const createClickHandler = (i2, currRow) => {
         return () => {
           setUserSelected(false);
           setAllUsersSelection(false);
@@ -13669,7 +13658,7 @@ var Group = /* @__PURE__ */ __name((props) => {
           removeSiblingsBorder(currentRow);
           currRow.classList.add("user-selected-row");
         };
-      }, "createClickHandler");
+      };
       const editButton = currentRow.getElementsByClassName("groups-edit-button")[0];
       if (currentRow.getAttribute("id") === props.groupDetails.group_id) {
         currentRow.onclick = null;
@@ -13684,8 +13673,8 @@ var Group = /* @__PURE__ */ __name((props) => {
         }
       }
     }
-  }, "addTableRowHandler");
-  const deleteSelectedGroupUsers = /* @__PURE__ */ __name(() => {
+  };
+  const deleteSelectedGroupUsers = () => {
     const selectedUsers = [];
     groupUsers.map((user) => {
       if (user.checked) {
@@ -13702,8 +13691,8 @@ var Group = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "deleteSelectedGroupUsers");
-  const removeSiblingsBorder = /* @__PURE__ */ __name((row) => {
+  };
+  const removeSiblingsBorder = (row) => {
     if (!row.parentNode) {
       return;
     }
@@ -13717,8 +13706,8 @@ var Group = /* @__PURE__ */ __name((props) => {
       sibling = sibling.nextSibling;
     }
     return;
-  }, "removeSiblingsBorder");
-  const filter = /* @__PURE__ */ __name((e) => {
+  };
+  const filter = (e) => {
     const keyword = e.target.value;
     let sortedGroups = [...props.groups];
     if (!displayInactiveGroups) {
@@ -13729,11 +13718,11 @@ var Group = /* @__PURE__ */ __name((props) => {
     }) : sortedGroups;
     setFoundGroups(results);
     setSearchCriteria(keyword);
-  }, "filter");
-  const showCreateGroupsModal = /* @__PURE__ */ __name(() => {
+  };
+  const showCreateGroupsModal = () => {
     dispatch(showDialog(<CreateGroupsDialog_default groups={props.groups} createGroups={props.createGroups} />));
-  }, "showCreateGroupsModal");
-  const showInviteUsersModal = /* @__PURE__ */ __name(() => {
+  };
+  const showInviteUsersModal = () => {
     dispatch(
       showDialog(
         <InviteUsersDialog_default
@@ -13744,8 +13733,8 @@ var Group = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "showInviteUsersModal");
-  const showEditGroupsModal = /* @__PURE__ */ __name(() => {
+  };
+  const showEditGroupsModal = () => {
     dispatch(
       showDialog(
         <EditGroupsDialog_default
@@ -13756,27 +13745,27 @@ var Group = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "showEditGroupsModal");
-  const showAddGroupMembersDialog = /* @__PURE__ */ __name(() => {
+  };
+  const showAddGroupMembersDialog = () => {
     dispatch(
       showDialog(
         <AddGroupMembersDialog_default users={props.users} groupDetails={props.groupDetails} inviteUsers={props.inviteUsers} />
       )
     );
-  }, "showAddGroupMembersDialog");
+  };
   React45.useEffect(() => {
     if (isEditingRights) {
       showEditGroupsRightsModal();
     }
   }, [currentRights]);
-  const onRightsChange = /* @__PURE__ */ __name((verifiedRights) => {
+  const onRightsChange = (verifiedRights) => {
     setCurrentRights(verifiedRights);
-  }, "onRightsChange");
-  const onRightsInit = /* @__PURE__ */ __name((verifiedRights) => {
+  };
+  const onRightsInit = (verifiedRights) => {
     setDefaultRights(verifiedRights);
     setCurrentRights(verifiedRights);
-  }, "onRightsInit");
-  const onSaveRights = /* @__PURE__ */ __name((setGroupsRightSaveClicked) => {
+  };
+  const onSaveRights = (setGroupsRightSaveClicked) => {
     return () => {
       setDefaultRights({});
       setCurrentRights({});
@@ -13784,8 +13773,8 @@ var Group = /* @__PURE__ */ __name((props) => {
       setGroupsRightSaveClicked(false);
       dispatch(hideDialog());
     };
-  }, "onSaveRights");
-  const renderGroupRights = /* @__PURE__ */ __name((groupsRightSaveClicked, setGroupsRightSaveClicked) => {
+  };
+  const renderGroupRights = (groupsRightSaveClicked, setGroupsRightSaveClicked) => {
     return <GroupsRights_default
       isReadonly={false}
       t={t}
@@ -13800,12 +13789,12 @@ var Group = /* @__PURE__ */ __name((props) => {
       groupId={props.groupDetails.group_id}
       onSave={onSaveRights(setGroupsRightSaveClicked)}
     />;
-  }, "renderGroupRights");
-  const onGroupRightsDialogClose = /* @__PURE__ */ __name(() => {
+  };
+  const onGroupRightsDialogClose = () => {
     setIsEditingRights(false);
     dispatch(hideDialog());
-  }, "onGroupRightsDialogClose");
-  const showEditGroupsRightsModal = /* @__PURE__ */ __name(() => {
+  };
+  const showEditGroupsRightsModal = () => {
     if (!isEditingRights) {
       setIsEditingRights(true);
     }
@@ -13820,15 +13809,15 @@ var Group = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "showEditGroupsRightsModal");
-  const handleChange = /* @__PURE__ */ __name((selectedValue) => () => {
+  };
+  const handleChange = (selectedValue) => () => {
     userSettings.set(username, "userSettings.groupListSorting" /* GROUP_LIST_SORTING */, selectedValue);
     setSortValue(selectedValue);
     const sortedGroups = [...foundGroups];
     sortGroups(sortedGroups, selectedValue);
     setFoundGroups(sortedGroups);
-  }, "handleChange");
-  const handleNewChange = /* @__PURE__ */ __name((selectedValue) => () => {
+  };
+  const handleNewChange = (selectedValue) => () => {
     switch (selectedValue) {
       case "newUser" /* newUser */:
         showInviteUsersModal();
@@ -13837,16 +13826,16 @@ var Group = /* @__PURE__ */ __name((props) => {
         showCreateGroupsModal();
         break;
     }
-  }, "handleNewChange");
-  const checkUsersSelection = /* @__PURE__ */ __name(() => {
+  };
+  const checkUsersSelection = () => {
     setUserSelected(false);
     groupUsers.map((user) => {
       if (user.checked) {
         setUserSelected(true);
       }
     });
-  }, "checkUsersSelection");
-  const checkBoxChangeHandler = /* @__PURE__ */ __name((index, rowId) => {
+  };
+  const checkBoxChangeHandler = (index, rowId) => {
     const temp = [...groupUsers];
     temp[index].checked = !temp[index].checked;
     if (temp[index].checked) {
@@ -13865,16 +13854,16 @@ var Group = /* @__PURE__ */ __name((props) => {
       }
     }
     setAllUsersSelection(allChecked);
-  }, "checkBoxChangeHandler");
-  const getUsersCountLabel = /* @__PURE__ */ __name((active, numberOfUsers) => {
+  };
+  const getUsersCountLabel = (active, numberOfUsers) => {
     if (!active) {
       return t("profile.inactive");
     } else if (numberOfUsers > 1 || numberOfUsers === 0) {
       return numberOfUsers + " " + t("profile.users");
     }
     return numberOfUsers + " " + t("profile.user");
-  }, "getUsersCountLabel");
-  const allUsersCheckBoxChangeHandler = /* @__PURE__ */ __name(() => {
+  };
+  const allUsersCheckBoxChangeHandler = () => {
     setAllUsersSelection(!allUsersSelection);
     const temp = [...groupUsers];
     const table = document.getElementById("group-user-list-table");
@@ -13898,8 +13887,8 @@ var Group = /* @__PURE__ */ __name((props) => {
     }
     setGroupUsers(temp);
     checkUsersSelection();
-  }, "allUsersCheckBoxChangeHandler");
-  const toggleActiveGroupsDiplay = /* @__PURE__ */ __name(() => {
+  };
+  const toggleActiveGroupsDiplay = () => {
     const changed = !displayInactiveGroups;
     userSettings.set(username, "userSettings.groupListShowInactive" /* GROUP_LIST_SHOW_INACTIVE */, changed);
     setDisplayInactiveGroups(changed);
@@ -13913,7 +13902,7 @@ var Group = /* @__PURE__ */ __name((props) => {
     } else {
       props.getGroupsDetails(props.groupDetails.group_id);
     }
-  }, "toggleActiveGroupsDiplay");
+  };
   const isSortActiveClass = React45.useCallback(
     (value) => {
       return cx5({ "vai-menu-button__list-item--active": sortValue && sortValue === value });
@@ -13923,7 +13912,7 @@ var Group = /* @__PURE__ */ __name((props) => {
   React45.useEffect(() => {
     setTriggerUpdate(/* @__PURE__ */ new Date());
   }, [groupDetailsContentRef?.current, topRef?.current]);
-  const getGroupUsersTableHeight = /* @__PURE__ */ __name(() => {
+  const getGroupUsersTableHeight = () => {
     const allInitialized = topRef?.current != null && groupDetailsContentRef?.current != null;
     if (!allInitialized)
       return HUNDRED_PCT;
@@ -13937,8 +13926,8 @@ var Group = /* @__PURE__ */ __name((props) => {
     const detailsRefPadBottom = detailsRefStyles.getPaddingBottom();
     const allRelevantSpacing = topRefPadTop + topRefPadBottom + topRefMarginTop + topRefMarginBottom + detailsRefPadTop + detailsRefPadBottom;
     return groupDetailsContentRef.current.clientHeight - topRef.current.clientHeight - allRelevantSpacing;
-  }, "getGroupUsersTableHeight");
-  const renderGroupTable = /* @__PURE__ */ __name(() => {
+  };
+  const renderGroupTable = () => {
     let tableInner;
     if (props.groupListLoading) {
       return <CenteredSpinner_default htmlId="group-list-spinner" />;
@@ -13974,8 +13963,8 @@ var Group = /* @__PURE__ */ __name((props) => {
       </TableRow7>)}</>;
     }
     return <Table7 tableStyle={TableStyle6.Plain} className="user-and-group-table" htmlId="group-list-table"><TableBody7>{tableInner}</TableBody7></Table7>;
-  }, "renderGroupTable");
-  const renderListHeader = /* @__PURE__ */ __name(() => {
+  };
+  const renderListHeader = () => {
     return <>
       <InputField15
         htmlId="group-search-input"
@@ -14026,11 +14015,11 @@ var Group = /* @__PURE__ */ __name((props) => {
             <MenuButtonListItem3
               htmlId="group-new-users-groups__item--new-group"
               onSelect={handleNewChange("newGroup" /* newGroup */)}
-            >{t("profile.newGroup")}</MenuButtonListItem3>
+            >{t("profile.newGroupTitle")}</MenuButtonListItem3>
             <MenuButtonListItem3
               htmlId="group-new-users-groups__item--new-user"
               onSelect={handleNewChange("newUser" /* newUser */)}
-            >{t("profile.inviteUser")}</MenuButtonListItem3>
+            >{t("profile.inviteUserTitle")}</MenuButtonListItem3>
           </MenuButtonList3>
         </MenuButton3>
       </Flex25>
@@ -14049,12 +14038,12 @@ var Group = /* @__PURE__ */ __name((props) => {
         /></FlexItem16>
       </Flex25>
     </>;
-  }, "renderListHeader");
+  };
   const groupListContent = <Paper4 htmlId="group-list-paper" className="user-list-paper">
     {renderListHeader()}
     <div className="user-and-group-table-wrapper">{renderGroupTable()}</div>
   </Paper4>;
-  const activeToggleChange = /* @__PURE__ */ __name((toggleVal) => {
+  const activeToggleChange = (toggleVal) => {
     dispatch(
       showDialog(
         <GroupActivationDialog_default
@@ -14064,14 +14053,14 @@ var Group = /* @__PURE__ */ __name((props) => {
         />
       )
     );
-  }, "activeToggleChange");
-  const onRightsExpanded = /* @__PURE__ */ __name((expanded) => {
+  };
+  const onRightsExpanded = (expanded) => {
     setTimeout(() => setTriggerUpdate(/* @__PURE__ */ new Date()), 100);
-  }, "onRightsExpanded");
+  };
   const isCurrentGroupAdmin = React45.useCallback(() => {
     return isAdminGroup(props.groupDetails);
   }, [props.groupDetails]);
-  const renderGroupDetail = /* @__PURE__ */ __name(() => {
+  const renderGroupDetail = () => {
     if (props.groupDetailsLoading || !props.groupDetails) {
       return <CenteredSpinner_default htmlId="group-details-spinner" />;
     }
@@ -14207,17 +14196,17 @@ var Group = /* @__PURE__ */ __name((props) => {
         </TableRow7>)}</TableBody7>
       </Table7></div>
     </>;
-  }, "renderGroupDetail");
+  };
   const groupDetailsContent = !props.groupDetails && !props.groupDetailsLoading ? null : <Paper4 ref={groupDetailsContentRef} className="user-profile-paper">{renderGroupDetail()}</Paper4>;
   return <Flex25>
     <FlexItem16 alignSelf="flex-start" className="vai-margin-right-75-rem" flexBasis="23%">{groupListContent}</FlexItem16>
     <FlexItem16 alignSelf="flex-start" flexBasis="77%">{groupDetailsContent}</FlexItem16>
   </Flex25>;
-}, "Group");
+};
 var Group_default = Group;
 
 // ../vlncc-frontend/src/components/profile/index.tsx
-var Profile = /* @__PURE__ */ __name((props) => {
+var Profile = (props) => {
   const {
     getUserProfile: getUserProfile2,
     getGroupsDetails: getGroupsDetails2,
@@ -14305,11 +14294,11 @@ var Profile = /* @__PURE__ */ __name((props) => {
       />}
     />
   </Route3></Routes3>;
-}, "Profile");
+};
 var Profile_default = Profile;
 
 // ../vlncc-frontend/src/containers/Profile.tsx
-var mapDispatchToProps6 = /* @__PURE__ */ __name((dispatch) => ({
+var mapDispatchToProps6 = (dispatch) => ({
   getUsers: () => dispatch(profileDispatchActions.getUsers()),
   getUserProfile: (userName, includeRights) => dispatch(profileDispatchActions.getUserProfile(userName, includeRights)),
   getMyProfile: () => dispatch(profileDispatchActions.getMyProfile()),
@@ -14324,12 +14313,12 @@ var mapDispatchToProps6 = /* @__PURE__ */ __name((dispatch) => ({
   deleteGroup: (groupId) => dispatch(profileDispatchActions.deleteGroup(groupId)),
   toggleGroupActivation: (isActive, groupId, groupName) => dispatch(profileDispatchActions.toggleGroupActivation(isActive, groupId, groupName)),
   deleteGroupUsers: (users, groupId) => dispatch(profileDispatchActions.deleteGroupUsers(users, groupId))
-}), "mapDispatchToProps");
-var mapStateToProps7 = /* @__PURE__ */ __name(({ profile, general }) => ({
+});
+var mapStateToProps7 = ({ profile, general }) => ({
   profile,
   language: general.language
-}), "mapStateToProps");
-var ProfileContainer = /* @__PURE__ */ __name(({
+});
+var ProfileContainer = ({
   profile,
   getUserProfile: getUserProfile2,
   getGroupsDetails: getGroupsDetails2,
@@ -14392,7 +14381,7 @@ var ProfileContainer = /* @__PURE__ */ __name(({
     toggleGroupActivation={toggleGroupActivation2}
     site={site}
   />;
-}, "ProfileContainer");
+};
 var Profile_default2 = connect8(mapStateToProps7, mapDispatchToProps6)(ProfileContainer);
 
 // ../vlncc-frontend/src/containers/Events.tsx
@@ -14427,7 +14416,7 @@ import { VaiIcon as VaiIcon16 } from "@vaisala-rockhopper/design-tokens";
 import { format as format2 } from "date-fns";
 import "./timepicker.scss";
 import { useRef as useRef5 } from "react";
-var TimePicker = /* @__PURE__ */ __name((props) => {
+var TimePicker = (props) => {
   const [selectedTime, setSelectedTime] = React47.useState(format2(/* @__PURE__ */ new Date(), "HH:mm"));
   const [timeOptions, setTimeOptions] = React47.useState([]);
   const [invalid, setInvalid] = React47.useState(false);
@@ -14451,15 +14440,15 @@ var TimePicker = /* @__PURE__ */ __name((props) => {
       }
     }
   }, [timeOptions, selectedTime]);
-  const scrollToSelectedTime = /* @__PURE__ */ __name(() => {
+  const scrollToSelectedTime = () => {
     const [hh, mm] = selectedTime.split(":");
     const roundedTime = `${hh}:${roundToMultipleOfFive(Number(mm))}`;
     const selectedTimeOption = listRef.current?.querySelector(`[data-scrollid="${roundedTime}"]`);
     selectedTimeOption?.scrollIntoView({ block: "center" });
-  }, "scrollToSelectedTime");
-  const isInvalidTime = /* @__PURE__ */ __name((value) => {
+  };
+  const isInvalidTime = (value) => {
     return timeOptions.find((r) => r.value === value && r.disabled);
-  }, "isInvalidTime");
+  };
   return <div ref={listRef}><MenuButton4 id="time-picker" data-testid={props.testId}>
     <MenuButtonToggle4
       id={props.id}
@@ -14481,7 +14470,7 @@ var TimePicker = /* @__PURE__ */ __name((props) => {
       }}
     >{option.value}</MenuButtonListItem4>)}</MenuButtonList4>
   </MenuButton4></div>;
-}, "TimePicker");
+};
 var TimePicker_default = TimePicker;
 
 // ../vlncc-frontend/src/components/Events/EventFilterBar.tsx
@@ -14522,7 +14511,7 @@ var DEFAULT_FILTERS = {
   ["action" /* ACTION */]: [],
   ["source" /* SOURCE */]: []
 };
-var EventFilterBar = /* @__PURE__ */ __name(({
+var EventFilterBar = ({
   deviceType,
   rowsCount,
   pagination,
@@ -14540,10 +14529,10 @@ var EventFilterBar = /* @__PURE__ */ __name(({
   React48.useEffect(() => {
     doEventsQuery();
   }, [pagination]);
-  const toggleExtraFilters = /* @__PURE__ */ __name(() => {
+  const toggleExtraFilters = () => {
     setShowExtraFilters((value) => !value);
-  }, "toggleExtraFilters");
-  const doEventsQuery = /* @__PURE__ */ __name(() => {
+  };
+  const doEventsQuery = () => {
     const fromDateTime = eventFilters.fromDateTime.split(":").map((x) => parseInt(x));
     const from = eventFilters.fromDate.setHours(fromDateTime[0], fromDateTime[1]);
     const toDateTime = eventFilters.toDateTime.split(":").map((x) => parseInt(x));
@@ -14563,39 +14552,39 @@ var EventFilterBar = /* @__PURE__ */ __name(({
     }
     query["locale"] = language;
     getEvents2(query);
-  }, "doEventsQuery");
-  const onChange = /* @__PURE__ */ __name((value, name) => {
+  };
+  const onChange = (value, name) => {
     setEventFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  }, "onChange");
-  const handleCategoryChange = /* @__PURE__ */ __name((options) => {
+  };
+  const handleCategoryChange = (options) => {
     const lastItem = options[options.length - 1];
     if (lastItem === SELECT_ALL) {
       onChange(CATEGORIES_LIST, "category" /* CATEGORY */);
     } else {
       onChange(options, "category" /* CATEGORY */);
     }
-  }, "handleCategoryChange");
-  const handleActionChange = /* @__PURE__ */ __name((options) => {
+  };
+  const handleActionChange = (options) => {
     const lastItem = options[options.length - 1];
     if (lastItem === SELECT_ALL) {
       onChange(ACTIONS_LIST, "action" /* ACTION */);
     } else {
       onChange(options, "action" /* ACTION */);
     }
-  }, "handleActionChange");
-  const handleSourceChange = /* @__PURE__ */ __name((options) => {
+  };
+  const handleSourceChange = (options) => {
     onChange(options, "source" /* SOURCE */);
-  }, "handleSourceChange");
-  const handleInputChange = /* @__PURE__ */ __name((event) => {
+  };
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
     setEventFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  }, "handleInputChange");
-  const handleKeyDown = /* @__PURE__ */ __name((event) => {
+  };
+  const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       handleApply();
     }
-  }, "handleKeyDown");
-  const searchLabel = /* @__PURE__ */ __name((rowsCount2) => <>
+  };
+  const searchLabel = (rowsCount2) => <>
     <span id="events-event-search-title">{t("events.filterBar.search")}</span>
     <span id="events-event-count">
       {" -"}
@@ -14604,9 +14593,9 @@ var EventFilterBar = /* @__PURE__ */ __name(({
       {" "}
       {t("events.filterBar.events")}
     </span>
-  </>, "searchLabel");
+  </>;
   const isExtraFiltersEmpty = isEmpty3(eventFilters.action) && isEmpty3(eventFilters.category) && isEmpty3(eventFilters.source) && isEmpty3(eventFilters.search);
-  const onClearFilters = /* @__PURE__ */ __name(() => {
+  const onClearFilters = () => {
     setEventFilters((prevState) => ({
       ...prevState,
       search: "",
@@ -14615,7 +14604,7 @@ var EventFilterBar = /* @__PURE__ */ __name(({
       source: []
     }));
     handleApply();
-  }, "onClearFilters");
+  };
   return <div id="events-event-filter-bar">
     <div id="events-event-filter-bar-search" className="events-event-filter-search"><Form15.Item label={searchLabel(rowsCount)} className="events-event-filter-bar-search"><InputField16
       id="events-event-filter-bar-search"
@@ -14729,7 +14718,7 @@ var EventFilterBar = /* @__PURE__ */ __name(({
       data-testid={TEST_IDS.events_filter_bar_apply_filters_button}
     >{isLoading ? <CenteredSpinner_default htmlId="save-button-spinner" className="" /> : t("events.filterBar.apply")}</Button34></div>
   </div>;
-}, "EventFilterBar");
+};
 var EventFilterBar_default = EventFilterBar;
 
 // ../vlncc-frontend/src/components/Events/EventsTable.tsx
@@ -14746,7 +14735,7 @@ var headerCells = [
   { key: "parameters", sortable: false, name: "parameters" },
   { key: "time", sortable: false, name: "time" }
 ];
-var EventsTable = /* @__PURE__ */ __name((props) => {
+var EventsTable = (props) => {
   const { rows, deviceType, isLoading, updateRowVisibleEndIdx, showDetailView, handleOnRowClick } = props;
   const { t } = useTranslation52();
   const [data, setData] = React49.useState({ rows });
@@ -14772,27 +14761,27 @@ var EventsTable = /* @__PURE__ */ __name((props) => {
     }
     setTableHeaders(cells);
   }, [deviceType]);
-  const rowGetter = /* @__PURE__ */ __name((rowIdx) => {
+  const rowGetter = (rowIdx) => {
     const row = data.rows[rowIdx];
     if (row?.parameters && Array.isArray(row.parameters) && row.parameters.length > 0) {
       row.parameters = row.parameters.join(", ");
     }
     return row;
-  }, "rowGetter");
-  const onSort = /* @__PURE__ */ __name((column, direction) => {
+  };
+  const onSort = (column, direction) => {
     const multiplier = direction === "DESC" ? -1 : 1;
     const rows2 = data.rows.slice().sort((a, b) => (a[column] == b[column] ? 0 : a[column] < b[column] ? 1 : -1) * multiplier);
     setData({ rows: rows2 });
-  }, "onSort");
-  const handleOnScroll = /* @__PURE__ */ __name((scrollState) => {
+  };
+  const handleOnScroll = (scrollState) => {
     const { rowVisibleEndIdx } = scrollState;
     const isLastRow = rowVisibleEndIdx === rows.length;
     if (isLoading || !isLastRow) {
       return;
     }
     updateRowVisibleEndIdx(rowVisibleEndIdx);
-  }, "handleOnScroll");
-  const handleRowClick = /* @__PURE__ */ __name((rowIdx, row) => {
+  };
+  const handleRowClick = (rowIdx, row) => {
     if (rowIdx < 0) {
       return;
     }
@@ -14802,7 +14791,7 @@ var EventsTable = /* @__PURE__ */ __name((props) => {
       return ["object", "action", "time", "source"].includes(header.key);
     });
     setTableHeaders(filteredHeaders);
-  }, "handleRowClick");
+  };
   return <>
     <DataTable2
       columns={tableHeaders.map((cell) => {
@@ -14822,7 +14811,7 @@ var EventsTable = /* @__PURE__ */ __name((props) => {
       {t("events.table.loading")}
     </div>}
   </>;
-}, "EventsTable");
+};
 var EventsTable_default = EventsTable;
 
 // ../vlncc-frontend/src/components/Events/EventDetail.tsx
@@ -14839,29 +14828,29 @@ import {
 import { VaiIcon as VaiIcon18 } from "@vaisala-rockhopper/design-tokens";
 import "./event-detail.scss";
 import { useTranslation as useTranslation53 } from "react-i18next";
-var BooleanValueFormatter = /* @__PURE__ */ __name(({ value }) => {
+var BooleanValueFormatter = ({ value }) => {
   if (typeof value === "boolean") {
     return `${value}`;
   }
   return value;
-}, "BooleanValueFormatter");
+};
 var headerCells2 = [
   { key: "parameter", sortable: true, name: "Parameter" },
   { key: "before", sortable: true, name: "Before", formatter: BooleanValueFormatter },
   { key: "after", sortable: false, name: "After", formatter: BooleanValueFormatter },
   { key: "content", sortable: false, name: "Content" }
 ];
-var sortRows = /* @__PURE__ */ __name((initialRows, sortColumn, sortDirection) => (rows) => {
-  const comparer = /* @__PURE__ */ __name((a, b) => {
+var sortRows = (initialRows, sortColumn, sortDirection) => (rows) => {
+  const comparer = (a, b) => {
     if (sortDirection === "ASC") {
       return a[sortColumn] > b[sortColumn] ? 1 : -1;
     } else if (sortDirection === "DESC") {
       return a[sortColumn] < b[sortColumn] ? 1 : -1;
     }
-  }, "comparer");
+  };
   return sortDirection === "NONE" ? initialRows : [...rows].sort(comparer);
-}, "sortRows");
-var EventDetail = /* @__PURE__ */ __name(({ onClose, hasBeforeState, handleNavBtn, data }) => {
+};
+var EventDetail = ({ onClose, hasBeforeState, handleNavBtn, data }) => {
   const { t } = useTranslation53();
   const showAffectedLocation = data.category === "Location" /* LOCATION */;
   const [columns, setColumns] = useState36([]);
@@ -14881,13 +14870,13 @@ var EventDetail = /* @__PURE__ */ __name(({ onClose, hasBeforeState, handleNavBt
   useEffect32(() => {
     setRows(data.parameters);
   }, [data.parameters]);
-  const handleCrossClick = /* @__PURE__ */ __name(() => {
+  const handleCrossClick = () => {
     onClose(false);
-  }, "handleCrossClick");
-  const rowGetter = /* @__PURE__ */ __name((rowIdx) => {
+  };
+  const rowGetter = (rowIdx) => {
     return rows[rowIdx];
-  }, "rowGetter");
-  const beforeStateTemplate = /* @__PURE__ */ __name(() => {
+  };
+  const beforeStateTemplate = () => {
     return <Grid2.Row><Grid2.Col><div className="details">
       <Grid2.Row>
         <Grid2.Col><div><Heading15 level={4} className="title">
@@ -14922,8 +14911,8 @@ var EventDetail = /* @__PURE__ */ __name(({ onClose, hasBeforeState, handleNavBt
         >{data.affectedLocation}</Button35></Grid2.Col>
       </Grid2.Row>}
     </div></Grid2.Col></Grid2.Row>;
-  }, "beforeStateTemplate");
-  const withoutBeforeStateTemplate = /* @__PURE__ */ __name(() => {
+  };
+  const withoutBeforeStateTemplate = () => {
     return <>
       <Grid2.Row><Grid2.Col><div className="details-compact"><Grid2.Row>
         <Grid2.Col>
@@ -14951,7 +14940,7 @@ var EventDetail = /* @__PURE__ */ __name(({ onClose, hasBeforeState, handleNavBt
         startIcon={<Icon27 name={VaiIcon18.LinkNewWindow} />}
       >{data.affectedLocation}</Button35></Grid2.Col></Grid2.Row>
     </>;
-  }, "withoutBeforeStateTemplate");
+  };
   return <div id="events-event-detail">
     <div id="events-event-detail-header" className="header">
       <div className="navigation" onClick={() => handleNavBtn(-1)}>
@@ -14979,11 +14968,11 @@ var EventDetail = /* @__PURE__ */ __name(({ onClose, hasBeforeState, handleNavBt
       />}</Grid2.Col></Grid2.Row>
     </Grid2></div>
   </div>;
-}, "EventDetail");
+};
 
 // ../vlncc-frontend/src/components/Events/Events.tsx
 import "./event.scss";
-var Events = /* @__PURE__ */ __name(({
+var Events = ({
   events,
   eventDetails,
   eventsLoading,
@@ -15007,18 +14996,18 @@ var Events = /* @__PURE__ */ __name(({
     const updatedEvents = pagination.rowIndex > 0 ? rows.concat(events) : events;
     setRows(updatedEvents);
   }, [events]);
-  const updateRowVisibleEndIdx = /* @__PURE__ */ __name((rowIndex) => {
+  const updateRowVisibleEndIdx = (rowIndex) => {
     if (rowIndex < totalCount) {
       setPagination({
         rowIndex,
         rowCount: EVENTS_TABLE_ROWS_COUNT
       });
     }
-  }, "updateRowVisibleEndIdx");
-  const updateShowDetailView = /* @__PURE__ */ __name((flag) => {
+  };
+  const updateShowDetailView = (flag) => {
     setShowDetailView(flag);
-  }, "updateShowDetailView");
-  const handleOnRowClick = /* @__PURE__ */ __name(async (rowIdx, row) => {
+  };
+  const handleOnRowClick = async (rowIdx, row) => {
     setActiveRowIndex(rowIdx);
     await getEventDetail(row.eventId, language);
     updateShowDetailView(true);
@@ -15027,21 +15016,21 @@ var Events = /* @__PURE__ */ __name(({
     } else {
       setHasBeforeState(true);
     }
-  }, "handleOnRowClick");
-  const handleNavBtn = /* @__PURE__ */ __name((value) => {
+  };
+  const handleNavBtn = (value) => {
     setActiveRowIndex(activeRowIndex + value);
-  }, "handleNavBtn");
-  const handleApply = /* @__PURE__ */ __name(() => {
+  };
+  const handleApply = () => {
     setRows([]);
     setPagination({
       rowIndex: 0,
       rowCount: EVENTS_TABLE_ROWS_COUNT
     });
-  }, "handleApply");
-  const getEventsData = /* @__PURE__ */ __name((query) => {
+  };
+  const getEventsData = (query) => {
     if (!eventsLoading)
       getEvents2(query);
-  }, "getEventsData");
+  };
   return <div id="events">
     <EventFilterBar_default
       deviceType={deviceType}
@@ -15071,27 +15060,27 @@ var Events = /* @__PURE__ */ __name(({
       /></Paper5></div>}
     </div>
   </div>;
-}, "Events");
+};
 var Events_default = Events;
 
 // ../vlncc-frontend/src/components/Events/index.tsx
 var Events_default2 = Events_default;
 
 // ../vlncc-frontend/src/containers/Events.tsx
-var mapDispatchToProps7 = /* @__PURE__ */ __name((dispatch) => ({
+var mapDispatchToProps7 = (dispatch) => ({
   getEvents: (pagination) => dispatch(eventsDispatchActions.getEvents(pagination)),
   getEventDetail: (eventId, language) => dispatch(eventsDispatchActions.getEventDetails(eventId, language))
-}), "mapDispatchToProps");
-var mapStateToProps8 = /* @__PURE__ */ __name(({ general, events }) => ({
+});
+var mapStateToProps8 = ({ general, events }) => ({
   language: general.language,
   events: events.events,
   eventDetails: events.eventDetail,
   eventsLoading: events.eventsLoading,
   totalCount: events.totalCount
-}), "mapStateToProps");
-var EventsContainer = /* @__PURE__ */ __name((props) => {
+});
+var EventsContainer = (props) => {
   return <Events_default2 {...props} />;
-}, "EventsContainer");
+};
 var Events_default3 = withDisplaySize(connect9(mapStateToProps8, mapDispatchToProps7)(EventsContainer));
 
 // ../vlncc-frontend/src/containers/Reports.tsx
@@ -15137,7 +15126,7 @@ import { VaiColor as VaiColor7, VaiIcon as VaiIcon19 } from "@vaisala-rockhopper
 // ../vlncc-frontend/src/components/Utils/TruncatedText/TruncatedText.tsx
 import * as React52 from "react";
 import { Tooltip } from "@vaisala-rockhopper/components";
-var TruncatedText = /* @__PURE__ */ __name(({ text, className }) => {
+var TruncatedText = ({ text, className }) => {
   const textNode = React52.useRef();
   const [showTooltip, setShowTooltip] = React52.useState(false);
   React52.useEffect(() => {
@@ -15155,12 +15144,12 @@ var TruncatedText = /* @__PURE__ */ __name(({ text, className }) => {
     <span ref={textNode} className={`truncated-text ${className}`}>{text}</span>
     {showTooltip && <Tooltip triggerRef={textNode}>{text}</Tooltip>}
   </>;
-}, "TruncatedText");
+};
 var TruncatedText_default = TruncatedText;
 
 // ../vlncc-frontend/src/components/Reports/AccordionTree/AccordionTree.tsx
 import { useTranslation as useTranslation54 } from "react-i18next";
-var AccordionTree = /* @__PURE__ */ __name(({
+var AccordionTree = ({
   locationsTree,
   setLocationsTree,
   setLocationsCount,
@@ -15196,7 +15185,7 @@ var AccordionTree = /* @__PURE__ */ __name(({
       setFormattedData({ ...locationsTree });
     }
   }, [locationsTree]);
-  const AccordionTitle = /* @__PURE__ */ __name(({
+  const AccordionTitle = ({
     node,
     className,
     noChildren,
@@ -15204,7 +15193,7 @@ var AccordionTree = /* @__PURE__ */ __name(({
   }) => {
     const wrapper = React53.useRef();
     const [showCheckbox, setShowCheckbox] = React53.useState(false);
-    const onCheck = /* @__PURE__ */ __name((event) => {
+    const onCheck = (event) => {
       const formattedDataClone = JSON.parse(JSON.stringify(formattedData));
       let neededNode = {};
       const parentNodes = [];
@@ -15221,8 +15210,8 @@ var AccordionTree = /* @__PURE__ */ __name(({
         areAllChildrenSelected(n);
       });
       setFormattedData(formattedDataClone);
-    }, "onCheck");
-    const changeSelectionNodeAndChildren = /* @__PURE__ */ __name((node2, state, locationsNum = locationsCount) => {
+    };
+    const changeSelectionNodeAndChildren = (node2, state, locationsNum = locationsCount) => {
       const prevNodeState = node2.selected;
       node2.selected = state;
       if (node2.type === LOCATION_KEY && prevNodeState !== state) {
@@ -15239,8 +15228,8 @@ var AccordionTree = /* @__PURE__ */ __name(({
         });
       }
       return [node2, locationsNum];
-    }, "changeSelectionNodeAndChildren");
-    const changeCheckingState = /* @__PURE__ */ __name((node2, children, selectedNum, partialSelectedNum) => {
+    };
+    const changeCheckingState = (node2, children, selectedNum, partialSelectedNum) => {
       if (selectedNum === children.length) {
         wrapper?.current?.classList.remove("partially-checked");
         node2.partialSelected = false;
@@ -15257,8 +15246,8 @@ var AccordionTree = /* @__PURE__ */ __name(({
         node2.selected = false;
         return false;
       }
-    }, "changeCheckingState");
-    const areAllChildrenSelected = /* @__PURE__ */ __name((n = node) => {
+    };
+    const areAllChildrenSelected = (n = node) => {
       const children = Object.values(n.children);
       let selectedChildrenNum = 0;
       let partialSelectedNum = 0;
@@ -15273,8 +15262,8 @@ var AccordionTree = /* @__PURE__ */ __name(({
         }
       });
       return children.length > 0 ? changeCheckingState(n, children, selectedChildrenNum, partialSelectedNum) : false;
-    }, "areAllChildrenSelected");
-    const renderIcon = /* @__PURE__ */ __name(() => {
+    };
+    const renderIcon = () => {
       if (node.type === SITE_KEY) {
         return <Icon28 name={VaiIcon19.MapMarkerHexagon} color={VaiColor7.BlueDark} size={Size48.M} />;
       } else if (node.type === LOCATION_KEY) {
@@ -15290,7 +15279,7 @@ var AccordionTree = /* @__PURE__ */ __name(({
         }
       }
       return <></>;
-    }, "renderIcon");
+    };
     React53.useEffect(() => {
       if (!showCheckbox) {
         setShowCheckbox(true);
@@ -15320,8 +15309,8 @@ var AccordionTree = /* @__PURE__ */ __name(({
         {t("reports.locations")}
       </Flex26>}
     </Flex26>;
-  }, "AccordionTitle");
-  const calculateSiteChildrenCount = /* @__PURE__ */ __name((data, count = {}) => {
+  };
+  const calculateSiteChildrenCount = (data, count = {}) => {
     if (data.length === 0) {
       count["count"] = 0;
     }
@@ -15337,8 +15326,8 @@ var AccordionTree = /* @__PURE__ */ __name(({
       }
     });
     return count;
-  }, "calculateSiteChildrenCount");
-  const calculateLocationsNumForNode = /* @__PURE__ */ __name((node, sitesChildren = sitesChildrenCount) => {
+  };
+  const calculateLocationsNumForNode = (node, sitesChildren = sitesChildrenCount) => {
     let count = 0;
     if (Object.keys(sitesChildren).length > 0 && node) {
       let currentNode;
@@ -15358,8 +15347,8 @@ var AccordionTree = /* @__PURE__ */ __name(({
       }
     }
     return count;
-  }, "calculateLocationsNumForNode");
-  const renderTree = /* @__PURE__ */ __name((data) => {
+  };
+  const renderTree = (data) => {
     return Object.values(data).map((node) => {
       if (Object.keys(node.children).length > 0) {
         return <AccordionList2
@@ -15383,24 +15372,24 @@ var AccordionTree = /* @__PURE__ */ __name(({
         />;
       }
     });
-  }, "renderTree");
+  };
   return <>{Object.keys(formattedData).length > 0 && !isFetching ? renderTree(formattedData) : isFetching ? <CenteredSpinner_default /> : <EmptyState heading="site.noSiteRights" illustration={"nothingSelected" /* nothingSelected */} />}</>;
-}, "AccordionTree");
-var mapStateToProps9 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps9 = ({ reports }) => ({
   selectedFormattedLocationsNum: reports.selectedLocationsNum,
   selectedFormattedLocations: reports.selectedFormattedLocations
-}), "mapStateToProps");
-var mapDispatchToProps8 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps8 = (dispatch) => ({
   setReportSelectedFormattedLocations: (locations) => dispatch(reportsDispatchActions.setReportSelectedFormattedLocations(locations)),
   setReportLocations: (locations) => dispatch(reportsDispatchActions.setReportLocations(locations)),
   logout: () => dispatch(authDispatchActions.logout)
-}), "mapDispatchToProps");
+});
 var AccordionTree_default = connect10(mapStateToProps9, mapDispatchToProps8)(AccordionTree);
 
 // ../vlncc-frontend/src/components/Reports/SelectLocationsDialog/SelectLocationsDialog.tsx
 import { connect as connect11 } from "react-redux";
 import { useDebounce } from "use-debounce";
-var SelectLocationsDialog = /* @__PURE__ */ __name((props) => {
+var SelectLocationsDialog = (props) => {
   const { t } = useTranslation55();
   const [searchVal, setSearchVal] = React54.useState("");
   const [value] = useDebounce(searchVal, 600);
@@ -15419,11 +15408,11 @@ var SelectLocationsDialog = /* @__PURE__ */ __name((props) => {
     if (!props.loadingAPI)
       setPreviousLocationsTree(props.selectedFormattedLocations);
   }, [props.selectedFormattedLocations]);
-  const handleInputChange = /* @__PURE__ */ __name((event) => {
+  const handleInputChange = (event) => {
     const search = event.target.value;
     setSearchVal(search);
-  }, "handleInputChange");
-  const getSelectedLocationsIds = /* @__PURE__ */ __name((data = newlocationsTree, selectedIDs = [], selectedCustomProps = {}) => {
+  };
+  const getSelectedLocationsIds = (data = newlocationsTree, selectedIDs = [], selectedCustomProps = {}) => {
     sortLocationsOnTopOfZones(data).forEach((n) => {
       if (Object.values(n.children).length > 0) {
         getSelectedLocationsIds(n.children, selectedIDs, selectedCustomProps);
@@ -15442,8 +15431,8 @@ var SelectLocationsDialog = /* @__PURE__ */ __name((props) => {
       }
     });
     return { selectedIDs, selectedCustomProps };
-  }, "getSelectedLocationsIds");
-  const addSelectedLocations = /* @__PURE__ */ __name(() => {
+  };
+  const addSelectedLocations = () => {
     const { selectedIDs, selectedCustomProps } = getSelectedLocationsIds();
     setPreviousLocationsTree(newlocationsTree);
     props.setReportSelectedFormattedLocations(newlocationsTree);
@@ -15451,7 +15440,7 @@ var SelectLocationsDialog = /* @__PURE__ */ __name((props) => {
     props.setReportSelectedLocationsCustomProps(selectedCustomProps);
     props.setReportSelectedLocationsNum(locationsCount);
     props.onDismiss();
-  }, "addSelectedLocations");
+  };
   return <Modal4
     id="select-locations-dialog-id"
     htmlId="select-locations-dialog"
@@ -15501,20 +15490,20 @@ var SelectLocationsDialog = /* @__PURE__ */ __name((props) => {
       >{t("general.cancel")}</Button36>
     </Flex27>
   </Modal4>;
-}, "SelectLocationsDialog");
-var mapStateToProps10 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps10 = ({ reports }) => ({
   selectedFormattedLocations: reports.selectedFormattedLocations,
   selectedFormattedLocationsNum: reports.selectedLocationsNum,
   intervalDate: reports.intervalDate,
   loadingAPI: reports.isApiLoading,
   selectedLocationsCustomProps: reports.selectedLocationsCustomProps
-}), "mapStateToProps");
-var mapDispatchToProps9 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps9 = (dispatch) => ({
   setReportSelectedFormattedLocations: (locations) => dispatch(reportsDispatchActions.setReportSelectedFormattedLocations(locations)),
   setReportSelectedLocationsCustomProps: (locations) => dispatch(reportsDispatchActions.setReportSelectedLocationsCustomProps(locations)),
   setReportSelectedLocationsNum: (number) => dispatch(reportsDispatchActions.setReportSelectedLocationsNum(number)),
   setReportSelectedLocationsIDs: (IDs) => dispatch(reportsDispatchActions.setReportSelectedLocationsIDs(IDs))
-}), "mapDispatchToProps");
+});
 var SelectLocationsDialog_default = connect11(mapStateToProps10, mapDispatchToProps9)(SelectLocationsDialog);
 
 // ../vlncc-frontend/src/components/Reports/LocationsList/LocationsList.tsx
@@ -15529,7 +15518,7 @@ import { connect as connect12 } from "react-redux";
 import "./selected-locations-list.scss";
 var locationsClone = null;
 var requests = {};
-var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
+var SelectedLocationsList = (props) => {
   const [prevSelectedNode, setPrevSelectedNode] = React55.useState(null);
   const [removingNode, setRemovingNode] = React55.useState(false);
   const [zonesNames, setZonesNames] = React55.useState({});
@@ -15537,7 +15526,7 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
   const [getMeasurements, { isLoading }] = useGetMeasurementsMutation();
   const [downloadJsonData] = useLazyDownloadJsonResponseQuery();
   const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
-  const processData = /* @__PURE__ */ __name((data, prevData, id) => {
+  const processData = (data, prevData, id) => {
     const selectedLocationsClone = JSON.parse(JSON.stringify(prevData));
     let measurements = [], minThreshold = Infinity, maxThreshold = -Infinity;
     const threshold = {};
@@ -15578,8 +15567,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       selectedNode.most_recent = data.recent?.toFixed(decimals) || null;
       locationsClone = { ...selectedLocationsClone };
     }
-  }, "processData");
-  const getMeasurementsPoints = /* @__PURE__ */ __name(async (locationIds, prevData = props.selectedLocationsCustomProps) => {
+  };
+  const getMeasurementsPoints = async (locationIds, prevData = props.selectedLocationsCustomProps) => {
     try {
       props.setReportLoadingState(true);
       locationsClone = null;
@@ -15614,14 +15603,14 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       console.error(e.response ?? e);
       throw e;
     }
-  }, "getMeasurementsPoints");
-  const updateLocationsState = /* @__PURE__ */ __name((data = props.selectedLocationsCustomProps) => {
+  };
+  const updateLocationsState = (data = props.selectedLocationsCustomProps) => {
     const [newLocations, visibleLocations, assignedColors] = hideAdditionalLocations(data);
     props.setReportsAssignedChartColors(assignedColors);
     props.setReportsVisibleLocations(visibleLocations);
     props.setReportSelectedLocationsCustomProps(newLocations);
     setPrevLocationsStructure(newLocations);
-  }, "updateLocationsState");
+  };
   React55.useEffect(() => {
     setPrevSelectedNode(null);
     hideAdditionalLocations();
@@ -15640,7 +15629,7 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       abortCurrentRequests();
     };
   }, []);
-  const abortCurrentRequests = /* @__PURE__ */ __name(() => {
+  const abortCurrentRequests = () => {
     if (requests && Object.keys(requests).length > 0 && !props.isTesting) {
       for (const key in requests) {
         requests[key].abort();
@@ -15648,8 +15637,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       }
     }
     requests = {};
-  }, "abortCurrentRequests");
-  const hideAdditionalLocations = /* @__PURE__ */ __name((data = props.selectedLocationsCustomProps, visibleLocations = props.visibleLocations, assignedChartColors = props.assignedChartColors, visibleLocationsNumIndicator = 0) => {
+  };
+  const hideAdditionalLocations = (data = props.selectedLocationsCustomProps, visibleLocations = props.visibleLocations, assignedChartColors = props.assignedChartColors, visibleLocationsNumIndicator = 0) => {
     const dataClone = data === props.selectedLocationsCustomProps ? JSON.parse(JSON.stringify(data)) : data;
     const visibleLocationsClone = visibleLocations === props.visibleLocations ? JSON.parse(JSON.stringify(visibleLocations)) : visibleLocations;
     const assignedColorsClone = assignedChartColors === props.assignedChartColors ? getInitialAssignedChartColors() : assignedChartColors;
@@ -15687,8 +15676,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       }
     });
     return [dataClone, visibleLocationsClone, assignedColorsClone, visibleLocationsNumIndicator];
-  }, "hideAdditionalLocations");
-  const onNodeRemove = /* @__PURE__ */ __name((node) => (event) => {
+  };
+  const onNodeRemove = (node) => (event) => {
     event.stopPropagation();
     if (props.selectedLocationsNum - 1 === 0) {
       const formattedData = modifyResponseData(props.locations);
@@ -15717,8 +15706,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       props.setReportSelectedLocationsCustomProps(newLocationsCustomProps);
     }
     props.setReportsSelectedLocationsNum(props.selectedLocationsNum - 1);
-  }, "onNodeRemove");
-  const onNodeVisibilityToggle = /* @__PURE__ */ __name((node) => (event) => {
+  };
+  const onNodeVisibilityToggle = (node) => (event) => {
     event.stopPropagation();
     const selectedLocationsClone = JSON.parse(JSON.stringify(props.selectedLocationsCustomProps));
     if (getVisibleLocationsNumber(props.visibleLocations) < MAX_LOCATIONS_SELECTED || selectedLocationsClone[node.node_id].visibleOnGraph) {
@@ -15742,8 +15731,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       }
       props.setReportSelectedLocationsCustomProps(selectedLocationsClone);
     }
-  }, "onNodeVisibilityToggle");
-  const getFirstAvailableColor = /* @__PURE__ */ __name(() => {
+  };
+  const getFirstAvailableColor = () => {
     let availableColor;
     for (const [key, value] of Object.entries(props.assignedChartColors)) {
       if (!value) {
@@ -15752,8 +15741,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       }
     }
     return availableColor;
-  }, "getFirstAvailableColor");
-  const onNodeClick = /* @__PURE__ */ __name((node) => (e) => {
+  };
+  const onNodeClick = (node) => (e) => {
     const selectedLocationsClone = JSON.parse(JSON.stringify(props.selectedLocationsCustomProps));
     if (prevSelectedNode && prevSelectedNode.node_id !== node.node_id) {
       selectedLocationsClone[prevSelectedNode.node_id].showThreshold = false;
@@ -15761,8 +15750,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
     selectedLocationsClone[node.node_id].showThreshold = !selectedLocationsClone[node.node_id].showThreshold;
     setPrevSelectedNode({ ...selectedLocationsClone[node.node_id], node_id: node.node_id });
     props.setReportSelectedLocationsCustomProps(selectedLocationsClone);
-  }, "onNodeClick");
-  const renderIcon = /* @__PURE__ */ __name((node) => {
+  };
+  const renderIcon = (node) => {
     switch (node.meas_id) {
       case "temperature" /* TEMPERATURE */:
         return <Icon30 name={VaiIcon21.Thermometer} color={VaiColor8.BlueDark} size={Size50.M} />;
@@ -15773,8 +15762,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
       default:
         return <></>;
     }
-  }, "renderIcon");
-  const renderZoneNamesByHierarchy = /* @__PURE__ */ __name((node) => {
+  };
+  const renderZoneNamesByHierarchy = (node) => {
     let selectedNode;
     const selectedLocationsClone = JSON.parse(JSON.stringify(props.selectedLocations));
     let zoneName = "";
@@ -15784,8 +15773,8 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
     });
     setZonesNames((names) => ({ ...names, [node.node_id]: zoneName }));
     return zoneName;
-  }, "renderZoneNamesByHierarchy");
-  const renderTree = /* @__PURE__ */ __name((data = props.selectedLocations) => {
+  };
+  const renderTree = (data = props.selectedLocations) => {
     return sortLocationsOnTopOfZones(data).map((node) => {
       if (Object.keys(node.children).length > 0) {
         return <div key={node.node_id}>
@@ -15830,10 +15819,10 @@ var SelectedLocationsList = /* @__PURE__ */ __name((props) => {
         </Paper6>;
       }
     });
-  }, "renderTree");
+  };
   return <div className="selected-locations-wrapper" data-testid="selected-locations-list-wrapper">{(isLoading || props.loadingAPI) && !props.isTesting ? <CenteredSpinner_default /> : Object.keys(props.visibleLocations).length > 0 ? <div data-testid="selected-locations-list-inner-wrapper">{renderTree()}</div> : null}</div>;
-}, "SelectedLocationsList");
-var mapStateToProps11 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps11 = ({ reports }) => ({
   locations: reports.locations,
   selectedFormattedLocations: reports.selectedFormattedLocations,
   selectedLocationsNum: reports.selectedLocationsNum,
@@ -15844,8 +15833,8 @@ var mapStateToProps11 = /* @__PURE__ */ __name(({ reports }) => ({
   isTesting: reports.isTesting,
   loadingAPI: reports.isApiLoading,
   selectedLocationsCustomProps: reports.selectedLocationsCustomProps
-}), "mapStateToProps");
-var mapDispatchToProps10 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps10 = (dispatch) => ({
   setReportsSelectedFormattedLocations: (locations) => dispatch(reportsDispatchActions.setReportSelectedFormattedLocations(locations)),
   setReportSelectedLocationsCustomProps: (locations) => dispatch(reportsDispatchActions.setReportSelectedLocationsCustomProps(locations)),
   setReportsVisibleLocations: (locations) => dispatch(reportsDispatchActions.setReportVisibleLocations(locations)),
@@ -15853,12 +15842,12 @@ var mapDispatchToProps10 = /* @__PURE__ */ __name((dispatch) => ({
   setReportSelectedLocationsIDs: (IDs) => dispatch(reportsDispatchActions.setReportSelectedLocationsIDs(IDs)),
   setReportsAssignedChartColors: (colors) => dispatch(reportsDispatchActions.setReportAssignedChartColors(colors)),
   setReportLoadingState: (loading) => dispatch(reportsDispatchActions.setReportLoadingState(loading))
-}), "mapDispatchToProps");
+});
 var SelectedLocationsList_default = connect12(mapStateToProps11, mapDispatchToProps10)(SelectedLocationsList);
 
 // ../vlncc-frontend/src/components/Reports/LocationsList/LocationsList.tsx
 import { useDebounce as useDebounce2 } from "use-debounce";
-var LocationsList = /* @__PURE__ */ __name((props) => {
+var LocationsList = (props) => {
   const { t } = useTranslation56();
   const [reportsFilter, setReportsFilter] = React56.useState({
     search: "",
@@ -15882,14 +15871,14 @@ var LocationsList = /* @__PURE__ */ __name((props) => {
     setFilteredLocationsCount(visibleLocations);
     setFilteredLocations(newFilteredLocations);
   }, [value, props.selectedFormattedLocations]);
-  const handleInputChange = /* @__PURE__ */ __name((event) => {
+  const handleInputChange = (event) => {
     const { name, value: value2 } = event.target;
     setReportsFilter((prevDateSelector) => ({ ...prevDateSelector, [name]: value2 }));
-  }, "handleInputChange");
-  const handleChange = /* @__PURE__ */ __name((selectedValue) => {
+  };
+  const handleChange = (selectedValue) => {
     console.log(selectedValue);
-  }, "handleChange");
-  const calculateFilteredLocationsCount = /* @__PURE__ */ __name((node = {}, parent_node = {}, visible_locations = 0) => {
+  };
+  const calculateFilteredLocationsCount = (node = {}, parent_node = {}, visible_locations = 0) => {
     const locationsClone2 = Object.keys(node).length > 0 ? node : JSON.parse(JSON.stringify(parent_node));
     let visibleLocations = visible_locations;
     Object.values(locationsClone2).forEach((node2) => {
@@ -15905,8 +15894,8 @@ var LocationsList = /* @__PURE__ */ __name((props) => {
       }
     });
     return visibleLocations;
-  }, "calculateFilteredLocationsCount");
-  const toggleSelectModal = /* @__PURE__ */ __name(() => setShowDialogs((prev) => ({ ...prev, select: !prev.select })), "toggleSelectModal");
+  };
+  const toggleSelectModal = () => setShowDialogs((prev) => ({ ...prev, select: !prev.select }));
   return <Paper7 className="h-100 locations-list-wrapper" data-testid="locations-list-wrapper">
     <Heading17 level={2} className="vai-margin-vertical-none">{t("reports.reportLocations")}</Heading17>
     <span style={{ color: VaiColor9.GreyMedium }} data-testid="locations-number-wrapper">
@@ -15951,12 +15940,12 @@ var LocationsList = /* @__PURE__ */ __name((props) => {
       description="reports.emptyLocationsNote"
     /> : filteredLocationsCount === 0 ? <span className="no-results-text">{t("noResults")}</span> : <SelectedLocationsList_default selectedLocations={filteredLocations} />}
   </Paper7>;
-}, "LocationsList");
-var mapStateToProps12 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps12 = ({ reports }) => ({
   selectedLocationsNum: reports.selectedLocationsNum,
   selectedFormattedLocations: reports.selectedFormattedLocations,
   loading: reports.isApiLoading
-}), "mapStateToProps");
+});
 var LocationsList_default = connect13(mapStateToProps12)(LocationsList);
 
 // ../vlncc-frontend/src/components/Reports/LocationsFilterBar/LocationsFilterBar.tsx
@@ -16003,13 +15992,13 @@ import { connect as connect14 } from "react-redux";
 import { addMinutes as addMinutes2, differenceInMinutes, format as format4, getUnixTime as getUnixTime2, isBefore as isBefore2 } from "date-fns";
 import { isEqual as isEqual2 } from "lodash";
 var MAX_TITLE_CHARACTERS = 256;
-var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
+var GenerateReportDialog = (props) => {
   const { t } = useTranslation57();
   const [generateReportAPI, { isLoading }] = useGenerateReportMutation();
   const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
-  const titleFormatter = /* @__PURE__ */ __name((dateStr) => {
+  const titleFormatter = (dateStr) => {
     return `viewLinc ${dateStr.toString().replace(/:/g, "\uA789")}`;
-  }, "titleFormatter");
+  };
   const [title, setTitle] = React57.useState(titleFormatter(format4(/* @__PURE__ */ new Date(), "yyyy-MM-dd HH:mm:ss")));
   const [titleError, setTitleError] = React57.useState("");
   const [formatType, setFormatType] = React57.useState("");
@@ -16046,15 +16035,15 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
   const [dataTableInterval, setDataTableInterval] = React57.useState("0");
   const [estimatedPagesCount, setEstimatedPagesCount] = React57.useState(1);
   const { timezone } = useUserSettings_default();
-  const getNumberOfMinutes = /* @__PURE__ */ __name((from, to, interval) => {
+  const getNumberOfMinutes = (from, to, interval) => {
     let count = 0;
     while (isBefore2(from, to) || isEqual2(from, to)) {
       count++;
       from = addMinutes2(from, interval);
     }
     return count;
-  }, "getNumberOfMinutes");
-  const calculateEstimatedPageCount = /* @__PURE__ */ __name(() => {
+  };
+  const calculateEstimatedPageCount = () => {
     let count = 1 + Math.ceil(props.selectedFormattedLocationsNum / 20);
     if (includedSections["locationSummaryTable" /* LOCATIONS_SUMMARY */].checked) {
       count += Math.ceil(props.selectedFormattedLocationsNum / 6);
@@ -16085,7 +16074,7 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
       count = Math.ceil(count / 5) * 5;
     }
     setEstimatedPagesCount(count);
-  }, "calculateEstimatedPageCount");
+  };
   React57.useEffect(() => {
     calculateEstimatedPageCount();
   }, [includedSections, dataTableInterval]);
@@ -16125,7 +16114,7 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
       description: "A summary of the device and date source information at each location in the graph."
     }
   ];
-  const disableGraphsAndAlarms = /* @__PURE__ */ __name((disabled) => {
+  const disableGraphsAndAlarms = (disabled) => {
     setIncludedSections({
       ...includedSections,
       ["graphsByThreshold" /* GRAPHS_BY_THRESHOLD */]: {
@@ -16139,8 +16128,8 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
         checked: disabled ? false : includedSections["alarms" /* ALARMS */].checked
       }
     });
-  }, "disableGraphsAndAlarms");
-  const toggleIncludedSection = /* @__PURE__ */ __name((key) => {
+  };
+  const toggleIncludedSection = (key) => {
     const prevChecked = includedSections[key].checked;
     if (prevChecked && includedSectionsCount > 1) {
       setIncludedSections({
@@ -16155,8 +16144,8 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
       });
       setIncludedSectionsCount(includedSectionsCount + 1);
     }
-  }, "toggleIncludedSection");
-  const generateReport = /* @__PURE__ */ __name(() => {
+  };
+  const generateReport = () => {
     const sections = {};
     for (const section in includedSections) {
       if (includedSections[section].checked && !includedSections[section].disabled) {
@@ -16181,8 +16170,8 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
     }).catch((e) => {
       console.error(e);
     });
-  }, "generateReport");
-  const renderSection = /* @__PURE__ */ __name((key) => <React57.Fragment key={key}>
+  };
+  const renderSection = (key) => <React57.Fragment key={key}>
     <Checkbox9
       data-testid={key}
       id="included-checkbox"
@@ -16198,9 +16187,9 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
       onSelect={(value) => setDataTableInterval(value)}
       disabled={!includedSections[key].checked}
     >{intervalValues.map((option) => <Select8.Option key={option.value} value={option.value}>{option.label}</Select8.Option>)}</Select8>}
-  </React57.Fragment>, "renderSection");
-  const toggleAboutContent = /* @__PURE__ */ __name(() => setShowAboutContent(!showAboutContent), "toggleAboutContent");
-  const onTitleChange = /* @__PURE__ */ __name((e) => {
+  </React57.Fragment>;
+  const toggleAboutContent = () => setShowAboutContent(!showAboutContent);
+  const onTitleChange = (e) => {
     const value = e.target.value;
     setTitle(value);
     if (value.length > MAX_TITLE_CHARACTERS) {
@@ -16208,7 +16197,7 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
     } else {
       setTitleError("");
     }
-  }, "onTitleChange");
+  };
   return <div data-testid="generate-report-dialog-id"><Modal5
     id="generate-report-dialog-id"
     htmlId="generate-report-dialog-id"
@@ -16310,26 +16299,26 @@ var GenerateReportDialog = /* @__PURE__ */ __name((props) => {
       </Flex30>)}
     </div>}
   </Modal5></div>;
-}, "GenerateReportDialog");
-var mapStateToProps13 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps13 = ({ reports }) => ({
   selectedFormattedLocations: reports.selectedFormattedLocations,
   selectedFormattedLocationsNum: reports.selectedLocationsNum,
   graphsNum: reports.graphsNum,
   intervalDate: reports.intervalDate,
   selectedLocationsIDs: reports.selectedLocationsIDs
-}), "mapStateToProps");
-var mapDispatchToProps11 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps11 = (dispatch) => ({
   setReportSelectedFormattedLocations: (locations) => dispatch(reportsDispatchActions.setReportSelectedFormattedLocations(locations)),
   setReportSelectedLocationsNum: (number) => dispatch(reportsDispatchActions.setReportSelectedLocationsNum(number)),
   setReportSelectedLocationsIDs: (IDs) => dispatch(reportsDispatchActions.setReportSelectedLocationsIDs(IDs))
-}), "mapDispatchToProps");
+});
 var GenerateReportDialog_default = connect14(mapStateToProps13, mapDispatchToProps11)(GenerateReportDialog);
 
 // ../vlncc-frontend/src/components/Reports/ConfirmationDialog/ConfirmationDialog.tsx
 import { Size as Size53, Modal as Modal6, Heading as Heading19, Button as Button39, Flex as Flex31 } from "@vaisala-rockhopper/components";
 import { useTranslation as useTranslation58 } from "react-i18next";
 import "./confirmation-dialog.scss";
-var ConfirmationDialog = /* @__PURE__ */ __name((props) => {
+var ConfirmationDialog = (props) => {
   const { t } = useTranslation58();
   return <div data-testid="confirmation-dialog-id"><Modal6
     id="confirmation-dialog-id"
@@ -16352,11 +16341,11 @@ var ConfirmationDialog = /* @__PURE__ */ __name((props) => {
       onClick={props.onDismiss}
     >{t("general.ok")}</Button39></Flex31>
   </Modal6></div>;
-}, "ConfirmationDialog");
+};
 var ConfirmationDialog_default = ConfirmationDialog;
 
 // ../vlncc-frontend/src/components/Reports/LocationsFilterBar/LocationsFilterBar.tsx
-var LocationsFilterBar = /* @__PURE__ */ __name(({
+var LocationsFilterBar = ({
   setReportIntervalDate: setReportIntervalDate2,
   intervalDate,
   selectedLocationsNum
@@ -16475,7 +16464,7 @@ var LocationsFilterBar = /* @__PURE__ */ __name(({
       text: t("reports.filterBar.1month")
     }
   ];
-  const changeDatesFilters = /* @__PURE__ */ __name((timeSpan) => {
+  const changeDatesFilters = (timeSpan) => {
     switch (timeSpan) {
       case "24hr" /* ONE_DAY */:
         setLocationsFilter({
@@ -16507,12 +16496,12 @@ var LocationsFilterBar = /* @__PURE__ */ __name(({
       default:
         break;
     }
-  }, "changeDatesFilters");
-  const isTimeBeforeTime = /* @__PURE__ */ __name((time1, time2) => {
+  };
+  const isTimeBeforeTime = (time1, time2) => {
     const date1 = /* @__PURE__ */ new Date(`2010-01-01 ${time1}`);
     const date2 = /* @__PURE__ */ new Date(`2010-01-01 ${time2}`);
     return isBefore3(date1, date2);
-  }, "isTimeBeforeTime");
+  };
   return <div id="locations-filter-bar" data-testid="locations-filter-bar">
     <div id="locations-filter-bar-left-item" className="item-left">
       <Flex32 alignItems="flex-end" className="filter-span-wrapper">{timeSpanButtons.map((btnOptions) => <Button40
@@ -16606,14 +16595,14 @@ var LocationsFilterBar = /* @__PURE__ */ __name(({
       />}
     </div>
   </div>;
-}, "LocationsFilterBar");
-var mapDispatchToProps12 = /* @__PURE__ */ __name((dispatch) => ({
+};
+var mapDispatchToProps12 = (dispatch) => ({
   setReportIntervalDate: (interval) => dispatch(reportsDispatchActions.setReportIntervalDate(interval))
-}), "mapDispatchToProps");
-var mapStateToProps14 = /* @__PURE__ */ __name(({ reports }) => ({
+});
+var mapStateToProps14 = ({ reports }) => ({
   intervalDate: reports.intervalDate,
   selectedLocationsNum: reports.selectedLocationsNum
-}), "mapStateToProps");
+});
 var LocationsFilterBar_default = connect15(mapStateToProps14, mapDispatchToProps12)(LocationsFilterBar);
 
 // ../vlncc-frontend/src/components/Reports/Graph/Graph.tsx
@@ -16654,7 +16643,7 @@ import {
 import * as React59 from "react";
 import { connect as connect16 } from "react-redux";
 import "./chart-interval-arrows.scss";
-var ChartIntervalArrows = /* @__PURE__ */ __name(({
+var ChartIntervalArrows = ({
   reports,
   setReportIntervalDate: setReportIntervalDate2,
   stepInterval
@@ -16674,7 +16663,7 @@ var ChartIntervalArrows = /* @__PURE__ */ __name(({
       prevFull: subSeconds(reports.intervalDate.from, stepInterval.fullStep)
     });
   }, [stepInterval]);
-  const moveGraphInterval = /* @__PURE__ */ __name((direction, stepSize = "quarter" /* QUARTER */) => {
+  const moveGraphInterval = (direction, stepSize = "quarter" /* QUARTER */) => {
     const interval = stepSize === "quarter" /* QUARTER */ ? stepInterval.quarterStep : stepInterval.fullStep;
     if (direction === "left" /* LEFT */) {
       setReportIntervalDate2({
@@ -16694,7 +16683,7 @@ var ChartIntervalArrows = /* @__PURE__ */ __name(({
         to: toDate
       });
     }
-  }, "moveGraphInterval");
+  };
   return <Flex33 className="date-wrapper" alignItems="center" justifyContent="space-around">
     <Icon33
       size={Size55.L}
@@ -16732,17 +16721,17 @@ var ChartIntervalArrows = /* @__PURE__ */ __name(({
       onClick={() => moveGraphInterval("right-edge" /* RIGHT_EDGE */)}
     />
   </Flex33>;
-}, "ChartIntervalArrows");
-var mapStateToProps15 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps15 = ({ reports }) => ({
   reports
-}), "mapStateToProps");
-var mapDispatchToProps13 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps13 = (dispatch) => ({
   setReportIntervalDate: (interval) => dispatch(reportsDispatchActions.setReportIntervalDate(interval))
-}), "mapDispatchToProps");
+});
 var ChartIntervalArrows_default = connect16(mapStateToProps15, mapDispatchToProps13)(ChartIntervalArrows);
 
 // ../vlncc-frontend/src/components/Reports/Chart/Chart.tsx
-var Chart = /* @__PURE__ */ __name(({
+var Chart = ({
   reports,
   id,
   syncKey,
@@ -16769,7 +16758,6 @@ var Chart = /* @__PURE__ */ __name(({
       img.onerror = reject;
     });
   }
-  __name(loadIcon, "loadIcon");
   async function drawThreshold(u, si) {
     const ctx = u.ctx;
     const measurement_points = locations[si - 1].measurement_points;
@@ -16803,7 +16791,6 @@ var Chart = /* @__PURE__ */ __name(({
       const img = await loadIcon(label.lineColorProps.icon);
       ctx.drawImage(img, iconXPos, rectY + 2, iconWidth, 25);
     }
-    __name(drawLabel, "drawLabel");
     for (let i = 0; i < measurement_points.length; i++) {
       const s = u.series[si];
       const object = measurement_points[i].threshold_settings;
@@ -16851,7 +16838,6 @@ var Chart = /* @__PURE__ */ __name(({
       await drawLabel(labels[type]);
     }
   }
-  __name(drawThreshold, "drawThreshold");
   function addAxesLabels(u) {
     const axesArr = document.querySelectorAll(`#${id} .u-axis`);
     u.axes.forEach((axis, i) => {
@@ -16863,15 +16849,14 @@ var Chart = /* @__PURE__ */ __name(({
       }
     });
   }
-  __name(addAxesLabels, "addAxesLabels");
-  const changeThresholdValue = /* @__PURE__ */ __name((node) => {
+  const changeThresholdValue = (node) => {
     const selectedLocationsClone = JSON.parse(JSON.stringify(reports.selectedLocationsCustomProps));
     if (selectedLocationsClone[node.node_id]) {
       selectedLocationsClone[node.node_id].showThreshold = !selectedLocationsClone[node.node_id].showThreshold;
       setReportsSelectedLocationsCustomProps(selectedLocationsClone);
     }
-  }, "changeThresholdValue");
-  const tooltipPlugin = /* @__PURE__ */ __name(({ shiftX = 10, shiftY = 10, onclick }) => {
+  };
+  const tooltipPlugin = ({ shiftX = 10, shiftY = 10, onclick }) => {
     let tooltipLeftOffset = 0;
     let tooltipTopOffset = 0;
     const tooltip = document.createElement("div");
@@ -16892,7 +16877,6 @@ var Chart = /* @__PURE__ */ __name(({
         tooltipVisible = true;
       }
     }
-    __name(showTooltip, "showTooltip");
     function hideTooltip() {
       if (tooltipVisible) {
         tooltip.style.display = "none";
@@ -16900,7 +16884,6 @@ var Chart = /* @__PURE__ */ __name(({
         tooltipVisible = false;
       }
     }
-    __name(hideTooltip, "hideTooltip");
     function generateTooltipSortedData(u) {
       const tooltipData = {};
       for (let i = 1; i < u.data.length; i++) {
@@ -16953,7 +16936,6 @@ var Chart = /* @__PURE__ */ __name(({
       });
       return contentHTML;
     }
-    __name(generateTooltipSortedData, "generateTooltipSortedData");
     function generateTooltipContent(u) {
       const tooltipWrapper = document.createElement("div");
       tooltipWrapper.classList.add("tooltip-content");
@@ -16965,7 +16947,6 @@ var Chart = /* @__PURE__ */ __name(({
       tooltipWrapper.appendChild(contentHTML);
       return tooltipWrapper;
     }
-    __name(generateTooltipContent, "generateTooltipContent");
     function setTooltip(u) {
       showTooltip();
       const lft = u.cursor.left;
@@ -16992,7 +16973,6 @@ var Chart = /* @__PURE__ */ __name(({
       const tooltipContent = generateTooltipContent(u);
       tooltip.appendChild(tooltipContent);
     }
-    __name(setTooltip, "setTooltip");
     return {
       hooks: {
         ready: [
@@ -17120,7 +17100,7 @@ var Chart = /* @__PURE__ */ __name(({
         ]
       }
     };
-  }, "tooltipPlugin");
+  };
   const xAxisOptions = {
     splits(self, axisIdx, scaleMin, scaleMax) {
       const fullStep = getUnixTime3(reports.intervalDate.to) - getUnixTime3(reports.intervalDate.from);
@@ -17208,11 +17188,11 @@ var Chart = /* @__PURE__ */ __name(({
     }, [])
   );
   const [chartData, setChartData] = React60.useState([[], []]);
-  const focusColorSwitch = /* @__PURE__ */ __name((focused, unfocused) => (u, idx) => {
+  const focusColorSwitch = (focused, unfocused) => (u, idx) => {
     const series = u.series[idx];
     return series._focus === false ? unfocused : focused;
-  }, "focusColorSwitch");
-  const getScalesOptions = /* @__PURE__ */ __name(() => {
+  };
+  const getScalesOptions = () => {
     const options2 = {};
     if (units?.length > 0) {
       units.forEach((unit) => {
@@ -17234,7 +17214,7 @@ var Chart = /* @__PURE__ */ __name(({
       };
     }
     return options2;
-  }, "getScalesOptions");
+  };
   React60.useEffect(() => {
     setOptions((oldOptions) => ({
       ...oldOptions,
@@ -17248,14 +17228,14 @@ var Chart = /* @__PURE__ */ __name(({
       axes: [{ ...xAxisOptions }, { ...yAxisOptions }]
     }));
   }, [reports.intervalDate]);
-  const bindHandler = /* @__PURE__ */ __name((u, targ, handler) => {
+  const bindHandler = (u, targ, handler) => {
     return (e) => {
       const locationIndInAllCharts = allLocations.findIndex((loc) => loc.showThreshold);
       if (locationIndInAllCharts === -1) {
         handler(e);
       }
     };
-  }, "bindHandler");
+  };
   React60.useEffect(() => {
     const newOptions = {
       ...options,
@@ -17333,7 +17313,6 @@ var Chart = /* @__PURE__ */ __name(({
         setOptions({ ...options, width: document.getElementById(id).getBoundingClientRect().width });
       }
     }
-    __name(resizeChart, "resizeChart");
     window.addEventListener("resize", (e) => {
       if (resizeTimeout)
         clearTimeout(resizeTimeout);
@@ -17357,18 +17336,18 @@ var Chart = /* @__PURE__ */ __name(({
     })}</span></Flex34>}
     <UPlotReact key={id} options={options} data={chartData} />
   </Flex34>;
-}, "Chart");
-var mapStateToProps16 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps16 = ({ reports }) => ({
   reports
-}), "mapStateToProps");
-var mapDispatchToProps14 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps14 = (dispatch) => ({
   setReportsSelectedFormattedLocations: (locations) => dispatch(reportsDispatchActions.setReportSelectedFormattedLocations(locations)),
   setReportsSelectedLocationsCustomProps: (locations) => dispatch(reportsDispatchActions.setReportSelectedLocationsCustomProps(locations))
-}), "mapDispatchToProps");
+});
 var Chart_default = connect17(mapStateToProps16, mapDispatchToProps14)(Chart);
 
 // ../vlncc-frontend/src/components/Reports/Graph/Graph.tsx
-var Graph = /* @__PURE__ */ __name((props) => {
+var Graph = (props) => {
   const initialChartsData = [
     {
       units: [],
@@ -17382,7 +17361,7 @@ var Graph = /* @__PURE__ */ __name((props) => {
   const [allUnits, setAllUnits] = React61.useState([]);
   const [timestamps, setTimestamps] = React61.useState(/* @__PURE__ */ new Set());
   const [syncKey, setSyncKey] = React61.useState(null);
-  const formatData = /* @__PURE__ */ __name((locations) => {
+  const formatData = (locations) => {
     const formattedData = {};
     locations.forEach(
       (location, index) => {
@@ -17398,8 +17377,8 @@ var Graph = /* @__PURE__ */ __name((props) => {
       }
     );
     return formattedData;
-  }, "formatData");
-  const getAllLocationsAndUnits = /* @__PURE__ */ __name((data) => {
+  };
+  const getAllLocationsAndUnits = (data) => {
     const locations = [];
     const units = [];
     for (const key in data) {
@@ -17411,8 +17390,8 @@ var Graph = /* @__PURE__ */ __name((props) => {
       }
     }
     return [locations, units];
-  }, "getAllLocationsAndUnits");
-  const getDataForEachChart = /* @__PURE__ */ __name((moreThanOne = true) => {
+  };
+  const getDataForEachChart = (moreThanOne = true) => {
     const timestamps2 = /* @__PURE__ */ new Set();
     allLocations.forEach((loc) => {
       loc.measurement_points.forEach((point) => timestamps2.add(point.t));
@@ -17459,8 +17438,8 @@ var Graph = /* @__PURE__ */ __name((props) => {
       });
       return chartsData2;
     }
-  }, "getDataForEachChart");
-  const determineChartsCount = /* @__PURE__ */ __name(() => {
+  };
+  const determineChartsCount = () => {
     let chartsData2 = [];
     if (allUnits.length > 2 || allUnits.includes("celcius" /* CELSIUS */) && allUnits.includes("farenheit" /* FAHRENHEIT */)) {
       props.setReportGraphsNum(2);
@@ -17473,7 +17452,7 @@ var Graph = /* @__PURE__ */ __name((props) => {
       setChartsUnits([allUnits]);
       setChartsLocations([allLocations]);
     }
-  }, "determineChartsCount");
+  };
   React61.useEffect(() => {
     if (props.selectedLocationsNum > 0) {
       const [locations, units] = getAllLocationsAndUnits(props.selectedLocationsCustomProps);
@@ -17528,17 +17507,17 @@ var Graph = /* @__PURE__ */ __name((props) => {
     allLocations={chartsLocations.flat(1)}
     units={chartsUnits[ind]}
   /></div>) : <div id="chart-empty" data-testid="chart-instance"><Chart_default id="chart-empty" data={[]} locations={[]} allLocations={[]} units={[]} /></div>}</div>;
-}, "Graph");
-var mapStateToProps17 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps17 = ({ reports }) => ({
   selectedFormattedLocations: reports.selectedFormattedLocations,
   selectedLocationsNum: reports.selectedLocationsNum,
   intervalDate: reports.intervalDate,
   selectedLocationsIDs: reports.selectedLocationsIDs,
   selectedLocationsCustomProps: reports.selectedLocationsCustomProps
-}), "mapStateToProps");
-var mapDispatchToProps15 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps15 = (dispatch) => ({
   setReportGraphsNum: (num) => dispatch(reportsDispatchActions.setReportGraphsNum(num))
-}), "mapDispatchToProps");
+});
 var Graph_default = connect18(mapStateToProps17, mapDispatchToProps15)(Graph);
 
 // ../vlncc-frontend/src/components/Reports/Statistics/Statistics.tsx
@@ -17547,9 +17526,9 @@ import { DataTable as DataTable4, Flex as Flex35, TableSortDirection } from "@va
 import "./statistics-table.scss";
 import { useTranslation as useTranslation61 } from "react-i18next";
 import { connect as connect19 } from "react-redux";
-var NullOrValueFormatter = /* @__PURE__ */ __name(({ value }) => {
+var NullOrValueFormatter = ({ value }) => {
   return value === null ? <span title="-">-</span> : <span title={`${value}`}>{value}</span>;
-}, "NullOrValueFormatter");
+};
 var headerCells3 = [
   { key: "location", sortable: true, name: "Location", width: 200 },
   { key: "unit", sortable: true, name: "Unit" },
@@ -17558,10 +17537,10 @@ var headerCells3 = [
   { key: "minimum", sortable: true, name: "Minimum", formatter: <NullOrValueFormatter /> },
   { key: "maximum", sortable: true, name: "Maximum", formatter: <NullOrValueFormatter /> }
 ];
-var Statistics = /* @__PURE__ */ __name((props) => {
+var Statistics = (props) => {
   const { selectedFormattedLocations, assignedColors, selectedLocationsCustomProps } = props;
   const { t } = useTranslation61();
-  const createRows = /* @__PURE__ */ __name((data2 = selectedFormattedLocations, locations = []) => {
+  const createRows = (data2 = selectedFormattedLocations, locations = []) => {
     let selectedLocations = [...locations];
     sortLocationsOnTopOfZones(data2).forEach((node) => {
       if (Object.keys(node.children).length > 0) {
@@ -17592,7 +17571,7 @@ var Statistics = /* @__PURE__ */ __name((props) => {
       }
     });
     return selectedLocations;
-  }, "createRows");
+  };
   const [data, setData] = React62.useState({ rows: createRows() });
   const [tableHeaders, setTableHeaders] = React62.useState(headerCells3);
   React62.useEffect(() => {
@@ -17602,8 +17581,7 @@ var Statistics = /* @__PURE__ */ __name((props) => {
   function rowGetter(rowIdx) {
     return data.rows[rowIdx];
   }
-  __name(rowGetter, "rowGetter");
-  const onSort = /* @__PURE__ */ __name((column, direction) => {
+  const onSort = (column, direction) => {
     const multiplier = direction === TableSortDirection.Descending ? 1 : -1;
     const rows = data.rows.slice().sort((a, b) => {
       if (column === "location") {
@@ -17617,7 +17595,7 @@ var Statistics = /* @__PURE__ */ __name((props) => {
       return (a[column] == b[column] ? 0 : a[column] < b[column] ? 1 : -1) * multiplier;
     });
     setData({ rows });
-  }, "onSort");
+  };
   return <div data-testid="statistics-wrapper">
     <DataTable4
       columns={tableHeaders.map((cell) => {
@@ -17634,24 +17612,24 @@ var Statistics = /* @__PURE__ */ __name((props) => {
       /* {isLoading && <div className={'load-more-rows'}> {t('events.table.loading')}</div>} */
     }
   </div>;
-}, "Statistics");
-var mapStateToProps18 = /* @__PURE__ */ __name(({ reports }) => ({
+};
+var mapStateToProps18 = ({ reports }) => ({
   selectedFormattedLocations: reports.selectedFormattedLocations,
   selectedLocationsCustomProps: reports.selectedLocationsCustomProps,
   assignedColors: reports.assignedChartColors,
   isLoading: reports.isApiLoading
-}), "mapStateToProps");
+});
 var Statistics_default = connect19(mapStateToProps18)(Statistics);
 
 // ../vlncc-frontend/src/containers/Reports.tsx
-var mapStateToProps19 = /* @__PURE__ */ __name(({ general }) => ({
+var mapStateToProps19 = ({ general }) => ({
   language: general.language
-}), "mapStateToProps");
-var mapDispatchToProps16 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps16 = (dispatch) => ({
   resetReportsState: () => dispatch(reportsDispatchActions.resetReportsState()),
   setIntervalDate: (interval) => dispatch(reportsDispatchActions.setReportIntervalDate(interval))
-}), "mapDispatchToProps");
-var ReportsContainer = /* @__PURE__ */ __name((props) => {
+});
+var ReportsContainer = (props) => {
   const reportsTabs = [
     {
       tabKey: "graph",
@@ -17684,23 +17662,23 @@ var ReportsContainer = /* @__PURE__ */ __name((props) => {
       </Route4></Routes4>
     </Paper8></Grid4.Col>
   </Grid4.Row></Grid4></PageContainer2.Content>;
-}, "ReportsContainer");
+};
 var Reports_default = connect20(mapStateToProps19, mapDispatchToProps16)(ReportsContainer);
 
 // ../vlncc-frontend/src/containers/DeviceManagerContainer.tsx
 import * as React65 from "react";
-import { Navigate as Navigate4, Route as Route5, Routes as Routes5, useNavigate as useNavigate11, useParams as useParams12 } from "react-router";
+import { Navigate as Navigate4, Route as Route5, Routes as Routes5, useNavigate as useNavigate11, useParams as useParams11 } from "react-router";
 import { Flex as Flex38, PageContainer as PageContainer3 } from "@vaisala-rockhopper/components";
 
 // ../vlncc-frontend/src/components/DeviceManager/DeviceManagerLinks.tsx
 import { useTranslation as useTranslation62 } from "react-i18next";
-import { useParams as useParams8 } from "react-router-dom";
+import { useParams as useParams7 } from "react-router-dom";
 
 // ../vlncc-frontend/src/components/DeviceManager/DeviceManagerProperties.tsx
 import { useTranslation as useTranslation63 } from "react-i18next";
-import { useParams as useParams9 } from "react-router-dom";
-var DeviceManagerProperties = /* @__PURE__ */ __name(({ hasDevices }) => {
-  const { id } = useParams9();
+import { useParams as useParams8 } from "react-router-dom";
+var DeviceManagerProperties = ({ hasDevices }) => {
+  const { id } = useParams8();
   const { t } = useTranslation63();
   const isLoading = false;
   if (isLoading) {
@@ -17714,14 +17692,14 @@ var DeviceManagerProperties = /* @__PURE__ */ __name(({ hasDevices }) => {
     />;
   }
   return <></>;
-}, "DeviceManagerProperties");
+};
 var DeviceManagerProperties_default = DeviceManagerProperties;
 
 // ../vlncc-frontend/src/components/DeviceManager/DeviceManagerStatus.tsx
 import { useTranslation as useTranslation64 } from "react-i18next";
-import { useParams as useParams10 } from "react-router-dom";
-var DeviceManagerStatus = /* @__PURE__ */ __name(({ hasDevices }) => {
-  const { id } = useParams10();
+import { useParams as useParams9 } from "react-router-dom";
+var DeviceManagerStatus = ({ hasDevices }) => {
+  const { id } = useParams9();
   const { t } = useTranslation64();
   const isLoading = false;
   if (isLoading) {
@@ -17735,7 +17713,7 @@ var DeviceManagerStatus = /* @__PURE__ */ __name(({ hasDevices }) => {
     />;
   }
   return <></>;
-}, "DeviceManagerStatus");
+};
 var DeviceManagerStatus_default = DeviceManagerStatus;
 
 // ../vlncc-frontend/src/components/DeviceManager/DeviceManager.tsx
@@ -17758,10 +17736,10 @@ import {
 import cx7 from "classnames";
 import RFL100_no_cable2 from "../../assets/images/RFL100_no_cable.png";
 import CA10_small_antenna2 from "../../assets/images/CA10_small_antenna.png";
-import { useNavigate as useNavigate9, useParams as useParams11 } from "react-router";
+import { useNavigate as useNavigate9, useParams as useParams10 } from "react-router";
 import "./device-manager.scss";
 var HTML_ID_PROPS = { htmlId: "device-manager", separator: "-" };
-var DeviceManager = /* @__PURE__ */ __name(({
+var DeviceManager = ({
   hasDevices,
   devices,
   isLoading,
@@ -17773,7 +17751,7 @@ var DeviceManager = /* @__PURE__ */ __name(({
 }) => {
   const { t } = useTranslation65();
   const { getId } = useHtmlId_default(HTML_ID_PROPS);
-  const params = useParams11();
+  const params = useParams10();
   const id = params["*"] ? params["*"].split("/").splice(-1)[0] : null;
   const navigate = useNavigate9();
   const [searchCriteria, setSearchCriteria] = React64.useState("");
@@ -17784,28 +17762,28 @@ var DeviceManager = /* @__PURE__ */ __name(({
   React64.useEffect(() => {
     setFilteredResults(devices);
   }, [devices]);
-  const filter = /* @__PURE__ */ __name((e) => {
+  const filter = (e) => {
     const keyword = e.target.value;
     setSearchCriteria(keyword);
-  }, "filter");
+  };
   const hasSearch = Boolean(searchCriteria);
   const hasFilter = filterByStatus !== "ALL" /* ALL */ && filterByDevice !== "ALL" /* ALL */;
-  const handleFilterByDeviceChange = /* @__PURE__ */ __name((value) => setFilterByDevice(value), "handleFilterByDeviceChange");
-  const handleFilterByStatusChange = /* @__PURE__ */ __name((value) => setFilterByStatus(value), "handleFilterByStatusChange");
-  const handleSortByChange = /* @__PURE__ */ __name((value) => setSortBy(value), "handleSortByChange");
+  const handleFilterByDeviceChange = (value) => setFilterByDevice(value);
+  const handleFilterByStatusChange = (value) => setFilterByStatus(value);
+  const handleSortByChange = (value) => setSortBy(value);
   const deviceTypeSelectId = getId("device-type-select");
   const deviceStatusSelectId = getId("device-status-select");
   const sortSelectId = getId("sort");
-  const getDeviceListItemClassName = /* @__PURE__ */ __name((device) => {
+  const getDeviceListItemClassName = (device) => {
     return cx7("vai-padding-vertical-s device-list-item", { "user-selected-row": device.device_id === id });
-  }, "getDeviceListItemClassName");
-  const handleListItemClick = /* @__PURE__ */ __name((deviceId) => () => {
+  };
+  const handleListItemClick = (deviceId) => () => {
     let route = currentRoute();
     route = route.split("/")[0];
     id !== deviceId && navigate(`${route}/${deviceId}`);
-  }, "handleListItemClick");
-  const refreshResults = /* @__PURE__ */ __name(() => refetch(), "refreshResults");
-  const getIcon2 = /* @__PURE__ */ __name((device) => {
+  };
+  const refreshResults = () => refetch();
+  const getIcon2 = (device) => {
     const [icon, color] = DEVICE_STATE_ICON_INFO[device.state];
     return icon ? <Icon34
       data-testid={TEST_IDS.device_manager_device_list_item_device_status_icon}
@@ -17814,7 +17792,7 @@ var DeviceManager = /* @__PURE__ */ __name(({
       color={color}
       size={Size56.XS}
     /> : null;
-  }, "getIcon");
+  };
   return <Paper9 id={getId("container")} className="device-manager">
     <div id={getId("top")} className="vai-margin-bottom-m vai-margin-horizontal-m">
       <h3 id={getId("heading")} className="vai-margin-bottom-m">{t("deviceManager.heading")}</h3>
@@ -17938,22 +17916,22 @@ var DeviceManager = /* @__PURE__ */ __name(({
       </ListItem2>;
     })}</List2>}</div>
   </Paper9>;
-}, "DeviceManager");
+};
 var DeviceManager_default = DeviceManager;
 
 // ../vlncc-frontend/src/components/AccessRestricted/AccessRestricted.tsx
 import { useTranslation as useTranslation66 } from "react-i18next";
 import { Button as Button42, Flex as Flex37, Stack as Stack4 } from "@vaisala-rockhopper/components";
 import { useNavigate as useNavigate10 } from "react-router-dom";
-var AccessRestricted = /* @__PURE__ */ __name(({ htmlId: htmlId3 = "access-restricted" }) => {
+var AccessRestricted = ({ htmlId: htmlId3 = "access-restricted" }) => {
   const { t } = useTranslation66();
   const appName2 = APP_NAME;
   const companyName = getConstantFromLocalStorage(LS_COMPANY_NAME);
   const navigate = useNavigate10();
   const { getId } = useHtmlId_default({ htmlId: htmlId3, separator: "-" });
-  const goToSites = /* @__PURE__ */ __name(() => {
+  const goToSites = () => {
     navigate(routes.site.url);
-  }, "goToSites");
+  };
   return <Flex37
     id={getId("container")}
     flexWrap="wrap"
@@ -17981,7 +17959,7 @@ var AccessRestricted = /* @__PURE__ */ __name(({ htmlId: htmlId3 = "access-restr
       /* {isDevelopment() ? <pre className="vai-margin-left-m">{error?.stack}</pre> : null} */
     }
   </Flex37>;
-}, "AccessRestricted");
+};
 var AccessRestricted_default = AccessRestricted;
 
 // ../vlncc-frontend/src/containers/DeviceManagerContainer.tsx
@@ -18005,9 +17983,9 @@ var deviceManagerNavigationTabs = [
     translationKey: "deviceManager.tab.title.properties"
   }
 ];
-var DeviceManagerContainer = /* @__PURE__ */ __name((props) => {
+var DeviceManagerContainer = (props) => {
   const navigate = useNavigate11();
-  const params = useParams12();
+  const params = useParams11();
   const { getId } = useHtmlId_default({ htmlId: "device-manager" });
   const customerId = getConstantFromLocalStorage(LS_COMPANY_CUSTOMER_ID);
   const siteId = PARENT_SITE_KEY;
@@ -18072,7 +18050,7 @@ var DeviceManagerContainer = /* @__PURE__ */ __name((props) => {
     </Flex38>
     {props.children}
   </PageContainer3.Content>;
-}, "DeviceManagerContainer");
+};
 var DeviceManagerContainer_default = DeviceManagerContainer;
 
 // ../vlncc-frontend/src/components/Error/Error500.tsx
@@ -18080,13 +18058,13 @@ import React66 from "react";
 import { useTranslation as useTranslation67 } from "react-i18next";
 import { Button as Button43, Flex as Flex39 } from "@vaisala-rockhopper/components";
 import { useLocation as useLocation10 } from "react-router-dom";
-var Error500 = /* @__PURE__ */ __name(({ error, resetErrorBoundary }) => {
+var Error500 = ({ error, resetErrorBoundary }) => {
   const { t } = useTranslation67();
   const location = useLocation10();
   const errorLocation = React66.useRef(location.pathname);
-  const reload = /* @__PURE__ */ __name(() => {
+  const reload = () => {
     window.location.reload();
-  }, "reload");
+  };
   React66.useEffect(() => {
     if (location.pathname !== errorLocation.current) {
       resetErrorBoundary(null);
@@ -18106,7 +18084,7 @@ var Error500 = /* @__PURE__ */ __name(({ error, resetErrorBoundary }) => {
       /* {isDevelopment() ? <pre className="vai-margin-left-m">{error?.stack}</pre> : null} */
     }
   </Flex39>;
-}, "Error500");
+};
 var Error500_default = Error500;
 
 // ../vlncc-frontend/src/components/Utils/Feedback/index.tsx
@@ -18114,7 +18092,7 @@ import { Anchor, Flex as Flex40, Icon as Icon35 } from "@vaisala-rockhopper/comp
 import { useTranslation as useTranslation68 } from "react-i18next";
 import { VaiIcon as VaiIcon25 } from "@vaisala-rockhopper/design-tokens";
 import "./feedback.scss";
-var Feedback = /* @__PURE__ */ __name(() => {
+var Feedback = () => {
   const { t } = useTranslation68();
   return <Anchor
     className="feedback-toast vai-font-size-xs vai-padding-vertical-s vai-padding-horizontal-xl"
@@ -18124,7 +18102,7 @@ var Feedback = /* @__PURE__ */ __name(() => {
     <Icon35 htmlId="feedback-toast" className="vai-margin-right-xs" name={VaiIcon25.HelpO} />
     {t("general.feedback")}
   </Flex40></Anchor>;
-}, "Feedback");
+};
 var Feedback_default = Feedback;
 
 // ../vlncc-frontend/src/components/Reports/DownloadReport/DownloadReport.tsx
@@ -18134,7 +18112,7 @@ import { parse as parse3 } from "querystring";
 import { NotificationType as NotificationType5 } from "@vaisala-rockhopper/components";
 import "./download-report.scss";
 import { useTranslation as useTranslation69 } from "react-i18next";
-var DownloadReport = /* @__PURE__ */ __name(() => {
+var DownloadReport = () => {
   const location = useLocation11();
   const navigate = useNavigate12();
   const { t } = useTranslation69();
@@ -18151,7 +18129,7 @@ var DownloadReport = /* @__PURE__ */ __name(() => {
   const [downloadUrl, setDownloadUrl] = React67.useState("");
   const [filename, setFilename] = React67.useState("");
   const anchorRef = React67.useRef(null);
-  const showErrorNotification = /* @__PURE__ */ __name(() => {
+  const showErrorNotification = () => {
     dispatch(
       addNotification({
         type: NotificationType5.Error,
@@ -18159,7 +18137,7 @@ var DownloadReport = /* @__PURE__ */ __name(() => {
         duration: 4
       })
     );
-  }, "showErrorNotification");
+  };
   React67.useEffect(() => {
     const { reportInstanceId, title } = parse3(location.search.substring(1));
     if (title) {
@@ -18209,7 +18187,7 @@ var DownloadReport = /* @__PURE__ */ __name(() => {
     {isFetchingUrl || isFetchingFile ? <CenteredSpinner_default /> : <></>}
     <a id="download-link" href={downloadUrl} ref={anchorRef} />
   </>;
-}, "DownloadReport");
+};
 var DownloadReport_default = DownloadReport;
 
 // ../vlncc-frontend/src/hooks/useSessionRefresh.tsx
@@ -18218,7 +18196,7 @@ import React69 from "react";
 
 // ../vlncc-frontend/src/hooks/useInterval.tsx
 import React68 from "react";
-var useInterval = /* @__PURE__ */ __name(({ callback, delay }) => {
+var useInterval = ({ callback, delay }) => {
   const intervalRef = React68.useRef();
   const callbackRef = React68.useRef(callback);
   React68.useEffect(() => {
@@ -18229,15 +18207,15 @@ var useInterval = /* @__PURE__ */ __name(({ callback, delay }) => {
     return () => window.clearInterval(intervalRef.current);
   }, []);
   return intervalRef;
-}, "useInterval");
+};
 var useInterval_default = useInterval;
 
 // ../vlncc-frontend/src/hooks/useSessionRefresh.tsx
 var DEFAULT_REFRESH_SECONDS = 1e3 * 60 * 5;
-var useSessionRefresh = /* @__PURE__ */ __name(({ refreshMs }) => {
+var useSessionRefresh = ({ refreshMs }) => {
   const isExpired = React69.useRef(true);
   const _refreshMs = refreshMs || DEFAULT_REFRESH_SECONDS;
-  const checkSession = /* @__PURE__ */ __name(async () => {
+  const checkSession = async () => {
     let _isExpired = isExpired.current;
     try {
       await Auth8.currentSession();
@@ -18247,14 +18225,14 @@ var useSessionRefresh = /* @__PURE__ */ __name(({ refreshMs }) => {
       _isExpired = true;
     }
     isExpired.current = _isExpired;
-  }, "checkSession");
+  };
   useInterval_default({ callback: checkSession, delay: _refreshMs });
   return { checkSession, isExpired: isExpired.current };
-}, "useSessionRefresh");
+};
 var useSessionRefresh_default = useSessionRefresh;
 
 // ../vlncc-frontend/src/components/Main.tsx
-var MainContent = /* @__PURE__ */ __name(() => {
+var MainContent = () => {
   return <ErrorBoundary key={window.location.pathname} fallbackRender={(props) => <Error500_default {...props} />}>
     {
       /* eslint-disable-next-line enforce-ids-in-jsx/missing-ids */
@@ -18270,9 +18248,9 @@ var MainContent = /* @__PURE__ */ __name(() => {
     </Routes6>
     <Feedback_default />
   </ErrorBoundary>;
-}, "MainContent");
+};
 var MemoizedMainContent = React70.memo(MainContent);
-var Main = /* @__PURE__ */ __name(({ displaySize, windowSize, deviceType }) => {
+var Main = ({ displaySize, windowSize, deviceType }) => {
   const [navigationCollapsed, setNavigationCollapsed] = React70.useState(false);
   const [pageContentScrollStatus, setPageContentScrollStatus] = React70.useState(ScrollStatus2.Top);
   const dispatch = useAppDispatch();
@@ -18287,10 +18265,10 @@ var Main = /* @__PURE__ */ __name(({ displaySize, windowSize, deviceType }) => {
       !navigationCollapsed && setNavigationCollapsed(true);
     }
   }, [displaySize]);
-  const onCollapseChange = /* @__PURE__ */ __name((navigationCollapsed2) => setNavigationCollapsed(navigationCollapsed2), "onCollapseChange");
-  const onPageContentScrollStatusChange = /* @__PURE__ */ __name((pageContentScrollStatus2) => {
+  const onCollapseChange = (navigationCollapsed2) => setNavigationCollapsed(navigationCollapsed2);
+  const onPageContentScrollStatusChange = (pageContentScrollStatus2) => {
     setPageContentScrollStatus(pageContentScrollStatus2);
-  }, "onPageContentScrollStatusChange");
+  };
   return <LoginRedirect_default><TimeContextProvider>
     <Navigation_default collapsed={navigationCollapsed} onCollapseChange={onCollapseChange} />
     <PageContainer4>
@@ -18303,7 +18281,7 @@ var Main = /* @__PURE__ */ __name(({ displaySize, windowSize, deviceType }) => {
       </PageContainer4.Content>
     </PageContainer4>
   </TimeContextProvider></LoginRedirect_default>;
-}, "Main");
+};
 var Main_default = withDisplaySize(Main);
 
 // ../vlncc-frontend/src/containers/Login.tsx
@@ -18325,9 +18303,9 @@ import PT from "../../../assets/flags/pt-BR.svg";
 import CN from "../../../assets/flags/zh-CN.svg";
 import SE from "../../../assets/flags/sv-SE.svg";
 import "./select-language-header.scss";
-var SelectLanguageHeader = /* @__PURE__ */ __name((props) => {
+var SelectLanguageHeader = (props) => {
   const { language, changeLanguage: changeLanguage2 } = props;
-  const getSRC = /* @__PURE__ */ __name((src) => {
+  const getSRC = (src) => {
     switch (src) {
       case "en-US" /* en */:
         return enUS;
@@ -18350,12 +18328,12 @@ var SelectLanguageHeader = /* @__PURE__ */ __name((props) => {
       case "zh-CN" /* zhcn */:
         return CN;
     }
-  }, "getSRC");
-  const onChangeLanguageClick = /* @__PURE__ */ __name((lang) => () => {
+  };
+  const onChangeLanguageClick = (lang) => () => {
     if (lang !== language) {
       changeLanguage2(lang);
     }
-  }, "onChangeLanguageClick");
+  };
   return <Header2
     id="select-header-language-container"
     data-testid="language-header"
@@ -18389,10 +18367,10 @@ var SelectLanguageHeader = /* @__PURE__ */ __name((props) => {
       onClick={onChangeLanguageClick(key)}
     >{LANGUAGE_TEXT[key]}</Header2.MenuItem>;
   })}</Header2.Menu></Header2>;
-}, "SelectLanguageHeader");
+};
 
 // ../vlncc-frontend/src/containers/Login.tsx
-var mapDispatchToProps17 = /* @__PURE__ */ __name((dispatch) => ({
+var mapDispatchToProps17 = (dispatch) => ({
   changeLanguage: (language) => dispatch(actionCreators.changeLanguage(language)),
   login: (username, password, companyName, isFirstLogin) => dispatch(authDispatchActions.login(username, password, companyName, isFirstLogin)),
   sendResetCode: (email, companyName) => dispatch(authDispatchActions.sendResetCode(email, companyName)),
@@ -18407,13 +18385,13 @@ var mapDispatchToProps17 = /* @__PURE__ */ __name((dispatch) => ({
   resendMFA: () => dispatch(authDispatchActions.resendMFA()),
   MFABackToLogin: () => dispatch(authDispatchActions.MFABackToLogin()),
   getLanguageInfo: () => dispatch(authDispatchActions.getLanguageInfo())
-}), "mapDispatchToProps");
-var mapStateToProps20 = /* @__PURE__ */ __name(({ auth, general, profile }) => ({
+});
+var mapStateToProps20 = ({ auth, general, profile }) => ({
   auth,
   language: general.language,
   profileLoading: profile.initProfileLoading
-}), "mapStateToProps");
-var LoginContainer = /* @__PURE__ */ __name(({
+});
+var LoginContainer = ({
   auth,
   profileLoading,
   login: login2,
@@ -18482,7 +18460,7 @@ var LoginContainer = /* @__PURE__ */ __name(({
       MFABackToLogin={MFABackToLogin2}
     />
   </>}</MainRedirect_default>;
-}, "LoginContainer");
+};
 var Login_default2 = connect21(mapStateToProps20, mapDispatchToProps17)(LoginContainer);
 
 // ../vlncc-frontend/src/app.tsx
@@ -18490,7 +18468,7 @@ import * as React72 from "react";
 
 // ../vlncc-frontend/src/components/Toaster.tsx
 import { Anchor as Anchor2, Notification, Toaster as VaiToaster } from "@vaisala-rockhopper/components";
-var Toaster = /* @__PURE__ */ __name(() => {
+var Toaster = () => {
   const dispatch = useAppDispatch();
   const notifications2 = useAppSelector(selectNotifications);
   return <VaiToaster>{notifications2.map((notification) => <Notification
@@ -18503,19 +18481,19 @@ var Toaster = /* @__PURE__ */ __name(() => {
     {notification.content}
     {notification.linkTo ? <Anchor2 to={notification.linkTo} openInNewWindow>{notification.linkText}</Anchor2> : null}
   </Notification>)}</VaiToaster>;
-}, "Toaster");
+};
 var Toaster_default = Toaster;
 
 // ../vlncc-frontend/src/app.tsx
 import { useIdleTimer } from "react-idle-timer";
 function Application({ theme: theme2, logout: logout2, isAuthenticated }) {
   const dialog = useAppSelector(selectDialog);
-  const onIdle = /* @__PURE__ */ __name(() => {
+  const onIdle = () => {
     if (isAuthenticated) {
       console.log("user is idle");
       logout2(false, 6 /* InactivityError */);
     }
-  }, "onIdle");
+  };
   useIdleTimer({
     crossTab: true,
     syncTimers: 1e3,
@@ -18541,14 +18519,13 @@ function Application({ theme: theme2, logout: logout2, isAuthenticated }) {
     </Routes7>
   </React72.Suspense></VaiApplication>;
 }
-__name(Application, "Application");
-var mapStateToProps21 = /* @__PURE__ */ __name((state) => ({
+var mapStateToProps21 = (state) => ({
   theme: state.general.theme,
   isAuthenticated: state.auth.isAuthenticated
-}), "mapStateToProps");
-var mapDispatchToProps18 = /* @__PURE__ */ __name((dispatch) => ({
+});
+var mapDispatchToProps18 = (dispatch) => ({
   logout: (globalSignout, error) => dispatch(authDispatchActions.logout(globalSignout, error))
-}), "mapDispatchToProps");
+});
 var App_default = connect22(mapStateToProps21, mapDispatchToProps18)(Application);
 
 // ../vlncc-frontend/src/index.tsx
@@ -18599,7 +18576,7 @@ try {
 } catch (error) {
   reportError(error, "Error in AWS Amplify configure:");
 }
-var Root = /* @__PURE__ */ __name(() => <Provider store={store_default}><BrowserRouter><App_default /></BrowserRouter></Provider>, "Root");
+var Root = () => <Provider store={store_default}><BrowserRouter><App_default /></BrowserRouter></Provider>;
 ReactDOM.render(<Root />, document.getElementById("root"));
 unregister();
 var src_default = Root;

@@ -1,1 +1,28 @@
-{"Name":{"children":[{"name":"Child","children":[]},{"name":"AnotherChild","children":[]},{"name":"AnotherChild","children":[{"name":"AnotherChild","children":[{"name":"Child","children":[]}]}]}]}}
+{
+    "Name": {
+        "children": [
+            {
+                "name": "Child",
+                "children": []
+            },
+            {
+                "name": "AnotherChild",
+                "children": []
+            },
+            {
+                "name": "AnotherChild",
+                "children": [
+                    {
+                        "name": "AnotherChild",
+                        "children": [
+                            {
+                                "name": "Child",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
