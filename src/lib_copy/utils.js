@@ -106,7 +106,7 @@ module.exports.getJsxTreeForFromDeclaration = (declaration, importVarNameToSourc
     if (declaration.init && declaration.init.type === 'ArrowFunctionExpression' && declaration.id.name[0] === declaration.id.name[0].toUpperCase()) {
         const componentName = declaration.id.name
         const rootJsx = getReturnedJSX(declaration)
-        tree[componentName] = { children: [] }
+        tree[componentName] = { type: "Component", children: [] }
 
         if (rootJsx) {
             if (rootJsx.type === "JSXFragment") {
@@ -131,7 +131,7 @@ module.exports.getJsxTreeForFromFunctionDeclaration = (node, importVarNameToSour
     const componentName = importVarNameToSourceMap[node.id.name] || node.id.name
     const rootJsx = getReturnedJSXFromBlockBody(node)
 
-    tree[componentName] = { children: [] }
+    tree[componentName] = { type: "Component", children: [] }
     if (rootJsx) {
 
         if (rootJsx.type === "JSXFragment") {
@@ -150,12 +150,14 @@ module.exports.getJsxTreeForFromFunctionDeclaration = (node, importVarNameToSour
 }
 function getJSXElements(node, varBindings) {
     let jsxElement = {}
-    const nodeName =  getFullMemberExpressionName(node.openingElement.name)
-    console.log(nodeName)
-    jsxElement = { name: varBindings[nodeName] || nodeName, children: [] };
+    const nodeName = getFullMemberExpressionName(node.openingElement.name, varBindings)
+    jsxElement = { name: varBindings[nodeName] || nodeName, type: "JSXElement", children: [] };
     node.children.forEach(node => {
         if (node.type === "JSXElement" && node.openingElement) {
             jsxElement.children.push(getJSXElements(node, varBindings))
+        }
+        if (node.type === 'JSXExpressionContainer') {
+            jsxElement.children.push({ name: node.expression.name, type: 'JSXExpressionContainer', children: null })
         }
     })
 
@@ -181,15 +183,12 @@ function getReturnedJSXFromBlockBody(node) {
     return jsxRoot
 }
 
-function getFullMemberExpressionName(node) {
-    console.log(node.name)
-    console.log(node)
+function getFullMemberExpressionName(node, varBindings) {
     if (node.type === 'JSXIdentifier') {
-      return node.name;
+        return varBindings[node.name] || node.name;
     } else if (node.type === 'JSXMemberExpression') {
-      return (
-        getFullMemberExpressionName(node.object) + '.' + getFullMemberExpressionName(node.property)
-      );
-    } 
-  }
-  
+        return (
+            getFullMemberExpressionName(node.object, varBindings) + '.' + getFullMemberExpressionName(node.property, varBindings)
+        );
+    }
+}

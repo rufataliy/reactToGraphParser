@@ -2,34 +2,36 @@ const traverse = require('@babel/traverse').default;
 const resolve = require("resolve");
 const path = require("path");
 const fs = require('fs');
-const { parse } = require('@babel/parser');
+const { parse } = require('@babel/parser')
 
-module.exports.addExtensions = (ast, filename) => {
-    traverse(ast, {
-        ImportDeclaration(importPath) {
-            const { value } = importPath.node.source;
-            const resolvedPath = resolve.sync(value, {
-                basedir: path.dirname(filename),
-                moduleDirectory: ['node_modules', '@types'],
-                extensions: ['.ts', '.tsx', '.js', '.jsx', ".d.ts"],
-            });
-            importPath.node.source.value = resolvedPath;
-        }
-    })
+function addExtensions(ast, file) {
+    if (runPassedChecks(file)) {
+        traverse(ast, {
+            ImportDeclaration(importPath) {
+                const { value } = importPath.node.source;
+                const resolvedPath = resolve.sync(value, {
+                    basedir: path.dirname(file),
+                    moduleDirectory: ['node_modules', '@types'],
+                    extensions: ['.ts', '.tsx', '.js', '.jsx', ".d.ts"],
+                });
+                importPath.node.source.value = resolvedPath;
+            }
+        })
+    }
 }
-module.exports.runPassedChecks = (filename, processedFiles) => {
+
+function runPassedChecks(filename) {
     const extname = path.extname(filename);
 
     const hasFailed = filename.includes("node_modules") ||
         !['.jsx', '.tsx'].includes(path.extname(filename)) ||
-        extname === '.css' || extname === '.svg' ||
-        processedFiles.has(filename)
+        extname === '.css' || extname === '.svg'
 
     return !hasFailed
 
 }
 
-module.exports.parseAst = (filename) => {
+function parseAst(filename) {
     const code = fs.readFileSync(filename, 'utf8');
 
     const ast = parse(code, {
@@ -50,7 +52,8 @@ module.exports.parseAst = (filename) => {
 
     return ast
 }
-module.exports.getDefaultExportImportBindings = (ast, componentsWithFile, importVarNameToSourceMap, processedFiles) => {
+
+function getDefaultExportImportBindings(ast, componentsWithFile, importVarNameToSourceMap, processedFiles) {
     traverse(ast, {
         ImportDeclaration(incomingPath) {
             const defaultSpecifier = incomingPath.node.specifiers.find(
@@ -101,12 +104,38 @@ module.exports.getDefaultExportImportBindings = (ast, componentsWithFile, import
     });
 }
 
-module.exports.getJsxTreeForFromDeclaration = (declaration, importVarNameToSourceMap) => {
+function getJsxTreeForFromDeclaration(declaration) {
     const tree = {}
     if (declaration.init && declaration.init.type === 'ArrowFunctionExpression' && declaration.id.name[0] === declaration.id.name[0].toUpperCase()) {
         const componentName = declaration.id.name
         const rootJsx = getReturnedJSX(declaration)
         tree[componentName] = { children: [] }
+
+        if (rootJsx) {
+
+            if (rootJsx.type === "JSXFragment") {
+                rootJsx.children.forEach(child => {
+                    if (child.type === "JSXElement" && child.openingElement) {
+                        tree[componentName].children.push(getJSXElements(child))
+                    }
+                })
+            }
+            if (rootJsx.type === 'JSXElement') {
+                tree[componentName].children.push(getJSXElements(rootJsx))
+            }
+        }
+    }
+    return tree
+}
+
+
+function getJsxTreeForFromFunctionDeclaration(node, importVarNameToSourceMap) {
+    const tree = {}
+    const componentName = node.id.name
+    const rootJsx = getReturnedJSXFromBlockBody(node)
+
+    tree[componentName] = { children: [] }
+    if (rootJsx) {
 
         if (rootJsx.type === "JSXFragment") {
             rootJsx.children.forEach(child => {
@@ -119,37 +148,17 @@ module.exports.getJsxTreeForFromDeclaration = (declaration, importVarNameToSourc
             tree[componentName].children.push(getJSXElements(rootJsx, importVarNameToSourceMap))
         }
     }
-    return tree
-}
-
-
-module.exports.getJsxTreeForFromFunctionDeclaration = (node, importVarNameToSourceMap) => {
-    const tree = {}
-    const componentName = node.id.name
-    const rootJsx = getReturnedJSXFromBlockBody(node)
-
-    tree[componentName] = { children: [] }
-
-    if (rootJsx.type === "JSXFragment") {
-        rootJsx.children.forEach(child => {
-            if (child.type === "JSXElement" && child.openingElement) {
-                tree[componentName].children.push(getJSXElements(child, importVarNameToSourceMap))
-            }
-        })
-    }
-    if (rootJsx.type === 'JSXElement') {
-        tree[componentName].children.push(getJSXElements(rootJsx, importVarNameToSourceMap))
-    }
 
     return tree
 }
-function getJSXElements(node, importVarNameToSourceMap) {
+
+function getJSXElements(node) {
     let jsxElement = {}
-    const nodeName = importVarNameToSourceMap[node.openingElement.name.name].pointsTo
+    const nodeName = node.openingElement.name.name
     jsxElement = { name: nodeName, children: [] };
     node.children.forEach(node => {
         if (node.type === "JSXElement" && node.openingElement) {
-            jsxElement.children.push(getJSXElements(node, importVarNameToSourceMap))
+            jsxElement.children.push(getJSXElements(node))
         }
     })
 
@@ -168,7 +177,7 @@ function getReturnedJSX(declaration) {
         //     }
         // })
         // return node
-       return getReturnedJSXFromBlockBody(declaration.init)
+        return getReturnedJSXFromBlockBody(declaration.init)
     }
 }
 
@@ -180,4 +189,29 @@ function getReturnedJSXFromBlockBody(node) {
         }
     })
     return jsxRoot
+}
+
+function mergeReactComponentChidren(tree){
+    const rootFile = "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleReactComponents\\FunctionDeclaration\\Component.tsx"
+    for(const component in tree[rootFile].components){
+        tree[rootFile].components[component].children.forEach((child)=>{
+            const childSource = tree[rootFile].imports[child.name]?.source
+            const childSourceComponentName = tree[rootFile].imports[child.name]?.pointsTo
+            const children = tree[childSource] && tree[childSource].components[childSourceComponentName].children
+            children && child.children.push(...children)
+        })
+    }
+    // tree[root].components?.children.forEach(child=>{
+
+    // })
+}
+
+module.exports = {
+    parseAst,
+    getDefaultExportImportBindings,
+    getJsxTreeForFromDeclaration,
+    getJsxTreeForFromFunctionDeclaration,
+    addExtensions,
+    runPassedChecks,
+    mergeReactComponentChidren
 }

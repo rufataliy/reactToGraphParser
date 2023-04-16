@@ -43,6 +43,23 @@ const pluginDedupeImports = () => ({
     });
   },
 });
+const myPlugin = {
+  name: "test",
+  setup(build) {
+    // build.onResolve({ filter: modulePathFilter }, (args) => ({
+    //   path: args.path,
+    //   namespace: PLUGIN_NAME,
+    // }));
+
+    build.onLoad({ filter: /.*/, namespace: "react" }, (args) => {
+      // eslint-disable-next-line total-functions/no-unsafe-type-assertion
+      // const modulePath = args.path as T;
+      // const moduleInfo = normalizeModuleInfo(getModuleInfo(modulePath));
+      // return { contents: createContents(moduleInfo) };
+      console.log(args)
+    });
+  },
+};
 
 esbuild.build({
   entryPoints: [entry],
@@ -57,7 +74,9 @@ esbuild.build({
     '*.png',
     '*.svg',
     '*.ts',
-    '*.js'
+    '*.js',
+    '*.json',
+    '*constants.tsx'
   ],
   jsx: "preserve",
   minifySyntax: false,

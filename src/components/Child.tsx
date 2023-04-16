@@ -1,12 +1,14 @@
 import React from 'react';
-import SOMEAPP from "../simpleCraApp/App"
 
-const Child: React.FC = () => {
+const Component: React.FC = () => {
   return (
     <>
-      <SOMEAPP children={undefined} />
+       <SecondChild>
+        <ItsChildren/>
+      </SecondChild>
+      
     </>
   );
 }
 
-export default Child;
+export default Component;

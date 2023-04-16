@@ -1,0 +1,324 @@
+{
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\AnotherChild.tsx": {
+        "exports": [
+            {
+                "name": "AnotherChild",
+                "default": true
+            }
+        ],
+        "imports": {
+            "React": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\react\\index.js",
+                "isDefaultExport": true,
+                "pointsTo": null
+            }
+        },
+        "components": {
+            "AnotherChild": {
+                "children": [
+                    {
+                        "name": "FIrstChild",
+                        "children": [
+                            {
+                                "name": "ItsChildren",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\Child.tsx": {
+        "exports": [
+            {
+                "name": "Component",
+                "default": true
+            }
+        ],
+        "imports": {
+            "React": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\react\\index.js",
+                "isDefaultExport": true,
+                "pointsTo": null
+            }
+        },
+        "components": {
+            "Component": {
+                "children": [
+                    {
+                        "name": "SecondChild",
+                        "children": [
+                            {
+                                "name": "ItsChildren",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\index.tsx": {
+        "exports": [],
+        "imports": {
+            "React": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\react\\index.js",
+                "isDefaultExport": true,
+                "pointsTo": null
+            },
+            "useCallback": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\react\\index.js",
+                "isDefaultExport": false,
+                "importedAs": "useCallback"
+            },
+            "ReactDOM": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\react-dom\\client.js",
+                "isDefaultExport": true,
+                "pointsTo": null
+            },
+            "reportWebVitals": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\nonJsxFiles\\reportWebVitals.ts",
+                "isDefaultExport": true,
+                "pointsTo": null
+            },
+            "Child": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\Child.tsx",
+                "isDefaultExport": true,
+                "pointsTo": "Component"
+            },
+            "Component": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleCraApp\\App.tsx",
+                "isDefaultExport": false,
+                "importedAs": "Component"
+            },
+            "ReactFlow": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\reactflow\\dist\\umd\\index.js",
+                "isDefaultExport": true,
+                "pointsTo": null
+            },
+            "MiniMap": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\reactflow\\dist\\umd\\index.js",
+                "isDefaultExport": false,
+                "importedAs": "MiniMap"
+            }
+        },
+        "components": {
+            "App": {
+                "children": [
+                    {
+                        "name": "div",
+                        "children": [
+                            {
+                                "name": "ReactFlow",
+                                "children": [
+                                    {
+                                        "name": "Controls",
+                                        "children": []
+                                    },
+                                    {
+                                        "name": "MiniMap",
+                                        "children": []
+                                    },
+                                    {
+                                        "name": "Background",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleCraApp\\App.tsx": {
+        "exports": [
+            {
+                "name": "Name",
+                "default": true
+            }
+        ],
+        "imports": {
+            "React": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\node_modules\\react\\index.js",
+                "isDefaultExport": true,
+                "pointsTo": null
+            },
+            "AnotherChild": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\AnotherChild.tsx",
+                "isDefaultExport": true,
+                "pointsTo": "AnotherChild"
+            },
+            "Child": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\Child.tsx",
+                "isDefaultExport": true,
+                "pointsTo": "Component"
+            }
+        },
+        "components": {
+            "Name": {
+                "children": [
+                    {
+                        "name": "Child",
+                        "children": []
+                    },
+                    {
+                        "name": "AnotherChild",
+                        "children": []
+                    },
+                    {
+                        "name": "AnotherChild",
+                        "children": [
+                            {
+                                "name": "AnotherChild",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            "Component": {
+                "children": [
+                    {
+                        "name": "AnotherChild",
+                        "children": [
+                            {
+                                "name": "AnotherChild",
+                                "children": []
+                            },
+                            {
+                                "name": "Child",
+                                "children": []
+                            },
+                            {
+                                "name": "AnotherChild",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleReactComponents\\FunctionDeclaration\\Component.tsx": {
+        "exports": [],
+        "imports": {
+            "AnotherChild": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\AnotherChild.tsx",
+                "isDefaultExport": true,
+                "pointsTo": "AnotherChild"
+            },
+            "Child": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\Child.tsx",
+                "isDefaultExport": true,
+                "pointsTo": "Component"
+            }
+        },
+        "components": {
+            "Component": {
+                "children": [
+                    {
+                        "name": "Child",
+                        "children": [
+                            {
+                                "name": "SecondChild",
+                                "children": [
+                                    {
+                                        "name": "ItsChildren",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "AnotherChild",
+                        "children": [
+                            {
+                                "name": "FIrstChild",
+                                "children": [
+                                    {
+                                        "name": "ItsChildren",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "AnotherChild",
+                        "children": [
+                            {
+                                "name": "AnotherChild",
+                                "children": []
+                            },
+                            {
+                                "name": "FIrstChild",
+                                "children": [
+                                    {
+                                        "name": "ItsChildren",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleReactComponents\\FunctionDeclaration\\constants.tsx": {
+        "exports": [],
+        "imports": {},
+        "components": {}
+    },
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleReactComponents\\VariableDeclaration\\Component.tsx": {
+        "exports": [],
+        "imports": {
+            "AnotherChild": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\AnotherChild.tsx",
+                "isDefaultExport": true,
+                "pointsTo": "AnotherChild"
+            },
+            "Child": {
+                "source": "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\components\\Child.tsx",
+                "isDefaultExport": true,
+                "pointsTo": "Component"
+            }
+        },
+        "components": {
+            "Name": {
+                "children": [
+                    {
+                        "name": "Child",
+                        "children": []
+                    },
+                    {
+                        "name": "AnotherChild",
+                        "children": []
+                    },
+                    {
+                        "name": "AnotherChild",
+                        "children": [
+                            {
+                                "name": "AnotherChild",
+                                "children": [
+                                    {
+                                        "name": "Child",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleReactComponents\\VariableDeclaration\\constants.tsx": {
+        "exports": [],
+        "imports": {},
+        "components": {}
+    }
+}

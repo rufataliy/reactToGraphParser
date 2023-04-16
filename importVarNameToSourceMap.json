@@ -1,0 +1,49 @@
+{
+    "React": {
+        "source": "react",
+        "isDefaultExport": true,
+        "pointsTo": null
+    },
+    "useCallback": {
+        "source": "react",
+        "isDefaultExport": false
+    },
+    "ReactDOM": {
+        "source": "react-dom/client",
+        "isDefaultExport": true,
+        "pointsTo": null
+    },
+    "ReactFlow": {
+        "source": "reactflow",
+        "isDefaultExport": true,
+        "pointsTo": null
+    },
+    "MiniMap": {
+        "source": "reactflow",
+        "isDefaultExport": false
+    },
+    "Bla": {
+        "source": "react",
+        "isDefaultExport": true,
+        "pointsTo": null
+    },
+    "reportWebVitals": {
+        "source": "./nonJsxFiles/reportWebVitals",
+        "isDefaultExport": true,
+        "pointsTo": null
+    },
+    "Child": {
+        "source": "../../components/Child",
+        "isDefaultExport": true,
+        "pointsTo": null
+    },
+    "Component": {
+        "source": "./simpleCraApp/App",
+        "isDefaultExport": false
+    },
+    "AnotherChild": {
+        "source": "../../components/AnotherChild",
+        "isDefaultExport": true,
+        "pointsTo": null
+    }
+}

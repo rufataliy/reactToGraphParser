@@ -22,20 +22,42 @@ function getReactComponentTree(ast, tree = {}, varBindings) {
 }
 
 function getVarBindings(ast) {
-    const varBindings = {}
+    const varBindings = {source:{}}
     traverse(ast, {
-        ImportSpecifier(path) {
-            importedAs = path.node.local.name;
-            importName = path.node.imported.name;
-            varBindings[importedAs] = importName
+        ImportNamespaceSpecifier(path) {
+            const importedName = path.node.local.name
+            const source = path.parent.source.value
+            if(!varBindings.source[source]){
+                varBindings.source[source] = [importedName]
+                console.log(source)
+            } else {
+                varBindings.source[source].push(importedName)
+                // varBindings[importedName] = v
+            }
         },
+        ImportSpecifier(path) {
+            const importedAs = path.node.local.name;
+            const importName = path.node.imported.name;
+            varBindings[importedAs] = importName
+        }
     })
+    
+    for(const key in varBindings.source){
+        varBindings.source[key].sort((a,b)=>a.length -b.length)
+        varBindings.source[key].forEach(name => {
+            varBindings[name] = varBindings.source[key][0]
+        })
+    }
     return varBindings
 }
+
 module.exports.getReactComponentTree = getReactComponentTree
-const ast = parseAst('C:/Users/RUALI/projects/react-to-graph/out.jsx')
+const ast = parseAst('C:/Users/RUALI/projects/react-to-graph/out.tsx')
+// const ast = parseAst('C:/Users/RUALI/projects/react-to-graph/src/index.tsx')
 
 const varBindings = getVarBindings(ast)
 const tree = getReactComponentTree(ast, {}, varBindings)
 // console.log(tree)
 fs.writeFileSync('./tree.json', JSON.stringify(tree))
+fs.writeFileSync('./varBindings.json', JSON.stringify(varBindings))
+fs.writeFileSync('./ast.json', JSON.stringify(ast))
