@@ -153,7 +153,14 @@ function getJsxTreeForFromFunctionDeclaration(node, importVarNameToSourceMap) {
 
 function getJSXElements(node) {
 	let jsxElement = {}
-	const nodeName = node.openingElement.name.name
+
+	if (node.openingElement.name.type === 'JSXIdentifier') {
+		var nodeName = node.openingElement.name.name
+	}
+	if (node.openingElement.name.type === 'JSXMemberExpression') {
+		const { object, property } = node.openingElement.name
+		var nodeName = `${object.name}.${property.name}`
+	}
 	jsxElement = { name: nodeName, children: [] };
 	node.children.forEach(node => {
 		if (node.type === "JSXElement" && node.openingElement) {
@@ -218,8 +225,11 @@ function addStaticChildren(tree, importDetails, child, callback) {
 		const childSource = importDetails.source
 		callback(tree, childSource)
 		const orignalName = importDetails.pointsTo
-		const component = tree[childSource].components.find(component => component.name === orignalName)
-		child.children.push(...JSON.parse(JSON.stringify(component.children)))
+		if (tree[childSource]) {
+
+			const component = tree[childSource].components.find(component => component.name === orignalName)
+			child.children.push(...JSON.parse(JSON.stringify(component.children)))
+		}
 	}
 }
 

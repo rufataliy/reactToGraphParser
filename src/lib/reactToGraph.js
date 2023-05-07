@@ -60,6 +60,12 @@ const components = {}
 files.forEach(file => {
   if (runPassedChecks(file)) {
     const ast = parseAst(file)
+    if (file.includes('SomeUserChild')) {
+      fs.writeFile("SomeOtherChild.json", JSON.stringify(ast), () => { })
+    }
+    if (file.includes('SecondChild')) {
+      fs.writeFile("SecondChild.json", JSON.stringify(ast), () => { })
+    }
     addExtensions(ast, file)
     // console.log(file)
     const imports = getVarBindingToOriginalVarNames(ast, fileDetails)
@@ -69,38 +75,15 @@ files.forEach(file => {
     fileDetails[file] = { ...fileDetails[file], imports, components: [components] }
   }
 })
-const rootFile = "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleCraApp\\App.tsx"
+// const rootFile = "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleCraApp\\App.tsx"
+const rootFile = "C:\\Users\\RUALI\\projects\\vlncc-frontend\\src\\app.tsx"
 mergeReactComponentChidren(fileDetails, rootFile)
 
 const nodes = []
 const edges = []
-let x = 100
-let y = 100
+
 let id = 0
 
-const callback = (child, parent) => {
-  let parentNode = nodes.find(node => node.data.label === parent.name)
-  if (!parentNode) {
-    x += 100
-    y += 100
-    parentNode = { id: `${id}`, data: { label: parent.name }, position: { x, y } }
-    nodes.push(parentNode)
-  } else {
-    console.log(parentNode)
-  }
-
-  id += 1
-  x += 100
-  y += 100
-  const node = { id: `${id}`, data: { label: child.name }, position: { x, y } }
-  id += 1
-  const edge = { id: `${parentNode.id}-${node.id}`, source: parentNode.id, target: node.id }
-
-
-  nodes.push(node)
-  edges.push(edge)
-
-}
 
 // const callback = (child, node) => {
 //   console.log(node.name, child.name)
@@ -111,14 +94,12 @@ function generateGraph(node) {
   while (queue.length) {
     const parent = queue.shift()
     parent.id = id
-    y += 50
-    x += 50
-    parent.children.forEach((child, index) => {
+
+    parent.children.forEach((child) => {
       child.parentId = parent.id
-      child.coordinates = { x: x * index || 1, y }
       queue.push(child)
     })
-    nodes.push({ id: `${parent.id}`, data: { label: parent.name }, position: parent.coordinates || { x, y } })
+    nodes.push({ id: `${parent.id}`, data: { label: parent.name } })
     if (parent.parentId !== undefined) {
       edges.push({ id: `${parent.parentId}-${parent.id}`, source: `${parent.parentId}`, target: `${parent.id}` })
     }
