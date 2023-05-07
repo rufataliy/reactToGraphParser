@@ -3,7 +3,7 @@ const traverse = require('@babel/traverse').default;
 const { getJsxTreeForFromDeclaration, getJsxTreeForFromFunctionDeclaration } = require('./utils')
 // Gets list of all react components mapped to their source file names
 // TODO: assept ast as paramenter instead of parsing file with babel.
-function getReactComponentTree(ast) {
+function getReactComponentTree(ast, file) {
     let tree = {}
     traverse(ast, {
         FunctionDeclaration(path) {

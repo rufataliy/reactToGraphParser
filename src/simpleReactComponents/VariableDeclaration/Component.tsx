@@ -12,8 +12,42 @@ export const Name: React.FC<Props> = ({ children }) => (
         {children}
         <AnotherChild>
             <AnotherChild>
-                <Child />
+                <Child>
+                    <AnotherChild>
+                        <AnotherChild />
+                    </AnotherChild>
+                </Child>
             </AnotherChild>
         </AnotherChild>
     </>
+);
+
+export const Name2: React.FC<Props> = ({ children }) => (
+    <AnotherChild>
+        <AnotherChild>
+            <Child>
+                <AnotherChild>
+                    <AnotherChild />
+                </AnotherChild>
+            </Child>
+        </AnotherChild>
+        <AnotherChild>
+            <AnotherChild>
+                <Child>
+                    <AnotherChild>
+                        <AnotherChild />
+                    </AnotherChild>
+                    <AnotherChild>
+                        <AnotherChild>
+                            <Child>
+                                <AnotherChild>
+                                    <AnotherChild />
+                                </AnotherChild>
+                            </Child>
+                        </AnotherChild>
+                    </AnotherChild>
+                </Child>
+            </AnotherChild>
+        </AnotherChild>
+    </AnotherChild>
 );

@@ -1,16 +1,13 @@
 import React from 'react';
-import '../nonJsxFiles/App.css';
-
-interface Props{
+import ItsChildren from "./ItsChildren"
+interface Props {
   children?: React.ReactNode
 }
 
 const AnotherChild: React.FC<Props> = ({ children }) => {
   return (
     <>
-      <FIrstChild>
-        <ItsChildren/>
-      </FIrstChild>
+      <ItsChildren />
     </>
   );
 }

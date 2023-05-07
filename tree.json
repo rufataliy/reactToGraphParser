@@ -1,1 +1,12 @@
-{"Component":{"type":"Component","children":[{"name":"div","type":"JSXElement","children":[{"name":"children","type":"JSXExpressionContainer","children":null}]}]}}
+{
+    "Name": {
+        "type": "Component",
+        "children": [
+            {
+                "name": "Child",
+                "type": "JSXElement",
+                "children": []
+            }
+        ]
+    }
+}

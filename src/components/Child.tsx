@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
+import ItsChildren from './ItsChildren'
+import SecondChild from "./SecondChild"
 
-const Component: React.FC = () => {
+const Component: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
-       <SecondChild>
-        <ItsChildren/>
+      <SecondChild >
+        <ItsChildren />
       </SecondChild>
-      
     </>
   );
 }

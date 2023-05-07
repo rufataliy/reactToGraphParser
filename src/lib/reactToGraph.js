@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const traverse = require('@babel/traverse').default;
-const { addExtensions, runPassedChecks, parseAst, mergeReactComponentChidren } = require('./utils')
+const { addExtensions, runPassedChecks, parseAst, mergeReactComponentChidren, dfs, visitor } = require('./utils')
 const { getAllComponentsFromFile } = require('./getAllComponents')
 const { getReactComponentTree } = require('./getReactComponentTree')
 const files = require('../../.files.json')
@@ -28,13 +28,16 @@ function getVarBindingToOriginalVarNames(ast, fileDetails) {
 
       if (defaultSpecifier) {
         let originalName = null;
+
         const varName = defaultSpecifier.local.name;
+        // console.log(varName)
         fileDetails[incomingPath.node.source.value] && fileDetails[incomingPath.node.source.value].exports.forEach(node => {
           if (node.default) {
             originalName = node.name
           }
         })
         importVarNameToSourceMap[varName] = { source: incomingPath.node.source.value, isDefaultExport: true, pointsTo: originalName }
+        // console.log(importVarNameToSourceMap[varName])
       }
       if (namedSpecifier) {
         const localname = namedSpecifier.local.name;
@@ -47,23 +50,89 @@ function getVarBindingToOriginalVarNames(ast, fileDetails) {
 }
 
 let fileDetails = {}
-files.forEach(file=>{
-  const ast = parseAst(file)
-  fileDetails = {...fileDetails, [file]: { exports:[...getAllComponentsFromFile(ast)]}}
-  })
-
 files.forEach(file => {
-  if(runPassedChecks(file)){
-    const ast = parseAst(file)
-    addExtensions(ast, file)
-
-    const imports = getVarBindingToOriginalVarNames(ast, fileDetails)
-    const components = getReactComponentTree(ast)
-    fileDetails[file] = {...fileDetails[file], imports, components }
-  }
+  const ast = parseAst(file)
+  fileDetails = { ...fileDetails, [file]: { exports: [...getAllComponentsFromFile(ast)] } }
 })
 
-mergeReactComponentChidren(fileDetails)
+const components = {}
+
+files.forEach(file => {
+  if (runPassedChecks(file)) {
+    const ast = parseAst(file)
+    addExtensions(ast, file)
+    // console.log(file)
+    const imports = getVarBindingToOriginalVarNames(ast, fileDetails)
+    // console.log(imports)
+    const components = getReactComponentTree(ast, imports)
+
+    fileDetails[file] = { ...fileDetails[file], imports, components: [components] }
+  }
+})
+const rootFile = "C:\\Users\\RUALI\\projects\\react-to-graph\\src\\simpleCraApp\\App.tsx"
+mergeReactComponentChidren(fileDetails, rootFile)
+
+const nodes = []
+const edges = []
+let x = 100
+let y = 100
+let id = 0
+
+const callback = (child, parent) => {
+  let parentNode = nodes.find(node => node.data.label === parent.name)
+  if (!parentNode) {
+    x += 100
+    y += 100
+    parentNode = { id: `${id}`, data: { label: parent.name }, position: { x, y } }
+    nodes.push(parentNode)
+  } else {
+    console.log(parentNode)
+  }
+
+  id += 1
+  x += 100
+  y += 100
+  const node = { id: `${id}`, data: { label: child.name }, position: { x, y } }
+  id += 1
+  const edge = { id: `${parentNode.id}-${node.id}`, source: parentNode.id, target: node.id }
+
+
+  nodes.push(node)
+  edges.push(edge)
+
+}
+
+// const callback = (child, node) => {
+//   console.log(node.name, child.name)
+// }
+
+function generateGraph(node) {
+  const queue = [node]
+  while (queue.length) {
+    const parent = queue.shift()
+    parent.id = id
+    y += 50
+    x += 50
+    parent.children.forEach((child, index) => {
+      child.parentId = parent.id
+      child.coordinates = { x: x * index || 1, y }
+      queue.push(child)
+    })
+    nodes.push({ id: `${parent.id}`, data: { label: parent.name }, position: parent.coordinates || { x, y } })
+    if (parent.parentId !== undefined) {
+      edges.push({ id: `${parent.parentId}-${parent.id}`, source: `${parent.parentId}`, target: `${parent.id}` })
+    }
+    id += 1
+  }
+
+}
+fileDetails[rootFile].components.forEach((component) => {
+  generateGraph(component)
+})
+fs.writeFileSync("./src/nodes.json", JSON.stringify([nodes, edges]))
+// files.forEach(file=>{
+
+// })
 
 // files.forEach(file => {
 //   if(runPassedChecks(file)){

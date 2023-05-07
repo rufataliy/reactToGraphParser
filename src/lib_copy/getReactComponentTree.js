@@ -52,7 +52,7 @@ function getVarBindings(ast) {
 }
 
 module.exports.getReactComponentTree = getReactComponentTree
-const ast = parseAst('C:/Users/RUALI/projects/react-to-graph/out.tsx')
+const ast = parseAst('C:/Users/RUALI/projects/react-to-graph/src/simpleCraApp/App.tsx')
 // const ast = parseAst('C:/Users/RUALI/projects/react-to-graph/src/index.tsx')
 
 const varBindings = getVarBindings(ast)
